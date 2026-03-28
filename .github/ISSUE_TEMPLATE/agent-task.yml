@@ -1,0 +1,57 @@
+name: Agent Task
+description: Structured issue template for Claude/Codex workstreams.
+title: "[Task] "
+labels:
+  - agent-ready
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What outcome should this issue produce?
+      placeholder: Describe the intended result.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context And Constraints
+      description: Relevant product context, constraints, dependencies, or non-goals.
+      placeholder: Include anything an agent or teammate must know before starting.
+    validations:
+      required: true
+  - type: checkboxes
+    id: touched_areas
+    attributes:
+      label: Expected Areas
+      description: Select the parts of the repo likely to change.
+      options:
+        - label: Apps Script server logic (`Code.gs`)
+        - label: Dashboard frontend (`dashboard.html`)
+        - label: Apps Script config (`appsscript.json` or `.clasp.json`)
+        - label: Documentation or workflow files
+        - label: GitHub workflow or templates
+  - type: textarea
+    id: ownership
+    attributes:
+      label: Ownership And Parallelization Notes
+      description: Note expected file ownership, disjoint scopes, or overlap risks.
+      placeholder: Example: agent owns dashboard.html only; avoid editing workflow docs in this task.
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Definition Of Done
+      description: What must be true before this issue is complete?
+      placeholder: Include validation and deployment expectations.
+    validations:
+      required: true
+  - type: textarea
+    id: docs
+    attributes:
+      label: Documentation Impact
+      description: What docs must be updated if this task changes workflow, setup, deployment, or structure?
+      placeholder: State `none` only if there is no documentation impact.
+    validations:
+      required: true
