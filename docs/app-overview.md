@@ -86,6 +86,15 @@ The app uses historical session data from `Credit_Control` to identify sessions 
 
 If a student appears more than once for the same package in `Aggregations`, the package record with the highest total credits is retained. This is intended to reduce duplicate package cards caused by source-sheet data quality issues.
 
+### Package Exclusion Rules
+
+Packages are excluded from the dashboard when the package context indicates either:
+
+- `Pretest`
+- `Trial`
+
+The current code treats either keyword in `Students & Courses`.`Class Name` or `Class Subject` as an exclusion match for that student's package.
+
 ## Status Definitions
 
 The dashboard uses four package-level statuses:
@@ -102,14 +111,28 @@ The current code uses:
 
 ## What The Dashboard Should Show
 
-The PRD and current frontend indicate the following operator experience:
+The current frontend now organizes the operator experience into three layers:
+
+- `Command Center`
+  - action KPIs for immediate outreach load, near-term risk, missing schedule coverage, and pending deduction backlog
+  - a prioritized package queue ranked by urgency, depletion timing, and data confidence
+  - a contextual inspector explaining why the selected package is risky and what should happen next
+- `Analytics`
+  - trend views comparing `notify`, `watch`, `ok`, and `nodata` over stored refreshes
+  - segment views for package concentration, cadence, parent concentration, and risk drivers
+  - planning views for projected outreach and exhaustion load over upcoming weeks
+- `Student Detail`
+  - one student header with roll-up status and package counts
+  - per-package modules for current balance, balance waterfall, projection, and recommended action
+  - communication support via generated LINE message drafts
+
+The original core requirements remain intact:
 
 - overview metrics summarizing total students and package risk buckets
 - prioritized action tables for urgent and watch-list packages
 - a student sidebar sorted by status, with filters and search
 - student detail views with one package card per active package
 - package projections showing balance reduction across upcoming sessions
-- a visual calendar and package summary legend
 - a generated LINE message template for parent communication
 
 ## High-Level Data Flow
@@ -119,8 +142,10 @@ The current technical flow is:
 1. Admin opens the Apps Script web app.
 2. Apps Script runs `getStudentData()` server-side.
 3. `Code.gs` reads the required sheets and applies business logic.
-4. The resulting JSON payload is embedded into `dashboard.html`.
-5. The frontend renders the overview, detail views, projections, and message templates client-side.
+4. The backend enriches the payload with queue ranking, summary analytics, data-quality flags, and segment data.
+5. The app stores a lightweight comparison snapshot in Apps Script script properties for delta and trend views.
+6. The resulting JSON payload is embedded into `dashboard.html`.
+7. The frontend renders the command center, analytics views, detail views, and message templates client-side.
 
 ## Expected Staff Actions
 
@@ -131,22 +156,42 @@ The app is not just a reporting view. It is meant to support operations decision
 - inspect a student's package-level projections before contacting the parent
 - copy a prewritten LINE message appropriate to the package state
 
-## Known PRD Versus Code Gaps
+## Remaining PRD Follow-Ups
 
-These gaps should be resolved before making behavior-changing logic edits:
+The following gaps remain after the current business-rule cleanup:
 
-- `Trial` exclusion:
-  - the PRD says trial classes should be excluded when `Class Subject` contains `Trial`
-  - the current `Code.gs` path clearly handles `Pretest` exclusion and may not yet implement `Trial`
-- pending deduction versus completed deduction rule:
-  - the PRD contains separate language for how credits are deducted and how pending deductions are defined
-  - the repo should adopt one canonical interpretation before changing balance logic
 - repository reference:
   - the PRD still names the older GitHub repository path
   - the active collaboration repo is now `kasheesh711/Begifted-Ops`
 - deployment/access wording:
-  - the PRD says the web app is deployed as “Anyone with access”
-  - the tracked manifest and recent deployment work should be reconciled with the intended production access model
+  - the tracked manifest currently uses `ANYONE_ANONYMOUS`
+  - the intended production access model should be confirmed before the next hardening pass
+
+## Canonical Pending Deduction Rule
+
+Pending deductions currently mean:
+
+- historical session in `Credit_Control`
+- `final_status` is `ENDED`
+- `teacher_feedback` is blank or `0`
+- `credits_consumed` is `0`
+
+These sessions are treated as completed operationally but not yet reflected in consumed credits, so they reduce the dashboard's `Actual Remaining Credits`.
+
+## Validation Harness
+
+The repo now includes `runValidationSuite()` in `Validation.gs` for deterministic fixture-based checks of:
+
+- `Trial` exclusion
+- `Pretest` exclusion
+- pending deductions
+- watch/notify boundaries
+- no-data status behavior
+- duplicate package deduplication
+- low-balance packages without schedule data
+- priority-score ordering
+- summary delta calculations against stored snapshots
+- weekly alert bucket aggregation
 
 ## How To Use This Doc
 
