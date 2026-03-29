@@ -2,6 +2,10 @@
 
 Package expiry alert dashboard for BeGifted Education, built as a shared Google Apps Script project and managed in GitHub.
 
+This app gives admin staff a live view of which students are close to exhausting prepaid tutoring credits, which packages need immediate follow-up, and what parent communication should happen next.
+
+Read [`docs/app-overview.md`](docs/app-overview.md) before changing business logic. It summarizes the product purpose, sheet dependencies, status model, and known PRD-versus-code gaps.
+
 ## Working Model
 
 This repository is optimized for parallel agent-assisted development with Claude and Codex.
