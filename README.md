@@ -2,7 +2,7 @@
 
 Package expiry alert dashboard for BeGifted Education, built as a shared Google Apps Script project and managed in GitHub.
 
-This app gives admin staff a live view of which students are close to exhausting prepaid tutoring credits, which packages need immediate follow-up, what changed since the previous review, and which risk drivers deserve attention.
+This app gives admin staff a live view of which students are close to exhausting prepaid tutoring credits, which students need immediate follow-up, and when those students are scheduled to turn up next.
 
 Read [`docs/app-overview.md`](docs/app-overview.md) before changing business logic. It summarizes the product purpose, sheet dependencies, status model, and known PRD-versus-code gaps.
 
@@ -12,15 +12,14 @@ The dashboard now uses an async bootstrap path instead of embedding the full dat
 
 - `doGet()` returns the shell immediately so operators see the UI without waiting for spreadsheet reads.
 - `dashboard.html` loads the data asynchronously through Apps Script and shows explicit loading or retry states while the payload is in flight.
-- `Code.gs` caches the computed dashboard payload in chunked `CacheService` entries for 2 minutes so warm refreshes can reuse the same payload.
+- the Apps Script backend caches the computed dashboard payload in chunked `CacheService` entries for 2 minutes so warm refreshes can reuse the same payload
 - snapshot history and delta baselines are only persisted during a fresh recompute, not on cache hits
 
 ## Current Product Surfaces
 
-The live app is now organized into three primary surfaces:
+The live app is now organized into two primary surfaces:
 
-- `Command Center`: action KPIs, prioritized package queue, and contextual risk brief for the selected package
-- `Analytics`: trend, segment, and planning views derived from the current sheet data plus stored comparison snapshots
+- `Command Center`: student-level prioritized queue plus a month/week/day calendar that expands daily schedule detail
 - `Student Detail`: package-level balance waterfall, projection, data-quality warnings, and communication support
 
 ## Working Model
@@ -36,9 +35,15 @@ The shared workflow lives in [`docs/WORKFLOW.md`](docs/WORKFLOW.md).
 
 ## Repository Layout
 
-- `Code.gs`: server-side Apps Script logic.
-- `Validation.gs`: fixture-based validation runner for package-rule logic and analytics helpers.
-- `dashboard.html`: client-side command center, analytics workspace, and student detail UI.
+- `Code.gs`: shared constants plus web-app entrypoints and async payload bootstrap.
+- `DashboardDataLoading.gs`: sheet adapters and required-column validation.
+- `DashboardPackages.gs`: active-student filtering, exclusion rules, pending deductions, package assembly, and action helpers.
+- `DashboardAnalytics.gs`: package scoring, student-level queue aggregation, calendar shaping, summary metrics, and snapshot persistence helpers.
+- `DashboardState.gs`: snapshot persistence and chunked cache helpers.
+- `DashboardProjection.gs`: balance projection and status evaluation helpers.
+- `SharedHelpers.gs`: generic spreadsheet, date, and parsing utilities used across backend files.
+- `Validation.gs`: fixture-based validation runner for package-rule logic, student queue aggregation, calendar grouping, and cache helpers.
+- `dashboard.html`: client-side command center and student detail UI.
 - `appsscript.json`: shared Apps Script manifest and web app settings.
 - `.clasp.json`: shared binding to the team Apps Script project.
 - `CLAUDE.md`: Claude-specific repo instructions.
@@ -77,7 +82,7 @@ clasp run runValidationSuite
 The validation suite now covers:
 
 - package-rule behavior
-- dashboard analytics helpers such as priority ranking, data-quality flags, and summary delta calculations
+- student queue aggregation, priority ranking, calendar grouping, and summary delta calculations
 - payload cache miss and cache hit behavior
 - chunked cache round-trips for large payloads
 - chunked transport manifest and chunk reconstruction helpers
@@ -86,6 +91,7 @@ The validation suite now covers:
 
 - Start non-trivial work from a GitHub Issue.
 - Use branch names like `feature/<issue-or-short-name>`, `fix/<issue-or-short-name>`, and `docs/<issue-or-short-name>`.
+- Claim backend ownership by file slice whenever possible so concurrent work stays disjoint.
 - Include documentation updates in the same PR when workflow, deployment, setup, or structure changes.
 - Never commit auth tokens, local machine config, or personal credentials.
 

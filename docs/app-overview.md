@@ -1,6 +1,6 @@
 # App Overview
 
-This document is the engineering-facing summary of what the BeGifted Package Expiry Dashboard is supposed to do. The full product source of truth is the PRD document `Begifted Package Expiry Dashboard_PRD.docx`. Use this Markdown file for repo-local onboarding and for planning code changes.
+This document is the engineering-facing summary of what the BeGifted Credit Control Dashboard is supposed to do. The full product source of truth is the PRD document `Begifted Package Expiry Dashboard_PRD.docx`. Use this Markdown file for repo-local onboarding and for planning code changes.
 
 ## Purpose And Users
 
@@ -46,7 +46,7 @@ Required sources:
 
 ## Current Business Rules
 
-The current implementation shape in `Code.gs` and the PRD indicate this flow:
+The current implementation shape in the Apps Script backend and the PRD indicate this flow:
 
 1. Load all required sheets.
 2. Keep only active students.
@@ -111,26 +111,26 @@ The current code uses:
 
 ## What The Dashboard Should Show
 
-The current frontend now organizes the operator experience into three layers:
+The current frontend organizes the operator experience into two layers:
 
 - `Command Center`
-  - action KPIs for immediate outreach load, near-term risk, missing schedule coverage, and pending deduction backlog
-  - a prioritized package queue ranked by urgency, depletion timing, and data confidence
-  - a contextual inspector explaining why the selected package is risky and what should happen next
-- `Analytics`
-  - trend views comparing `notify`, `watch`, `ok`, and `nodata` over stored refreshes
-  - segment views for package concentration, cadence, parent concentration, and risk drivers
-  - planning views for projected outreach and exhaustion load over upcoming weeks
+  - a student-level prioritized action queue instead of repeated package rows
+  - rolled-up system and actual balances across all active packages
+  - the nearest next session across any package for each queued student
+  - a side-by-side calendar that supports month, week, and day views
+  - daily schedule summaries that expand into student-level detail on click
+  - a resizable split layout so admin staff can focus on either the queue or the calendar
 - `Student Detail`
   - one student header with roll-up status and package counts
   - per-package modules for current balance, balance waterfall, projection, and recommended action
   - communication support via generated LINE message drafts
 
-The original core requirements remain intact:
+The current product requirements now emphasize:
 
-- overview metrics summarizing total students and package risk buckets
-- prioritized action tables for urgent and watch-list packages
-- a student sidebar sorted by status, with filters and search
+- top-bar search across student name, parent name, and package names
+- sortable student queue headers with ascending/descending toggle
+- pinned queue priority for students with no future schedule and low or negative rolled-up balance
+- calendar-driven visibility into which students are attending next and who should be contacted first
 - student detail views with one package card per active package
 - package projections showing balance reduction across upcoming sessions
 - a generated LINE message template for parent communication
@@ -142,11 +142,11 @@ The current technical flow is:
 1. Admin opens the Apps Script web app.
 2. `doGet()` returns the dashboard shell immediately instead of embedding the full payload into the HTML template.
 3. `dashboard.html` requests the dashboard payload asynchronously from Apps Script after the shell is already visible.
-4. `Code.gs` either serves a cached dashboard payload or reads the required sheets and applies business logic on a fresh recompute.
-5. The backend enriches the payload with queue ranking, summary analytics, data-quality flags, and segment data.
-6. On a fresh recompute, the app stores a lightweight comparison snapshot in Apps Script script properties for delta and trend views.
+4. The Apps Script backend either serves a cached dashboard payload or reads the required sheets and applies business logic on a fresh recompute.
+5. The backend enriches the payload with package scoring, student-level queue aggregation, summary counts, and calendar day groupings.
+6. On a fresh recompute, the app stores a lightweight comparison snapshot in Apps Script script properties for delta-aware queue scoring and summary comparisons.
 7. The payload is cached in chunked `CacheService` entries for 2 minutes so warm loads can reuse the same data generation result.
-8. The frontend reconstructs the payload, then renders the command center, analytics views, detail views, and message templates client-side.
+8. The frontend reconstructs the payload, then renders the queue, calendar, detail views, and message templates client-side.
 
 ### Load-Path Notes
 
@@ -159,7 +159,8 @@ The current technical flow is:
 The app is not just a reporting view. It is meant to support operations decisions:
 
 - identify packages requiring immediate parent contact
-- monitor packages that are not urgent yet but will soon need follow-up
+- monitor students that are not urgent yet but will soon need follow-up
+- compare upcoming attendance dates against rolled-up credit risk
 - inspect a student's package-level projections before contacting the parent
 - copy a prewritten LINE message appropriate to the package state
 
@@ -196,7 +197,9 @@ The repo now includes `runValidationSuite()` in `Validation.gs` for deterministi
 - no-data status behavior
 - duplicate package deduplication
 - low-balance packages without schedule data
-- priority-score ordering
+- student queue roll-up behavior
+- pinned student ordering
+- calendar day grouping
 - summary delta calculations against stored snapshots
 - weekly alert bucket aggregation
 - dashboard payload cache miss and cache hit behavior

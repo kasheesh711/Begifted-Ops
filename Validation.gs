@@ -15,6 +15,9 @@ function runValidationSuite() {
     testDuplicatePackagesKeepLargestTotalCredits,
     testLowBalanceWithoutScheduleGetsDataQualityFlag,
     testPriorityScoreRanksNotifyAheadOfHealthy,
+    testStudentQueueRollsUpPackagesIntoOneRow,
+    testPinnedStudentsSortAheadOfOtherRisk,
+    testCalendarGroupsStudentSessionsByDay,
     testSummaryDeltasCompareAgainstPreviousSnapshot,
     testWeeklyBucketsGroupProjectedAlerts,
     testDashboardCacheMissBuildsAndCachesPayload,
@@ -343,11 +346,182 @@ function testPriorityScoreRanksNotifyAheadOfHealthy() {
     new Date(2026, 2, 29)
   );
 
-  assertEqual(dashboard.payload.actionQueue[0].student, "Gina Ho", "Expected notify package to rank first.");
+  assertEqual(dashboard.payload.studentQueue[0].student, "Gina Ho", "Expected notify student to rank first.");
   assertTrue(
-    dashboard.payload.actionQueue[0].priorityScore > dashboard.payload.actionQueue[1].priorityScore,
-    "Expected notify package to have a higher priority score."
+    dashboard.payload.studentQueue[0].priorityScore > dashboard.payload.studentQueue[1].priorityScore,
+    "Expected notify student to have a higher priority score."
   );
+}
+
+function testStudentQueueRollsUpPackagesIntoOneRow() {
+  const today = new Date(2026, 2, 29);
+  const sessionA = { date: new Date(2026, 3, 2), durationMin: 60 };
+  const sessionB = { date: new Date(2026, 3, 5), durationMin: 90 };
+  const students = [
+    {
+      student: "Iris Tan",
+      parent: "Pim Tan",
+      dataQualityFlags: [],
+      packages: [
+        finalizePackageRecord(
+          createPackageRecord(
+            "Iris Tan",
+            "Pim Tan",
+            "English Pack",
+            3,
+            0,
+            3,
+            10,
+            [sessionB],
+            computeProjection(3, [sessionB], today)
+          ),
+          { parent: "Pim Tan" }
+        ),
+        finalizePackageRecord(
+          createPackageRecord(
+            "Iris Tan",
+            "Pim Tan",
+            "Math Pack",
+            1.5,
+            0.5,
+            1,
+            8,
+            [sessionA],
+            computeProjection(1, [sessionA], today)
+          ),
+          { parent: "Pim Tan" }
+        ),
+      ],
+    },
+  ];
+
+  const dashboard = buildDashboardModel(
+    students,
+    { lastSnapshot: null, history: [] },
+    today,
+    today
+  );
+
+  assertEqual(dashboard.payload.studentQueue.length, 1, "Expected one rolled-up student queue row.");
+  assertEqual(dashboard.payload.studentQueue[0].totalAdjustedRemaining, 4, "Expected student actual balance to be summed across packages.");
+  assertEqual(dashboard.payload.studentQueue[0].totalCurrentRemaining, 4.5, "Expected student system balance to be summed across packages.");
+  assertEqual(dashboard.payload.studentQueue[0].nextSessionDate, "2026-04-02", "Expected next session to use the earliest scheduled package session.");
+}
+
+function testPinnedStudentsSortAheadOfOtherRisk() {
+  const today = new Date(2026, 2, 29);
+  const students = [
+    {
+      student: "Jade Lim",
+      parent: "May Lim",
+      dataQualityFlags: [],
+      packages: [
+        finalizePackageRecord(
+          createPackageRecord(
+            "Jade Lim",
+            "May Lim",
+            "Science Pack",
+            1.5,
+            0,
+            1.5,
+            10,
+            [],
+            computeProjection(1.5, [], today)
+          ),
+          { parent: "May Lim" }
+        ),
+      ],
+    },
+    {
+      student: "Kai Tan",
+      parent: "Nita Tan",
+      dataQualityFlags: [],
+      packages: [
+        finalizePackageRecord(
+          createPackageRecord(
+            "Kai Tan",
+            "Nita Tan",
+            "Reading Pack",
+            2.5,
+            0,
+            2.5,
+            10,
+            [{ date: new Date(2026, 3, 1), durationMin: 60 }],
+            computeProjection(2.5, [{ date: new Date(2026, 3, 1), durationMin: 60 }], today)
+          ),
+          { parent: "Nita Tan" }
+        ),
+      ],
+    },
+  ];
+
+  const dashboard = buildDashboardModel(
+    students,
+    { lastSnapshot: null, history: [] },
+    today,
+    today
+  );
+
+  assertEqual(dashboard.payload.studentQueue[0].student, "Jade Lim", "Expected low-balance no-schedule student to be pinned first.");
+  assertTrue(dashboard.payload.studentQueue[0].pinned, "Expected first student to be marked pinned.");
+}
+
+function testCalendarGroupsStudentSessionsByDay() {
+  const today = new Date(2026, 2, 29);
+  const sameDayA = { date: new Date(2026, 3, 4), durationMin: 60 };
+  const sameDayB = { date: new Date(2026, 3, 4), durationMin: 90 };
+  const students = [
+    {
+      student: "Lila Wong",
+      parent: "June Wong",
+      dataQualityFlags: [],
+      packages: [
+        finalizePackageRecord(
+          createPackageRecord(
+            "Lila Wong",
+            "June Wong",
+            "Math Pack",
+            4,
+            0,
+            4,
+            10,
+            [sameDayA],
+            computeProjection(4, [sameDayA], today)
+          ),
+          { parent: "June Wong" }
+        ),
+        finalizePackageRecord(
+          createPackageRecord(
+            "Lila Wong",
+            "June Wong",
+            "English Pack",
+            3,
+            0,
+            3,
+            10,
+            [sameDayB],
+            computeProjection(3, [sameDayB], today)
+          ),
+          { parent: "June Wong" }
+        ),
+      ],
+    },
+  ];
+
+  const dashboard = buildDashboardModel(
+    students,
+    { lastSnapshot: null, history: [] },
+    today,
+    today
+  );
+
+  const day = dashboard.payload.calendar.days.find(function(item) {
+    return item.date === "2026-04-04";
+  });
+
+  assertTrue(!!day, "Expected the scheduled date to appear in the calendar payload.");
+  assertEqual(day.totalStudents, 1, "Expected the calendar day summary to group the student once.");
+  assertEqual(day.students[0].sessions.length, 2, "Expected same-day package sessions to be grouped under the same student.");
 }
 
 function testSummaryDeltasCompareAgainstPreviousSnapshot() {
@@ -418,7 +592,7 @@ function testDashboardCacheMissBuildsAndCachesPayload() {
   });
 
   assertEqual(buildCount, 1, "Expected cache miss to build the payload exactly once.");
-  assertTrue(Array.isArray(payload.actionQueue), "Expected cached wrapper to return the dashboard payload shape.");
+  assertTrue(Array.isArray(payload.studentQueue), "Expected cached wrapper to return the student queue payload shape.");
   assertTrue(
     !!cache.store[getDashboardCacheMetaKey("fixture-cache-miss")],
     "Expected cache miss to write cache metadata."
@@ -542,6 +716,10 @@ function createDashboardPayloadFixture(lastUpdatedAt, previousUpdatedAt) {
         lowBalanceNoSchedule: 0,
         multiRiskStudents: 0,
       },
+      queue: {
+        students: 1,
+        pinnedStudents: 0,
+      },
       deltas: {
         packagesNotify: null,
         packagesWatch: null,
@@ -549,21 +727,16 @@ function createDashboardPayloadFixture(lastUpdatedAt, previousUpdatedAt) {
         risk30: null,
         pendingDeductionBacklog: null,
         noSchedule: null,
+        queueStudents: null,
+        pinnedStudents: null,
       },
     },
-    insights: [],
-    segments: {
-      packageNames: [],
-      parents: [],
-      cadence: [],
-      drivers: [],
-      distribution: [],
-      outreachByWeek: [],
-      exhaustionByWeek: [],
-      exhaustionHeatmap: [],
+    studentQueue: [{ key: "fixture-student", student: "Fixture Student", searchText: "fixture student" }],
+    calendar: {
+      availableStart: "2026-03-30",
+      availableEnd: "2026-03-30",
+      days: [],
     },
-    timeline: [],
-    actionQueue: [{ key: "fixture-package" }],
     students: [],
   };
 }
