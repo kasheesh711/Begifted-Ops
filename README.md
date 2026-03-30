@@ -6,6 +6,15 @@ This app gives admin staff a live view of which students are close to exhausting
 
 Read [`docs/app-overview.md`](docs/app-overview.md) before changing business logic. It summarizes the product purpose, sheet dependencies, status model, and known PRD-versus-code gaps.
 
+## Runtime Notes
+
+The dashboard now uses an async bootstrap path instead of embedding the full data payload into the initial HTML response.
+
+- `doGet()` returns the shell immediately so operators see the UI without waiting for spreadsheet reads.
+- `dashboard.html` loads the data asynchronously through Apps Script and shows explicit loading or retry states while the payload is in flight.
+- `Code.gs` caches the computed dashboard payload in chunked `CacheService` entries for 2 minutes so warm refreshes can reuse the same payload.
+- snapshot history and delta baselines are only persisted during a fresh recompute, not on cache hits
+
 ## Current Product Surfaces
 
 The live app is now organized into three primary surfaces:
@@ -65,7 +74,13 @@ Validation entrypoint in Apps Script:
 clasp run runValidationSuite
 ```
 
-The validation suite now covers both package-rule behavior and dashboard analytics helpers such as priority ranking, data-quality flags, and summary delta calculations.
+The validation suite now covers:
+
+- package-rule behavior
+- dashboard analytics helpers such as priority ranking, data-quality flags, and summary delta calculations
+- payload cache miss and cache hit behavior
+- chunked cache round-trips for large payloads
+- chunked transport manifest and chunk reconstruction helpers
 
 ## Development Rules
 

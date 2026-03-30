@@ -140,12 +140,19 @@ The original core requirements remain intact:
 The current technical flow is:
 
 1. Admin opens the Apps Script web app.
-2. Apps Script runs `getStudentData()` server-side.
-3. `Code.gs` reads the required sheets and applies business logic.
-4. The backend enriches the payload with queue ranking, summary analytics, data-quality flags, and segment data.
-5. The app stores a lightweight comparison snapshot in Apps Script script properties for delta and trend views.
-6. The resulting JSON payload is embedded into `dashboard.html`.
-7. The frontend renders the command center, analytics views, detail views, and message templates client-side.
+2. `doGet()` returns the dashboard shell immediately instead of embedding the full payload into the HTML template.
+3. `dashboard.html` requests the dashboard payload asynchronously from Apps Script after the shell is already visible.
+4. `Code.gs` either serves a cached dashboard payload or reads the required sheets and applies business logic on a fresh recompute.
+5. The backend enriches the payload with queue ranking, summary analytics, data-quality flags, and segment data.
+6. On a fresh recompute, the app stores a lightweight comparison snapshot in Apps Script script properties for delta and trend views.
+7. The payload is cached in chunked `CacheService` entries for 2 minutes so warm loads can reuse the same data generation result.
+8. The frontend reconstructs the payload, then renders the command center, analytics views, detail views, and message templates client-side.
+
+### Load-Path Notes
+
+- The async bootstrap avoids the prior blank-screen behavior where HTML delivery was blocked on spreadsheet reads.
+- The cached payload keeps `lastUpdatedAt` stable across cache hits because it reflects payload generation time, not page-open time.
+- Snapshot persistence happens only on fresh recomputes so delta and trend baselines do not churn on repeated page loads.
 
 ## Expected Staff Actions
 
@@ -192,6 +199,9 @@ The repo now includes `runValidationSuite()` in `Validation.gs` for deterministi
 - priority-score ordering
 - summary delta calculations against stored snapshots
 - weekly alert bucket aggregation
+- dashboard payload cache miss and cache hit behavior
+- chunked cache storage for large payloads
+- chunked browser transport manifest and chunk reconstruction helpers
 
 ## How To Use This Doc
 

@@ -21,6 +21,9 @@ const SNAPSHOT_STATE_KEY = "BG_DASHBOARD_SNAPSHOT_V2";
 const HISTORY_STATE_KEY = "BG_DASHBOARD_HISTORY_V2";
 const HISTORY_LIMIT = 12;
 const TREND_POINT_LIMIT = 8;
+const DASHBOARD_CACHE_KEY = "BG_DASHBOARD_PAYLOAD_V1";
+const DASHBOARD_CACHE_TTL_SECONDS = 120;
+const DASHBOARD_CACHE_CHUNK_SIZE = 90000;
 
 const REQUIRED_COLUMNS = Object.freeze({
   aggregations: [
@@ -63,8 +66,7 @@ const REQUIRED_COLUMNS = Object.freeze({
 
 function doGet() {
   return HtmlService
-    .createTemplateFromFile("dashboard")
-    .evaluate()
+    .createHtmlOutputFromFile("dashboard")
     .setTitle("BeGifted — Credit Control Command Center")
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
@@ -74,6 +76,75 @@ function doGet() {
 // ============================================================
 
 function getStudentData() {
+  return fetchDashboardData();
+}
+
+function beginDashboardDataTransfer(options) {
+  const settings = options || {};
+  const cache = Object.prototype.hasOwnProperty.call(settings, "cache")
+    ? settings.cache
+    : getDashboardCache();
+  const cacheKey = settings.cacheKey || DASHBOARD_CACHE_KEY;
+  const payloadLoader = settings.payloadLoader || fetchDashboardData;
+  const payload = payloadLoader();
+  const manifest = readChunkedCacheManifest(cache, cacheKey);
+
+  if (!manifest) {
+    return {
+      mode: "inline",
+      payload: payload,
+    };
+  }
+
+  return {
+    mode: "chunked",
+    parts: manifest.parts,
+  };
+}
+
+function fetchDashboardDataChunk(index, options) {
+  const settings = options || {};
+  const cache = Object.prototype.hasOwnProperty.call(settings, "cache")
+    ? settings.cache
+    : getDashboardCache();
+  const cacheKey = settings.cacheKey || DASHBOARD_CACHE_KEY;
+
+  if (!cache) {
+    throw new Error("Dashboard cache unavailable. Retry the load.");
+  }
+
+  const chunk = cache.get(getDashboardCachePartKey(cacheKey, index));
+  if (typeof chunk !== "string") {
+    throw new Error("Dashboard payload chunk unavailable. Retry the load.");
+  }
+
+  return chunk;
+}
+
+function fetchDashboardData() {
+  return getCachedDashboardPayload();
+}
+
+function getCachedDashboardPayload(options) {
+  const settings = options || {};
+  const cache = Object.prototype.hasOwnProperty.call(settings, "cache")
+    ? settings.cache
+    : getDashboardCache();
+  const payloadBuilder = settings.payloadBuilder || buildAndPersistDashboardPayload;
+  const cacheKey = settings.cacheKey || DASHBOARD_CACHE_KEY;
+  const ttlSeconds = settings.ttlSeconds || DASHBOARD_CACHE_TTL_SECONDS;
+  const cachedPayload = readChunkedCacheValue(cache, cacheKey);
+
+  if (cachedPayload) {
+    return cachedPayload;
+  }
+
+  const payload = payloadBuilder();
+  writeChunkedCacheValue(cache, cacheKey, payload, ttlSeconds);
+  return payload;
+}
+
+function buildAndPersistDashboardPayload() {
   try {
     const today = getTodayDate();
     const now = new Date();
@@ -107,7 +178,7 @@ function getStudentData() {
     persistSnapshotState(dashboardModel.snapshotState);
     return dashboardModel.payload;
   } catch (e) {
-    Logger.log("getStudentData error: " + e.toString());
+    Logger.log("buildAndPersistDashboardPayload error: " + e.toString());
     throw new Error("ดึงข้อมูลไม่ได้: " + e.message);
   }
 }
@@ -1316,6 +1387,77 @@ function persistSnapshotState(snapshotState) {
   const properties = PropertiesService.getScriptProperties();
   properties.setProperty(SNAPSHOT_STATE_KEY, JSON.stringify(snapshotState.lastSnapshot));
   properties.setProperty(HISTORY_STATE_KEY, JSON.stringify(snapshotState.history));
+}
+
+function getDashboardCache() {
+  if (typeof CacheService === "undefined") return null;
+  return CacheService.getScriptCache();
+}
+
+function readChunkedCacheValue(cache, cacheKey) {
+  if (!cache) return null;
+
+  const meta = readChunkedCacheManifest(cache, cacheKey);
+  if (!meta || !meta.parts || meta.parts < 1) {
+    return null;
+  }
+
+  const partKeys = [];
+  for (let index = 0; index < meta.parts; index++) {
+    partKeys.push(getDashboardCachePartKey(cacheKey, index));
+  }
+
+  const parts = cache.getAll(partKeys);
+  let serialized = "";
+
+  for (let index = 0; index < partKeys.length; index++) {
+    const value = parts[partKeys[index]];
+    if (typeof value !== "string") {
+      return null;
+    }
+    serialized += value;
+  }
+
+  return parseJsonSafely(serialized);
+}
+
+function readChunkedCacheManifest(cache, cacheKey) {
+  if (!cache) return null;
+  return parseJsonSafely(cache.get(getDashboardCacheMetaKey(cacheKey)));
+}
+
+function writeChunkedCacheValue(cache, cacheKey, value, ttlSeconds) {
+  if (!cache) return;
+
+  const serialized = JSON.stringify(value);
+  const chunks = chunkString(serialized, DASHBOARD_CACHE_CHUNK_SIZE);
+  const values = {};
+
+  values[getDashboardCacheMetaKey(cacheKey)] = JSON.stringify({ parts: chunks.length });
+
+  chunks.forEach(function(chunk, index) {
+    values[getDashboardCachePartKey(cacheKey, index)] = chunk;
+  });
+
+  cache.putAll(values, ttlSeconds);
+}
+
+function getDashboardCacheMetaKey(cacheKey) {
+  return cacheKey + "::meta";
+}
+
+function getDashboardCachePartKey(cacheKey, index) {
+  return cacheKey + "::part::" + index;
+}
+
+function chunkString(value, chunkSize) {
+  const chunks = [];
+
+  for (let index = 0; index < value.length; index += chunkSize) {
+    chunks.push(value.slice(index, index + chunkSize));
+  }
+
+  return chunks.length ? chunks : [""];
 }
 
 // ============================================================

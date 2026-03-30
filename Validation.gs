@@ -17,6 +17,11 @@ function runValidationSuite() {
     testPriorityScoreRanksNotifyAheadOfHealthy,
     testSummaryDeltasCompareAgainstPreviousSnapshot,
     testWeeklyBucketsGroupProjectedAlerts,
+    testDashboardCacheMissBuildsAndCachesPayload,
+    testDashboardCacheHitReusesPayloadWithoutRebuild,
+    testChunkedCacheRoundTripPreservesLargePayload,
+    testDashboardTransferManifestUsesChunkedMode,
+    testDashboardTransferChunkReadsStoredChunk,
   ];
 
   const failures = [];
@@ -399,6 +404,108 @@ function testWeeklyBucketsGroupProjectedAlerts() {
   assertEqual(buckets[1].count, 1, "Expected second weekly bucket to include next-week alerts.");
 }
 
+function testDashboardCacheMissBuildsAndCachesPayload() {
+  const cache = createFakeCache();
+  let buildCount = 0;
+  const payload = getCachedDashboardPayload({
+    cache: cache,
+    cacheKey: "fixture-cache-miss",
+    ttlSeconds: 120,
+    payloadBuilder: function() {
+      buildCount++;
+      return createDashboardPayloadFixture("2026-03-30T01:00:00Z");
+    },
+  });
+
+  assertEqual(buildCount, 1, "Expected cache miss to build the payload exactly once.");
+  assertTrue(Array.isArray(payload.actionQueue), "Expected cached wrapper to return the dashboard payload shape.");
+  assertTrue(
+    !!cache.store[getDashboardCacheMetaKey("fixture-cache-miss")],
+    "Expected cache miss to write cache metadata."
+  );
+}
+
+function testDashboardCacheHitReusesPayloadWithoutRebuild() {
+  const cache = createFakeCache();
+  let buildCount = 0;
+  let persistCount = 0;
+  const payloadBuilder = function() {
+    buildCount++;
+    persistCount++;
+    return createDashboardPayloadFixture("2026-03-30T02:00:00Z", "2026-03-29T02:00:00Z");
+  };
+
+  const first = getCachedDashboardPayload({
+    cache: cache,
+    cacheKey: "fixture-cache-hit",
+    ttlSeconds: 120,
+    payloadBuilder: payloadBuilder,
+  });
+  const second = getCachedDashboardPayload({
+    cache: cache,
+    cacheKey: "fixture-cache-hit",
+    ttlSeconds: 120,
+    payloadBuilder: payloadBuilder,
+  });
+
+  assertEqual(buildCount, 1, "Expected cache hit to avoid rebuilding the payload.");
+  assertEqual(persistCount, 1, "Expected snapshot-side effects to run only on fresh recompute.");
+  assertEqual(second.lastUpdatedAt, first.lastUpdatedAt, "Expected cache hit to preserve payload generation time.");
+  assertEqual(second.previousUpdatedAt, first.previousUpdatedAt, "Expected cache hit to preserve comparison timestamp.");
+}
+
+function testChunkedCacheRoundTripPreservesLargePayload() {
+  const cache = createFakeCache();
+  const payload = createDashboardPayloadFixture("2026-03-30T03:00:00Z");
+  payload.notes = "x".repeat(DASHBOARD_CACHE_CHUNK_SIZE + 25);
+
+  writeChunkedCacheValue(cache, "fixture-cache-chunks", payload, 120);
+  const restored = readChunkedCacheValue(cache, "fixture-cache-chunks");
+
+  assertEqual(restored.notes.length, payload.notes.length, "Expected chunked cache round trip to preserve large payloads.");
+  assertEqual(restored.lastUpdatedAt, payload.lastUpdatedAt, "Expected chunked cache round trip to preserve timestamps.");
+}
+
+function testDashboardTransferManifestUsesChunkedMode() {
+  const cache = createFakeCache();
+  const payload = createDashboardPayloadFixture("2026-03-30T04:00:00Z");
+  payload.notes = "x".repeat(DASHBOARD_CACHE_CHUNK_SIZE + 25);
+
+  writeChunkedCacheValue(cache, "fixture-transfer", payload, 120);
+
+  const manifest = beginDashboardDataTransfer({
+    cache: cache,
+    cacheKey: "fixture-transfer",
+    payloadLoader: function() {
+      return payload;
+    },
+  });
+
+  assertEqual(manifest.mode, "chunked", "Expected dashboard transfer to use chunked mode when cache metadata is present.");
+  assertTrue(manifest.parts > 1, "Expected chunked transfer manifest to expose multiple payload parts.");
+}
+
+function testDashboardTransferChunkReadsStoredChunk() {
+  const cache = createFakeCache();
+  const payload = createDashboardPayloadFixture("2026-03-30T05:00:00Z");
+  payload.notes = "x".repeat(DASHBOARD_CACHE_CHUNK_SIZE + 25);
+
+  writeChunkedCacheValue(cache, "fixture-transfer-chunk", payload, 120);
+
+  const manifest = readChunkedCacheManifest(cache, "fixture-transfer-chunk");
+  const restored = [];
+
+  for (let index = 0; index < manifest.parts; index++) {
+    restored.push(fetchDashboardDataChunk(index, {
+      cache: cache,
+      cacheKey: "fixture-transfer-chunk",
+    }));
+  }
+
+  const parsed = JSON.parse(restored.join(""));
+  assertEqual(parsed.notes.length, payload.notes.length, "Expected dashboard transfer chunks to rebuild the serialized payload.");
+}
+
 function createSnapshot(columnNames, rowObjects) {
   const cols = {};
 
@@ -414,6 +521,77 @@ function createSnapshot(columnNames, rowObjects) {
         return rowObject[columnName];
       });
     }),
+  };
+}
+
+function createDashboardPayloadFixture(lastUpdatedAt, previousUpdatedAt) {
+  return {
+    lastUpdatedAt: lastUpdatedAt,
+    previousUpdatedAt: previousUpdatedAt || null,
+    summary: {
+      students: { total: 1, notify: 0, watch: 0, ok: 1, nodata: 0 },
+      packages: { total: 1, notify: 0, watch: 0, ok: 1, nodata: 0 },
+      portfolio: {
+        exhaustedNow: 0,
+        risk7: 0,
+        risk14: 0,
+        risk30: 0,
+        noSchedule: 0,
+        pendingDeductionBacklog: 0,
+        pendingDeductionPackages: 0,
+        lowBalanceNoSchedule: 0,
+        multiRiskStudents: 0,
+      },
+      deltas: {
+        packagesNotify: null,
+        packagesWatch: null,
+        risk7: null,
+        risk30: null,
+        pendingDeductionBacklog: null,
+        noSchedule: null,
+      },
+    },
+    insights: [],
+    segments: {
+      packageNames: [],
+      parents: [],
+      cadence: [],
+      drivers: [],
+      distribution: [],
+      outreachByWeek: [],
+      exhaustionByWeek: [],
+      exhaustionHeatmap: [],
+    },
+    timeline: [],
+    actionQueue: [{ key: "fixture-package" }],
+    students: [],
+  };
+}
+
+function createFakeCache() {
+  const store = {};
+
+  return {
+    store: store,
+    get: function(key) {
+      return Object.prototype.hasOwnProperty.call(store, key) ? store[key] : null;
+    },
+    getAll: function(keys) {
+      const values = {};
+
+      keys.forEach(function(key) {
+        if (Object.prototype.hasOwnProperty.call(store, key)) {
+          values[key] = store[key];
+        }
+      });
+
+      return values;
+    },
+    putAll: function(values) {
+      Object.keys(values).forEach(function(key) {
+        store[key] = values[key];
+      });
+    },
   };
 }
 

@@ -962,6 +962,29 @@
     color: var(--ink-soft);
   }
 
+  .state-card {
+    padding: 28px;
+  }
+
+  .state-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+
+  .state-detail {
+    margin-top: 10px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  .state-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+
   .modal-overlay {
     position: fixed;
     inset: 0;
@@ -1100,13 +1123,59 @@
   </div>
 
 <script>
-const DATA = JSON.parse(<?= JSON.stringify(getStudentData()) ?>);
+function createEmptyDashboardData() {
+  return {
+    lastUpdatedAt: null,
+    previousUpdatedAt: null,
+    summary: {
+      students: { total: 0, notify: 0, watch: 0, ok: 0, nodata: 0 },
+      packages: { total: 0, notify: 0, watch: 0, ok: 0, nodata: 0 },
+      portfolio: {
+        exhaustedNow: 0,
+        risk7: 0,
+        risk14: 0,
+        risk30: 0,
+        noSchedule: 0,
+        pendingDeductionBacklog: 0,
+        pendingDeductionPackages: 0,
+        lowBalanceNoSchedule: 0,
+        multiRiskStudents: 0,
+      },
+      deltas: {
+        packagesNotify: null,
+        packagesWatch: null,
+        risk7: null,
+        risk30: null,
+        pendingDeductionBacklog: null,
+        noSchedule: null,
+      },
+    },
+    insights: [],
+    segments: {
+      packageNames: [],
+      parents: [],
+      cadence: [],
+      drivers: [],
+      distribution: [],
+      outreachByWeek: [],
+      exhaustionByWeek: [],
+      exhaustionHeatmap: [],
+    },
+    timeline: [],
+    actionQueue: [],
+    students: [],
+  };
+}
+
+let DATA = createEmptyDashboardData();
+let isLoading = true;
+let loadError = null;
 
 let currentView = "command";
 let currentFilter = "all";
 let currentSearch = "";
 let currentSort = { field: "priorityScore", dir: "desc" };
-let selectedQueueKey = DATA.actionQueue.length ? DATA.actionQueue[0].key : null;
+let selectedQueueKey = null;
 let selectedStudentIndex = null;
 
 function escapeHtml(value) {
@@ -1212,6 +1281,93 @@ function getInitials(name) {
     .toUpperCase();
 }
 
+function hasLoadedData() {
+  return !isLoading && !loadError;
+}
+
+function renderStateCard(title, detail, actionsMarkup) {
+  return `
+    <section class="panel state-card">
+      <div class="state-title">${escapeHtml(title)}</div>
+      <div class="state-detail">${escapeHtml(detail)}</div>
+      ${actionsMarkup ? `<div class="state-actions">${actionsMarkup}</div>` : ""}
+    </section>
+  `;
+}
+
+function applyLoadedData(payload) {
+  DATA = payload || createEmptyDashboardData();
+  isLoading = false;
+  loadError = null;
+  selectedQueueKey = DATA.actionQueue.length ? DATA.actionQueue[0].key : null;
+
+  if (selectedStudentIndex !== null && !DATA.students[selectedStudentIndex]) {
+    selectedStudentIndex = null;
+  }
+
+  renderAll();
+}
+
+function handleLoadFailure(error) {
+  isLoading = false;
+  loadError = error && error.message ? error.message : String(error || "Unknown error");
+  renderAll();
+}
+
+function requestServer(functionName) {
+  const args = Array.prototype.slice.call(arguments, 1);
+
+  return new Promise(function(resolve, reject) {
+    const runner = google.script.run
+      .withSuccessHandler(resolve)
+      .withFailureHandler(reject);
+
+    runner[functionName].apply(runner, args);
+  });
+}
+
+async function resolveDashboardTransfer(transfer) {
+  if (!transfer) {
+    throw new Error("Dashboard transfer did not return any data.");
+  }
+
+  if (transfer.mode === "inline") {
+    applyLoadedData(transfer.payload);
+    return;
+  }
+
+  if (transfer.mode !== "chunked" || !transfer.parts) {
+    throw new Error("Dashboard transfer metadata is incomplete.");
+  }
+
+  const chunkRequests = [];
+  for (let index = 0; index < transfer.parts; index++) {
+    chunkRequests.push(requestServer("fetchDashboardDataChunk", index));
+  }
+
+  const chunks = await Promise.all(chunkRequests);
+  applyLoadedData(JSON.parse(chunks.join("")));
+}
+
+function loadDashboardData() {
+  isLoading = true;
+  loadError = null;
+  renderAll();
+
+  if (typeof google === "undefined" || !google.script || !google.script.run) {
+    handleLoadFailure("Apps Script runtime is unavailable in this view.");
+    return;
+  }
+
+  requestServer("beginDashboardDataTransfer")
+    .then(resolveDashboardTransfer)
+    .catch(handleLoadFailure);
+}
+
+function retryLoadData() {
+  loadDashboardData();
+}
+
 function worstStatus(packages) {
   if (packages.some(function(pkg) { return pkg.status === "notify"; })) return "notify";
   if (packages.some(function(pkg) { return pkg.status === "watch"; })) return "watch";
@@ -1313,6 +1469,19 @@ function renderHeaderState() {
   document.getElementById("view-command").classList.toggle("active", currentView === "command");
   document.getElementById("view-analytics").classList.toggle("active", currentView === "analytics");
   document.getElementById("view-student").classList.toggle("active", currentView === "student");
+
+  if (isLoading) {
+    document.getElementById("freshness-label").textContent = "Loading dashboard data";
+    document.getElementById("comparison-label").textContent = "Preparing latest package view";
+    return;
+  }
+
+  if (loadError) {
+    document.getElementById("freshness-label").textContent = "Dashboard load failed";
+    document.getElementById("comparison-label").textContent = "Retry to fetch the latest data";
+    return;
+  }
+
   document.getElementById("freshness-label").textContent = "Last updated " + formatDateTime(DATA.lastUpdatedAt);
   document.getElementById("comparison-label").textContent = DATA.previousUpdatedAt
     ? "Compared with " + formatDateTime(DATA.previousUpdatedAt)
@@ -1320,6 +1489,23 @@ function renderHeaderState() {
 }
 
 function renderRail() {
+  if (isLoading) {
+    document.getElementById("rail").innerHTML = renderStateCard(
+      "Loading dashboard",
+      "The page shell is ready. Live spreadsheet data, analytics, and student detail are loading now."
+    );
+    return;
+  }
+
+  if (loadError) {
+    document.getElementById("rail").innerHTML = renderStateCard(
+      "Could not load dashboard",
+      loadError,
+      `<button class="ghost-btn" onclick="retryLoadData()">Retry load</button>`
+    );
+    return;
+  }
+
   const students = getSidebarStudents();
   const selectedStudent = getStudentByIndex(selectedStudentIndex);
 
@@ -1411,6 +1597,23 @@ function renderFilterChip(filterName, label, count) {
 }
 
 function renderContent() {
+  if (isLoading) {
+    document.getElementById("main-area").innerHTML = renderStateCard(
+      "Loading command center",
+      "Fetching the latest package balances, risk queue, analytics, and student detail data."
+    );
+    return;
+  }
+
+  if (loadError) {
+    document.getElementById("main-area").innerHTML = renderStateCard(
+      "Dashboard data unavailable",
+      loadError,
+      `<button class="action-btn" onclick="retryLoadData()">Retry</button>`
+    );
+    return;
+  }
+
   if (currentView === "analytics") {
     document.getElementById("main-area").innerHTML = renderAnalyticsView();
     return;
@@ -2250,6 +2453,12 @@ function renderExhaustionText(row) {
 }
 
 function setView(viewName) {
+  if (isLoading || loadError) {
+    currentView = viewName === "student" ? "command" : viewName;
+    renderAll();
+    return;
+  }
+
   if (viewName === "student" && selectedStudentIndex === null) {
     currentView = "command";
   } else {
@@ -2259,6 +2468,7 @@ function setView(viewName) {
 }
 
 function setFilter(filterName) {
+  if (!hasLoadedData()) return;
   currentFilter = filterName;
   const firstRow = getSortedFilteredQueue()[0];
   selectedQueueKey = firstRow ? firstRow.key : null;
@@ -2266,6 +2476,7 @@ function setFilter(filterName) {
 }
 
 function setSearch(value) {
+  if (!hasLoadedData()) return;
   currentSearch = String(value || "").trim().toLowerCase();
   const firstRow = getSortedFilteredQueue()[0];
   selectedQueueKey = firstRow ? firstRow.key : null;
@@ -2273,11 +2484,13 @@ function setSearch(value) {
 }
 
 function selectQueue(key) {
+  if (!hasLoadedData()) return;
   selectedQueueKey = key;
   renderContent();
 }
 
 function openStudent(index) {
+  if (!hasLoadedData()) return;
   selectedStudentIndex = index;
   currentView = "student";
   renderAll();
@@ -2289,6 +2502,7 @@ function goCommand() {
 }
 
 function toggleSort(field) {
+  if (!hasLoadedData()) return;
   if (currentSort.field === field) {
     currentSort.dir = currentSort.dir === "asc" ? "desc" : "asc";
   } else {
@@ -2336,6 +2550,7 @@ function buildParentMessage(student, pkg) {
 }
 
 function openMsgModalByIndex(studentIndex, packageIndex) {
+  if (!hasLoadedData()) return;
   const student = DATA.students[studentIndex];
   const pkg = student && student.packages ? student.packages[packageIndex] : null;
   if (!student || !pkg) return;
@@ -2349,6 +2564,7 @@ function closeModal() {
 }
 
 function copyMsg() {
+  if (!hasLoadedData()) return;
   navigator.clipboard.writeText(document.getElementById("modal-msg").textContent);
   document.getElementById("modal-copy-btn").textContent = "Copied";
 }
@@ -2364,6 +2580,7 @@ function renderAll() {
 }
 
 renderAll();
+loadDashboardData();
 </script>
 </body>
 </html>
