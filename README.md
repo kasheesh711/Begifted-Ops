@@ -2,9 +2,26 @@
 
 Package expiry alert dashboard for BeGifted Education, built as a shared Google Apps Script project and managed in GitHub.
 
-This app gives admin staff a live view of which students are close to exhausting prepaid tutoring credits, which packages need immediate follow-up, and what parent communication should happen next.
+This app gives admin staff a live view of which students are close to exhausting prepaid tutoring credits, which packages need immediate follow-up, what changed since the previous review, and which risk drivers deserve attention.
 
 Read [`docs/app-overview.md`](docs/app-overview.md) before changing business logic. It summarizes the product purpose, sheet dependencies, status model, and known PRD-versus-code gaps.
+
+## Runtime Notes
+
+The dashboard now uses an async bootstrap path instead of embedding the full data payload into the initial HTML response.
+
+- `doGet()` returns the shell immediately so operators see the UI without waiting for spreadsheet reads.
+- `dashboard.html` loads the data asynchronously through Apps Script and shows explicit loading or retry states while the payload is in flight.
+- `Code.gs` caches the computed dashboard payload in chunked `CacheService` entries for 2 minutes so warm refreshes can reuse the same payload.
+- snapshot history and delta baselines are only persisted during a fresh recompute, not on cache hits
+
+## Current Product Surfaces
+
+The live app is now organized into three primary surfaces:
+
+- `Command Center`: action KPIs, prioritized package queue, and contextual risk brief for the selected package
+- `Analytics`: trend, segment, and planning views derived from the current sheet data plus stored comparison snapshots
+- `Student Detail`: package-level balance waterfall, projection, data-quality warnings, and communication support
 
 ## Working Model
 
@@ -20,7 +37,8 @@ The shared workflow lives in [`docs/WORKFLOW.md`](docs/WORKFLOW.md).
 ## Repository Layout
 
 - `Code.gs`: server-side Apps Script logic.
-- `dashboard.html`: client-side dashboard UI.
+- `Validation.gs`: fixture-based validation runner for package-rule logic and analytics helpers.
+- `dashboard.html`: client-side command center, analytics workspace, and student detail UI.
 - `appsscript.json`: shared Apps Script manifest and web app settings.
 - `.clasp.json`: shared binding to the team Apps Script project.
 - `CLAUDE.md`: Claude-specific repo instructions.
@@ -49,6 +67,20 @@ clasp pull
 clasp push
 clasp deploy
 ```
+
+Validation entrypoint in Apps Script:
+
+```sh
+clasp run runValidationSuite
+```
+
+The validation suite now covers:
+
+- package-rule behavior
+- dashboard analytics helpers such as priority ranking, data-quality flags, and summary delta calculations
+- payload cache miss and cache hit behavior
+- chunked cache round-trips for large payloads
+- chunked transport manifest and chunk reconstruction helpers
 
 ## Development Rules
 

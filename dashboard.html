@@ -1,604 +1,2586 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BeGifted — Package Expiry Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>BeGifted - Credit Control Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #F7F5F0;
-    --surface: #FFFFFF;
-    --surface2: #F0EDE6;
-    --orange: #FE7622;
-    --orange-light: #FFF0E6;
-    --orange-dark: #D95F0A;
-    --blue: #0145A8;
-    --blue-light: #E8EFFC;
-    --blue-dark: #013080;
-    --cream: #EEE8D8;
-    --red: #C0392B;
-    --red-light: #FDECEB;
-    --yellow: #D4870A;
-    --yellow-light: #FEF9EC;
-    --green: #1A7A4A;
-    --green-light: #E8F5EE;
-    --gray: #6B7280;
-    --gray-light: #F3F4F6;
-    --border: rgba(0,0,0,0.08);
-    --border-strong: rgba(0,0,0,0.14);
-    --text: #1A1A2E;
-    --text-2: #4A4A6A;
-    --text-3: #8A8AAA;
-    --radius: 12px;
-    --radius-sm: 8px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.04);
-    --shadow-lg: 0 4px 24px rgba(0,0,0,0.10);
+    --bg: #f4f0e8;
+    --bg-strong: #ece4d8;
+    --surface: #fffdf9;
+    --surface-muted: #f7f2ea;
+    --surface-alt: #f1ebdf;
+    --navy: #0d3b73;
+    --navy-deep: #082847;
+    --navy-soft: #e7eef9;
+    --orange: #f36a1d;
+    --orange-soft: #fff1e7;
+    --red: #c63d31;
+    --red-soft: #fbe9e7;
+    --yellow: #d28b15;
+    --yellow-soft: #fff6df;
+    --green: #1d7a4f;
+    --green-soft: #e8f6ef;
+    --ink: #1d2230;
+    --ink-soft: #5d6473;
+    --ink-faint: #8e95a3;
+    --border: rgba(16, 24, 40, 0.08);
+    --border-strong: rgba(16, 24, 40, 0.14);
+    --shadow: 0 10px 24px rgba(14, 22, 36, 0.06);
+    --shadow-soft: 0 2px 10px rgba(14, 22, 36, 0.04);
+    --radius-lg: 22px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
   }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; line-height: 1.5; }
-  .topbar { background: var(--blue); padding: 0 28px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-  .topbar-brand { display: flex; align-items: center; gap: 10px; }
-  .brand-dot { width: 28px; height: 28px; background: var(--orange); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; color: white; }
-  .brand-name { font-weight: 700; font-size: 15px; color: white; letter-spacing: -0.02em; }
-  .brand-sub { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 1px; }
-  .topbar-right { display: flex; align-items: center; gap: 12px; }
-  .today-badge { font-size: 12px; color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.12); padding: 4px 10px; border-radius: 20px; }
-  .layout { display: grid; grid-template-columns: 340px 1fr; gap: 0; height: calc(100vh - 56px); }
-  .left-panel { background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-  .panel-header { padding: 16px 18px 12px; border-bottom: 1px solid var(--border); }
-  .panel-title { font-weight: 700; font-size: 13px; color: var(--text); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
-  .summary-pills { display: flex; gap: 6px; flex-wrap: wrap; }
-  .s-pill { display: flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1.5px solid transparent; transition: all 0.15s; }
-  .s-pill.active { border-color: currentColor; }
-  .s-pill.all { background: var(--blue-light); color: var(--blue); }
-  .s-pill.notify { background: var(--red-light); color: var(--red); }
-  .s-pill.watch { background: var(--yellow-light); color: var(--yellow); }
-  .s-pill.ok { background: var(--green-light); color: var(--green); }
-  .search-wrap { padding: 10px 18px; border-bottom: 1px solid var(--border); }
-  .search-input { width: 100%; padding: 7px 10px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: var(--text); background: var(--bg); outline: none; }
-  .search-input::placeholder { color: var(--text-3); }
-  .search-input:focus { border-color: var(--blue); }
-  .student-list { overflow-y: auto; flex: 1; }
-  .student-item { padding: 12px 18px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.12s; display: flex; align-items: center; gap: 12px; }
-  .student-item:hover { background: var(--gray-light); }
-  .student-item.active { background: var(--blue-light); }
-  .student-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
-  .student-info { flex: 1; min-width: 0; }
-  .student-name { font-weight: 600; font-size: 13px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .student-sub { font-size: 11px; color: var(--text-3); margin-top: 1px; }
-  .pkg-count { font-size: 10px; color: var(--text-3); }
-  .right-panel { overflow-y: auto; padding: 24px 28px; background: var(--bg); }
-  .overview-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
-  .metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); }
-  .metric-label { font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
-  .metric-value { font-size: 28px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
-  .metric-value.red { color: var(--red); }
-  .metric-value.yellow { color: var(--yellow); }
-  .metric-value.green { color: var(--green); }
-  .metric-value.blue { color: var(--blue); }
-  .metric-sub { font-size: 11px; color: var(--text-3); margin-top: 4px; }
-  .section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-  .section-head h2 { font-size: 15px; font-weight: 700; color: var(--text); }
-  .section-badge { background: var(--orange); color: white; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 20px; }
-  .alert-table { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; box-shadow: var(--shadow); margin-bottom: 24px; width: 100%; }
-  .alert-table table { width: 100%; border-collapse: collapse; }
-  .alert-table th { padding: 10px 14px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; text-align: left; background: var(--surface2); border-bottom: 1px solid var(--border); }
-  .alert-table td { padding: 11px 14px; font-size: 13px; color: var(--text); border-bottom: 1px solid var(--border); vertical-align: middle; }
-  .alert-table tr:last-child td { border-bottom: none; }
-  .alert-table tr:hover td { background: var(--gray-light); cursor: pointer; }
-  .status-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
-  .status-chip.notify { background: var(--red-light); color: var(--red); }
-  .status-chip.watch { background: var(--yellow-light); color: var(--yellow); }
-  .status-chip.ok { background: var(--green-light); color: var(--green); }
-  .status-chip.nodata { background: var(--gray-light); color: var(--gray); }
-  .detail-header { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 22px; margin-bottom: 20px; display: flex; align-items: center; gap: 16px; box-shadow: var(--shadow); }
-  .detail-avatar { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; }
-  .detail-name { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
-  .detail-parent { font-size: 13px; color: var(--text-2); margin-top: 4px; }
-  .detail-meta { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
-  .detail-tag { font-size: 11px; background: var(--blue-light); color: var(--blue); padding: 2px 8px; border-radius: 20px; font-weight: 500; }
-  .packages-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-bottom: 24px; }
-  .pkg-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
-  .pkg-card-header { padding: 14px 16px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; }
-  .pkg-name { font-weight: 700; font-size: 13px; color: var(--text); }
-  .pkg-stat-label { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; }
-  .pkg-stat-value { font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -0.03em; line-height: 1.2; }
-  .pkg-card-body { padding: 14px 16px; }
-  .credit-bar-wrap { margin-bottom: 12px; }
-  .credit-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-3); margin-bottom: 5px; }
-  .credit-bar-track { height: 6px; background: var(--gray-light); border-radius: 3px; overflow: hidden; }
-  .credit-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
-  .alert-info-box { border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 10px; font-size: 12px; }
-  .alert-info-box.notify { background: var(--red-light); border-left: 3px solid var(--red); border-radius: 0; }
-  .alert-info-box.watch { background: var(--yellow-light); border-left: 3px solid var(--yellow); border-radius: 0; }
-  .alert-info-box.nodata { background: var(--gray-light); border-left: 3px solid var(--text-3); border-radius: 0; }
-  .alert-info-row { display: flex; justify-content: space-between; margin-top: 4px; }
-  .alert-info-row span:first-child { color: var(--text-3); }
-  .alert-info-row span:last-child { font-weight: 600; color: var(--text); }
-  .calendar-section { margin-top: 20px; }
-  .cal-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
-  .cal-months-container { overflow-x: auto; }
-  .cal-months { display: flex; gap: 16px; min-width: max-content; padding-bottom: 8px; }
-  .cal-month { min-width: 200px; }
-  .cal-month-name { font-size: 11px; font-weight: 700; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
-  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
-  .cal-dow { font-size: 9px; color: var(--text-3); font-weight: 600; text-align: center; padding: 2px 0; text-transform: uppercase; }
-  .cal-day { aspect-ratio: 1; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; color: var(--text-3); cursor: default; }
-  .cal-day.session { font-weight: 700; cursor: pointer; transition: transform 0.1s; }
-  .cal-day.session:hover { transform: scale(1.15); }
-  .cal-day.session.ok { background: var(--green-light); color: var(--green); }
-  .cal-day.session.watch { background: var(--yellow-light); color: var(--yellow); }
-  .cal-day.session.alert { background: var(--red-light); color: var(--red); }
-  .cal-day.session.exhaust { background: var(--red); color: white; }
-  .cal-day.today-mark { border: 1.5px solid var(--blue); }
-  .cal-legend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
-  .cal-leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-3); }
-  .cal-leg-dot { width: 10px; height: 10px; border-radius: 50%; }
-  .tooltip { position: fixed; background: var(--text); color: white; padding: 6px 10px; border-radius: var(--radius-sm); font-size: 11px; font-family: 'DM Mono', monospace; pointer-events: none; z-index: 9999; white-space: nowrap; opacity: 0; transition: opacity 0.1s; }
-  .timeline-wrap { margin-top: 14px; }
-  .timeline-title { font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
-  .timeline-row { display: grid; grid-template-columns: 80px 40px 60px 1fr 80px; gap: 6px; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 11px; }
-  .timeline-row.header { color: var(--text-3); font-weight: 600; }
-  .timeline-row.alert-row { background: rgba(192,57,43,0.04); margin: 0 -2px; padding-left: 2px; border-radius: 4px; }
-  .timeline-row.exhaust-row { background: rgba(192,57,43,0.08); margin: 0 -2px; padding-left: 2px; border-radius: 4px; }
-  .tl-date { font-family: 'DM Mono', monospace; color: var(--text-2); }
-  .tl-dur { color: var(--text-3); text-align: right; }
-  .tl-deduct { color: var(--red); font-weight: 600; text-align: right; }
-  .tl-bar-wrap { display: flex; align-items: center; gap: 5px; }
-  .tl-bal { font-family: 'DM Mono', monospace; font-weight: 600; text-align: right; font-size: 12px; }
-  .back-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--blue); cursor: pointer; margin-bottom: 18px; padding: 5px 10px; border-radius: var(--radius-sm); background: var(--blue-light); border: none; font-family: inherit; }
-  .back-btn:hover { background: #d0dcf7; }
-  .send-msg-btn { display: flex; align-items: center; gap: 6px; width: 100%; margin-top: 10px; padding: 8px 12px; background: var(--orange); color: white; border: none; border-radius: var(--radius-sm); font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.15s; }
-  .send-msg-btn:hover { background: var(--orange-dark); }
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; }
+  body {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(243,106,29,0.08), transparent 24%),
+      radial-gradient(circle at top right, rgba(13,59,115,0.08), transparent 28%),
+      var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  button, input { font: inherit; }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 18px 24px;
+    background: rgba(244, 240, 232, 0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(16, 24, 40, 0.08);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .brand-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--orange), #ff9652);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    box-shadow: 0 12px 24px rgba(243, 106, 29, 0.22);
+  }
+
+  .brand-title {
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+
+  .brand-subtitle {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .view-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(16, 24, 40, 0.08);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .view-btn {
+    border: none;
+    background: transparent;
+    color: var(--ink-soft);
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.16s ease;
+  }
+
+  .view-btn.active {
+    background: var(--navy);
+    color: white;
+    box-shadow: 0 8px 18px rgba(13, 59, 115, 0.2);
+  }
+
+  .topbar-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .meta-pill {
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(16, 24, 40, 0.08);
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .workspace {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 22px;
+    padding: 22px;
+  }
+
+  .rail {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: calc(100vh - 108px);
+  }
+
+  .panel {
+    background: rgba(255, 253, 249, 0.92);
+    border: 1px solid rgba(16, 24, 40, 0.08);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+  }
+
+  .rail-panel {
+    padding: 18px;
+  }
+
+  .panel-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .panel-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 800;
+    color: var(--ink-faint);
+  }
+
+  .panel-caption {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface-muted);
+    color: var(--ink);
+    outline: none;
+  }
+
+  .search-input:focus {
+    border-color: var(--navy);
+    background: white;
+  }
+
+  .filter-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .filter-chip {
+    border: 1px solid rgba(16, 24, 40, 0.08);
+    border-radius: 16px;
+    background: white;
+    padding: 12px;
+    cursor: pointer;
+    transition: 0.16s ease;
+    text-align: left;
+  }
+
+  .filter-chip.active {
+    border-color: rgba(13, 59, 115, 0.28);
+    background: var(--navy-soft);
+    box-shadow: inset 0 0 0 1px rgba(13, 59, 115, 0.08);
+  }
+
+  .chip-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .chip-count {
+    margin-top: 4px;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+
+  .student-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 56vh;
+    overflow: auto;
+  }
+
+  .student-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid transparent;
+    background: rgba(241, 235, 223, 0.36);
+    cursor: pointer;
+    transition: 0.16s ease;
+  }
+
+  .student-row:hover,
+  .student-row.active {
+    background: white;
+    border-color: rgba(13, 59, 115, 0.16);
+    transform: translateY(-1px);
+  }
+
+  .avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: -0.04em;
+    flex-shrink: 0;
+  }
+
+  .student-copy {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .student-name {
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .student-sub {
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+
+  .student-meta {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
+
+  .status-pill,
+  .flag-pill,
+  .delta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .status-pill.notify,
+  .tone-critical {
+    background: var(--red-soft);
+    color: var(--red);
+  }
+
+  .status-pill.watch,
+  .tone-warning {
+    background: var(--yellow-soft);
+    color: var(--yellow);
+  }
+
+  .status-pill.ok,
+  .tone-positive {
+    background: var(--green-soft);
+    color: var(--green);
+  }
+
+  .status-pill.nodata,
+  .tone-info {
+    background: var(--navy-soft);
+    color: var(--navy);
+  }
+
+  .delta-pill {
+    background: rgba(255, 255, 255, 0.72);
+    color: var(--ink-soft);
+  }
+
+  .flag-pill {
+    background: var(--surface-alt);
+    color: var(--ink-soft);
+    padding: 5px 10px;
+  }
+
+  .mini-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .main-area {
+    min-width: 0;
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .metric-card {
+    padding: 18px;
+    border-radius: var(--radius-lg);
+    background: rgba(255, 253, 249, 0.92);
+    border: 1px solid rgba(16, 24, 40, 0.08);
+    box-shadow: var(--shadow);
+  }
+
+  .metric-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 800;
+    color: var(--ink-faint);
+  }
+
+  .metric-value {
+    margin-top: 10px;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+
+  .metric-sub {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .command-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) 360px;
+    gap: 18px;
+  }
+
+  .queue-panel,
+  .context-column,
+  .analytics-grid,
+  .detail-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .queue-card {
+    padding: 18px;
+  }
+
+  .queue-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+
+  .queue-title {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+
+  .queue-subtitle {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+
+  .queue-count {
+    padding: 9px 12px;
+    border-radius: 999px;
+    background: var(--surface-muted);
+    color: var(--ink-soft);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .queue-table-wrap {
+    overflow: auto;
+    border-radius: 18px;
+    border: 1px solid rgba(16, 24, 40, 0.06);
+    background: white;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    background: var(--surface-muted);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    cursor: pointer;
+  }
+
+  th.no-sort { cursor: default; }
+
+  td {
+    padding: 14px 16px;
+    border-top: 1px solid rgba(16, 24, 40, 0.06);
+    vertical-align: top;
+    font-size: 13px;
+  }
+
+  .queue-row {
+    cursor: pointer;
+    transition: 0.14s ease;
+  }
+
+  .queue-row:hover,
+  .queue-row.active {
+    background: rgba(231, 238, 249, 0.78);
+  }
+
+  .queue-primary {
+    font-weight: 700;
+  }
+
+  .queue-secondary {
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .mono {
+    font-family: "DM Mono", monospace;
+  }
+
+  .context-card {
+    padding: 18px;
+  }
+
+  .context-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .context-title {
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+
+  .context-subtitle {
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  .context-grid {
+    display: grid;
+    gap: 14px;
+  }
+
+  .context-block {
+    padding: 14px;
+    border-radius: 16px;
+    background: var(--surface-muted);
+  }
+
+  .context-block h4,
+  .analytics-card h3,
+  .detail-card h3 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 800;
+    color: var(--ink-faint);
+    margin-bottom: 10px;
+  }
+
+  .context-hero {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .context-stat {
+    padding: 12px;
+    border-radius: 14px;
+    background: white;
+    border: 1px solid rgba(16, 24, 40, 0.06);
+  }
+
+  .context-stat-label {
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 800;
+  }
+
+  .context-stat-value {
+    margin-top: 8px;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .action-btn,
+  .ghost-btn {
+    border: none;
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.14s ease;
+  }
+
+  .action-btn {
+    background: var(--orange);
+    color: white;
+    box-shadow: 0 12px 24px rgba(243, 106, 29, 0.18);
+  }
+
+  .ghost-btn {
+    background: white;
+    color: var(--navy);
+    border: 1px solid rgba(13, 59, 115, 0.12);
+  }
+
+  .insight-list,
+  .driver-list,
+  .segment-list,
+  .upcoming-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .insight-row,
+  .driver-row,
+  .segment-row,
+  .upcoming-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: white;
+    border: 1px solid rgba(16, 24, 40, 0.06);
+  }
+
+  .insight-copy,
+  .segment-copy {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .insight-name,
+  .segment-name {
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .insight-detail,
+  .segment-detail {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 3px;
+  }
+
+  .insight-value,
+  .segment-value {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    text-align: right;
+  }
+
+  .analytics-grid {
+    display: grid;
+    gap: 18px;
+  }
+
+  .analytics-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .analytics-card,
+  .detail-card {
+    padding: 20px;
+  }
+
+  .chart-shell {
+    padding: 14px;
+    border-radius: 18px;
+    background: var(--surface-muted);
+    border: 1px solid rgba(16, 24, 40, 0.05);
+  }
+
+  .chart-labels,
+  .bar-list {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+
+  .legend-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .segment-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .segment-bar-track,
+  .hist-bar-track,
+  .week-bar-track {
+    height: 10px;
+    border-radius: 999px;
+    background: var(--surface-alt);
+    overflow: hidden;
+  }
+
+  .segment-bar-fill,
+  .hist-bar-fill,
+  .week-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+  }
+
+  .hist-grid,
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 12px;
+  }
+
+  .hist-cell,
+  .week-cell {
+    padding: 12px;
+    border-radius: 16px;
+    background: white;
+    border: 1px solid rgba(16, 24, 40, 0.06);
+  }
+
+  .hist-value,
+  .week-value {
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+
+  .heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .heatmap-cell {
+    aspect-ratio: 1;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink-soft);
+    background: rgba(255,255,255,0.5);
+  }
+
+  .detail-header {
+    padding: 20px;
+  }
+
+  .detail-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .back-btn {
+    border: none;
+    background: var(--navy-soft);
+    color: var(--navy);
+    font-weight: 700;
+    padding: 10px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  .detail-name {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+  }
+
+  .detail-sub {
+    margin-top: 6px;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+
+  .detail-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .detail-summary-card {
+    padding: 14px;
+    border-radius: 16px;
+    background: var(--surface-muted);
+  }
+
+  .detail-summary-card .metric-label {
+    margin-bottom: 8px;
+  }
+
+  .package-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .package-card {
+    padding: 20px;
+  }
+
+  .package-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .package-title {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+
+  .package-subtitle {
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  .package-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .stat-card {
+    padding: 12px;
+    border-radius: 14px;
+    background: white;
+    border: 1px solid rgba(16, 24, 40, 0.06);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    font-weight: 800;
+  }
+
+  .stat-value {
+    margin-top: 8px;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+
+  .waterfall {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .waterfall-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 64px;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .waterfall-label {
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-weight: 700;
+  }
+
+  .waterfall-track {
+    height: 12px;
+    border-radius: 999px;
+    background: var(--surface-alt);
+    overflow: hidden;
+  }
+
+  .waterfall-fill {
+    height: 100%;
+    border-radius: 999px;
+  }
+
+  .waterfall-value {
+    text-align: right;
+    font-weight: 800;
+    font-size: 12px;
+  }
+
+  .projection-table {
+    margin-top: 12px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(16, 24, 40, 0.06);
+  }
+
+  .projection-table table td,
+  .projection-table table th {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .projection-bars {
+    display: flex;
+    gap: 8px;
+    align-items: end;
+    min-height: 120px;
+  }
+
+  .projection-bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .projection-bar {
+    width: 100%;
+    max-width: 34px;
+    border-radius: 12px 12px 8px 8px;
+  }
+
+  .projection-label {
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+
+  .empty-state {
+    padding: 28px;
+    text-align: center;
+    color: var(--ink-soft);
+  }
+
+  .state-card {
+    padding: 28px;
+  }
+
+  .state-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+
+  .state-detail {
+    margin-top: 10px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  .state-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 15, 24, 0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 70;
+    padding: 20px;
+  }
+
   .modal-overlay.open { display: flex; }
-  .modal { background: white; border-radius: var(--radius); padding: 24px; width: 460px; max-width: 95vw; box-shadow: var(--shadow-lg); }
-  .modal h3 { font-size: 15px; font-weight: 700; margin-bottom: 14px; }
-  .modal-msg { background: var(--bg); border-radius: var(--radius-sm); padding: 14px; font-size: 13px; color: var(--text); line-height: 1.7; white-space: pre-wrap; border: 1px solid var(--border); margin-bottom: 14px; }
-  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
-  .modal-btn { padding: 8px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; background: white; color: var(--text); }
-  .modal-btn.primary { background: var(--orange); color: white; border-color: var(--orange); }
-  .modal-btn:hover { opacity: 0.85; }
-  @media (max-width: 768px) {
-    .layout { grid-template-columns: 1fr; }
-    .left-panel { max-height: 40vh; }
-    .overview-grid { grid-template-columns: repeat(2,1fr); }
+
+  .modal {
+    width: min(560px, 100%);
+    padding: 24px;
+    border-radius: 24px;
+    background: white;
+    box-shadow: 0 20px 40px rgba(8, 15, 24, 0.2);
+  }
+
+  .modal h3 {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    margin-bottom: 14px;
+  }
+
+  .modal-msg {
+    padding: 16px;
+    border-radius: 16px;
+    background: var(--surface-muted);
+    border: 1px solid rgba(16, 24, 40, 0.06);
+    white-space: pre-wrap;
+    line-height: 1.7;
+    color: var(--ink);
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .modal-btn {
+    border: none;
+    padding: 11px 16px;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .modal-btn.secondary {
+    background: var(--surface-muted);
+    color: var(--ink-soft);
+  }
+
+  .modal-btn.primary {
+    background: var(--orange);
+    color: white;
+  }
+
+  @media (max-width: 1380px) {
+    .metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .command-grid,
+    .analytics-row,
+    .package-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 1120px) {
+    .workspace { grid-template-columns: 1fr; }
+    .rail { min-height: auto; }
+    .student-list { max-height: none; }
+  }
+
+  @media (max-width: 760px) {
+    .topbar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .view-switch {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .metrics-grid,
+    .detail-summary-grid,
+    .context-hero,
+    .stat-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .filter-grid { grid-template-columns: 1fr; }
+    .waterfall-row { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
-
-<div class="topbar">
-  <div class="topbar-brand">
-    <div class="brand-dot">BG</div>
-    <div>
-      <div class="brand-name">BeGifted Education</div>
-      <div class="brand-sub">Package Expiry Dashboard</div>
-    </div>
-  </div>
-  <div class="topbar-right">
-    <span class="today-badge" id="today-label"></span>
-  </div>
-</div>
-
-<div class="layout">
-  <div class="left-panel">
-    <div class="panel-header">
-      <div class="panel-title">Students</div>
-      <div class="summary-pills" id="filter-pills">
-        <div class="s-pill all active" onclick="setFilter('all')">All <span id="cnt-all">0</span></div>
-        <div class="s-pill notify" onclick="setFilter('notify')">Notify <span id="cnt-notify">0</span></div>
-        <div class="s-pill watch" onclick="setFilter('watch')">Watch <span id="cnt-watch">0</span></div>
-        <div class="s-pill ok" onclick="setFilter('ok')">OK <span id="cnt-ok">0</span></div>
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-badge">BG</div>
+      <div>
+        <div class="brand-title">BeGifted Credit Control</div>
+        <div class="brand-subtitle">Action-first package monitoring and analytics</div>
       </div>
     </div>
-    <div class="search-wrap">
-      <input class="search-input" type="text" placeholder="Search student or parent..." oninput="handleSearch(this.value)" />
+
+    <div class="view-switch">
+      <button class="view-btn active" id="view-command" onclick="setView('command')">Command Center</button>
+      <button class="view-btn" id="view-analytics" onclick="setView('analytics')">Analytics</button>
+      <button class="view-btn" id="view-student" onclick="currentView==='student' ? setView('student') : null">Student Detail</button>
     </div>
-    <div class="student-list" id="student-list"></div>
-  </div>
-  <div class="right-panel" id="right-panel"></div>
-</div>
 
-<div class="tooltip" id="tooltip"></div>
-
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal">
-    <h3>แจ้งผู้ปกครองทาง LINE</h3>
-    <div class="modal-msg" id="modal-msg"></div>
-    <div class="modal-actions">
-      <button class="modal-btn" onclick="closeModal()">ปิด</button>
-      <button class="modal-btn primary" onclick="copyMsg()">Copy Message</button>
+    <div class="topbar-meta">
+      <span class="meta-pill" id="freshness-label"></span>
+      <span class="meta-pill" id="comparison-label"></span>
     </div>
   </div>
-</div>
+
+  <div class="workspace">
+    <aside class="rail" id="rail"></aside>
+    <main class="main-area" id="main-area"></main>
+  </div>
+
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <h3>LINE message preview</h3>
+      <div class="modal-msg" id="modal-msg"></div>
+      <div class="modal-actions">
+        <button class="modal-btn secondary" onclick="closeModal()">Close</button>
+        <button class="modal-btn primary" id="modal-copy-btn" onclick="copyMsg()">Copy message</button>
+      </div>
+    </div>
+  </div>
 
 <script>
-const TODAY = new Date();
-TODAY.setHours(0,0,0,0);
+function createEmptyDashboardData() {
+  return {
+    lastUpdatedAt: null,
+    previousUpdatedAt: null,
+    summary: {
+      students: { total: 0, notify: 0, watch: 0, ok: 0, nodata: 0 },
+      packages: { total: 0, notify: 0, watch: 0, ok: 0, nodata: 0 },
+      portfolio: {
+        exhaustedNow: 0,
+        risk7: 0,
+        risk14: 0,
+        risk30: 0,
+        noSchedule: 0,
+        pendingDeductionBacklog: 0,
+        pendingDeductionPackages: 0,
+        lowBalanceNoSchedule: 0,
+        multiRiskStudents: 0,
+      },
+      deltas: {
+        packagesNotify: null,
+        packagesWatch: null,
+        risk7: null,
+        risk30: null,
+        pendingDeductionBacklog: null,
+        noSchedule: null,
+      },
+    },
+    insights: [],
+    segments: {
+      packageNames: [],
+      parents: [],
+      cadence: [],
+      drivers: [],
+      distribution: [],
+      outreachByWeek: [],
+      exhaustionByWeek: [],
+      exhaustionHeatmap: [],
+    },
+    timeline: [],
+    actionQueue: [],
+    students: [],
+  };
+}
 
-const DATA = JSON.parse(<?= JSON.stringify(getStudentData()) ?>);
+let DATA = createEmptyDashboardData();
+let isLoading = true;
+let loadError = null;
 
-let currentFilter = 'all';
-let currentSearch = '';
-let selectedStudent = null;
-let currentView = 'overview';
+let currentView = "command";
+let currentFilter = "all";
+let currentSearch = "";
+let currentSort = { field: "priorityScore", dir: "desc" };
+let selectedQueueKey = null;
+let selectedStudentIndex = null;
 
-function getInitials(name) { return name.split(' ').filter(n=>n&&!n.startsWith('(')).slice(0,2).map(n=>n[0]).join('').toUpperCase(); }
-function avatarColor(i) {
-  const p = [
-    {bg:'#E8EFFC',fg:'#0145A8'},{bg:'#FFF0E6',fg:'#D95F0A'},
-    {bg:'#E8F5EE',fg:'#1A7A4A'},{bg:'#FFF9EC',fg:'#C87D0A'},{bg:'#F3EEFF',fg:'#6B2FD9'}
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, function(character) {
+    return {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    }[character];
+  });
+}
+
+function formatNumber(value) {
+  if (value === null || value === undefined || Number.isNaN(Number(value))) return "-";
+  const numeric = Number(value);
+  return Number.isInteger(numeric) ? String(numeric) : numeric.toFixed(1);
+}
+
+function formatSigned(value, suffix) {
+  if (value === null || value === undefined) return "Baseline";
+  const numeric = Number(value);
+  const sign = numeric > 0 ? "+" : "";
+  return sign + formatNumber(numeric) + (suffix || "");
+}
+
+function formatDate(dateString) {
+  if (!dateString) return "No date";
+  return new Date(dateString).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+function formatShortDate(dateString) {
+  if (!dateString) return "No date";
+  return new Date(dateString).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+  });
+}
+
+function formatDateTime(dateString) {
+  if (!dateString) return "No baseline";
+  return new Date(dateString).toLocaleString("en-GB", {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function statusLabel(status) {
+  return {
+    notify: "Act now",
+    watch: "Watch",
+    ok: "Healthy",
+    nodata: "No data",
+  }[status] || status;
+}
+
+function flagLabel(flag) {
+  return {
+    "no-upcoming-sessions": "No future schedule",
+    "pending-deduction": "Pending deduction",
+    "duplicate-source-rows": "Duplicate source rows",
+    "low-balance-no-schedule": "Low balance + no schedule",
+    "missing-parent": "Missing parent",
+    "exhausted-now": "Exhausted now",
+  }[flag] || flag;
+}
+
+function toneClass(tone) {
+  return {
+    critical: "tone-critical",
+    warning: "tone-warning",
+    attention: "tone-warning",
+    positive: "tone-positive",
+    info: "tone-info",
+  }[tone] || "tone-info";
+}
+
+function avatarPalette(index) {
+  const palettes = [
+    { bg: "#e7eef9", fg: "#0d3b73" },
+    { bg: "#fff1e7", fg: "#f36a1d" },
+    { bg: "#e8f6ef", fg: "#1d7a4f" },
+    { bg: "#fff6df", fg: "#d28b15" },
+    { bg: "#ede8fa", fg: "#5d43c4" },
   ];
-  return p[i % p.length];
-}
-function worstStatus(pkgs) {
-  if (pkgs.some(p=>p.status==='notify')) return 'notify';
-  if (pkgs.some(p=>p.status==='watch'))  return 'watch';
-  if (pkgs.some(p=>p.status==='ok'))     return 'ok';
-  return 'nodata';
-}
-function statusLabel(s) { return {notify:'Notify Now',watch:'Watch',ok:'OK',nodata:'No Data'}[s]||s; }
-function fmtDate(d) {
-  if (!d) return '—';
-  return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
-}
-function balColor(bal) { return bal>=4?'green':bal>=2?'yellow':'red'; }
-function computeCounts() {
-  let n=0,w=0,o=0;
-  DATA.forEach(s=>{
-    const st=worstStatus(s.packages);
-    if(st==='notify')n++; else if(st==='watch')w++; else if(st==='ok')o++;
-  });
-  return {total:DATA.length,notify:n,watch:w,ok:o};
+  return palettes[index % palettes.length];
 }
 
-function renderList() {
-  const list = document.getElementById('student-list');
-  const filtered = DATA.filter(s => {
-    const st = worstStatus(s.packages);
-    const matchFilter = currentFilter==='all' || st===currentFilter;
-    const matchSearch = !currentSearch ||
-      s.student.toLowerCase().includes(currentSearch) ||
-      s.parent.toLowerCase().includes(currentSearch);
-    return matchFilter && matchSearch;
+function getInitials(name) {
+  return String(name || "")
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(function(part) { return part[0]; })
+    .join("")
+    .toUpperCase();
+}
+
+function hasLoadedData() {
+  return !isLoading && !loadError;
+}
+
+function renderStateCard(title, detail, actionsMarkup) {
+  return `
+    <section class="panel state-card">
+      <div class="state-title">${escapeHtml(title)}</div>
+      <div class="state-detail">${escapeHtml(detail)}</div>
+      ${actionsMarkup ? `<div class="state-actions">${actionsMarkup}</div>` : ""}
+    </section>
+  `;
+}
+
+function applyLoadedData(payload) {
+  DATA = payload || createEmptyDashboardData();
+  isLoading = false;
+  loadError = null;
+  selectedQueueKey = DATA.actionQueue.length ? DATA.actionQueue[0].key : null;
+
+  if (selectedStudentIndex !== null && !DATA.students[selectedStudentIndex]) {
+    selectedStudentIndex = null;
+  }
+
+  renderAll();
+}
+
+function handleLoadFailure(error) {
+  isLoading = false;
+  loadError = error && error.message ? error.message : String(error || "Unknown error");
+  renderAll();
+}
+
+function requestServer(functionName) {
+  const args = Array.prototype.slice.call(arguments, 1);
+
+  return new Promise(function(resolve, reject) {
+    const runner = google.script.run
+      .withSuccessHandler(resolve)
+      .withFailureHandler(reject);
+
+    runner[functionName].apply(runner, args);
   });
-  if (!filtered.length) {
-    list.innerHTML='<div style="padding:24px;text-align:center;color:var(--text-3);font-size:13px;">No students found</div>';
+}
+
+async function resolveDashboardTransfer(transfer) {
+  if (!transfer) {
+    throw new Error("Dashboard transfer did not return any data.");
+  }
+
+  if (transfer.mode === "inline") {
+    applyLoadedData(transfer.payload);
     return;
   }
-  list.innerHTML = filtered.map(s => {
-    const ri = DATA.indexOf(s);
-    const st = worstStatus(s.packages);
-    const pal = avatarColor(ri);
-    const isActive = selectedStudent && selectedStudent.student===s.student;
-    return `<div class="student-item${isActive?' active':''}" onclick="selectStudent(${ri})">
-      <div class="student-avatar" style="background:${pal.bg};color:${pal.fg}">${getInitials(s.student)}</div>
-      <div class="student-info">
-        <div class="student-name">${s.student.split(' ')[0]} ${s.student.split(' ').slice(-1)[0]}</div>
-        <div class="student-sub">Parent: ${s.parent.split(' ')[0]}</div>
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
-        <span class="status-chip ${st}" style="font-size:10px;padding:2px 7px">${statusLabel(st)}</span>
-        <span class="pkg-count">${s.packages.length} package${s.packages.length>1?'s':''}</span>
-      </div>
-    </div>`;
-  }).join('');
+
+  if (transfer.mode !== "chunked" || !transfer.parts) {
+    throw new Error("Dashboard transfer metadata is incomplete.");
+  }
+
+  const chunkRequests = [];
+  for (let index = 0; index < transfer.parts; index++) {
+    chunkRequests.push(requestServer("fetchDashboardDataChunk", index));
+  }
+
+  const chunks = await Promise.all(chunkRequests);
+  applyLoadedData(JSON.parse(chunks.join("")));
 }
 
-function renderOverview() {
-  const counts = computeCounts();
-  const right = document.getElementById('right-panel');
-  const notifyPkgs = [];
-  DATA.forEach(s => s.packages.filter(p=>p.status==='notify').forEach(p => notifyPkgs.push({student:s,pkg:p})));
-  notifyPkgs.sort((a,b)=>(a.pkg.daysUntilAlert||999)-(b.pkg.daysUntilAlert||999));
-  const watchStudents = DATA.filter(s=>worstStatus(s.packages)==='watch');
+function loadDashboardData() {
+  isLoading = true;
+  loadError = null;
+  renderAll();
 
-  right.innerHTML = `
-    <div class="overview-grid">
-      <div class="metric-card"><div class="metric-label">Total Students</div><div class="metric-value blue">${counts.total}</div><div class="metric-sub">active in system</div></div>
-      <div class="metric-card"><div class="metric-label">Notify Now</div><div class="metric-value red">${counts.notify}</div><div class="metric-sub">credit &lt; 2 now</div></div>
-      <div class="metric-card"><div class="metric-label">Watch</div><div class="metric-value yellow">${counts.watch}</div><div class="metric-sub">within 30 days</div></div>
-      <div class="metric-card"><div class="metric-label">OK / No Data</div><div class="metric-value green">${counts.ok+(counts.total-counts.notify-counts.watch-counts.ok)}</div><div class="metric-sub">no action needed</div></div>
-    </div>
+  if (typeof google === "undefined" || !google.script || !google.script.run) {
+    handleLoadFailure("Apps Script runtime is unavailable in this view.");
+    return;
+  }
 
-    ${notifyPkgs.length?`
-    <div class="section-head"><h2>Packages requiring action</h2><span class="section-badge">${notifyPkgs.length} packages</span></div>
-    <div class="alert-table"><table>
-      <thead><tr><th>Student</th><th>Parent</th><th>Package</th><th>Actual Credits</th><th>Exhausted</th><th>Days Left</th><th>Status</th><th></th></tr></thead>
-      <tbody>${notifyPkgs.map(({student:s,pkg:p})=>`
-        <tr onclick="selectStudent(${DATA.indexOf(s)})">
-          <td><b>${s.student.split(' ')[0]}</b></td>
-          <td style="color:var(--text-3)">${s.parent}</td>
-          <td style="font-size:12px">${p.name}</td>
-          <td><b style="color:var(--red)">${p.adjustedRemaining}</b></td>
-          <td style="font-family:'DM Mono',monospace;font-size:12px">${fmtDate(p.exhaustDate)}</td>
-          <td><span style="font-weight:700;color:${p.daysUntilAlert<=7?'var(--red)':'var(--yellow)'}">${p.daysUntilAlert} days</span></td>
-          <td><span class="status-chip notify">Notify Now</span></td>
-          <td onclick="event.stopPropagation();openMsgModal('${s.student}','${s.parent}','${p.name}',${p.adjustedRemaining},'${p.exhaustDate}')" style="color:var(--orange);font-weight:700;font-size:11px;cursor:pointer;white-space:nowrap">LINE ↗</td>
-        </tr>`).join('')}
-      </tbody>
-    </table></div>`:'<div style="padding:20px;text-align:center;color:var(--text-3)">No packages require immediate action.</div>'}
-
-    ${watchStudents.length?`
-    <div class="section-head" style="margin-top:8px"><h2>Watch list</h2><span class="section-badge" style="background:var(--yellow)">${watchStudents.reduce((a,s)=>a+s.packages.filter(p=>p.status==='watch').length,0)} packages</span></div>
-    <div class="alert-table"><table>
-      <thead><tr><th>Student</th><th>Package</th><th>Actual Credits</th><th>Balance &lt; 2 on</th><th>Days Left</th><th>Status</th></tr></thead>
-      <tbody>${watchStudents.map(s=>s.packages.filter(p=>p.status==='watch').map(p=>`
-        <tr onclick="selectStudent(${DATA.indexOf(s)})">
-          <td><b>${s.student.split(' ')[0]}</b></td>
-          <td style="font-size:12px">${p.name}</td>
-          <td>${p.adjustedRemaining}</td>
-          <td style="font-family:'DM Mono',monospace;font-size:12px">${fmtDate(p.alertDate)}</td>
-          <td><span style="font-weight:700;color:var(--yellow)">${p.daysUntilAlert} days</span></td>
-          <td><span class="status-chip watch">Watch</span></td>
-        </tr>`).join('')).join('')}
-      </tbody>
-    </table></div>`:''}
-  `;
+  requestServer("beginDashboardDataTransfer")
+    .then(resolveDashboardTransfer)
+    .catch(handleLoadFailure);
 }
 
-function renderDetail(s) {
-  const right = document.getElementById('right-panel');
-  const si = DATA.indexOf(s);
-  const pal = avatarColor(si);
-  right.innerHTML = `
-    <button class="back-btn" onclick="goOverview()">← Back to overview</button>
-    <div class="detail-header">
-      <div class="detail-avatar" style="background:${pal.bg};color:${pal.fg}">${getInitials(s.student)}</div>
-      <div>
-        <div class="detail-name">${s.student}</div>
-        <div class="detail-parent">Parent: ${s.parent}</div>
-        <div class="detail-meta">${s.packages.map(p=>`<span class="detail-tag">${p.name}</span>`).join('')}</div>
-      </div>
-      <div style="margin-left:auto;text-align:right">
-        <div style="font-size:11px;color:var(--text-3);margin-bottom:4px">Overall status</div>
-        <span class="status-chip ${worstStatus(s.packages)}" style="font-size:13px;padding:5px 12px">${statusLabel(worstStatus(s.packages))}</span>
-      </div>
-    </div>
-    <div class="packages-grid">${s.packages.map(p=>renderPackageCard(p,s)).join('')}</div>
-    ${renderCalendar(s)}
-  `;
+function retryLoadData() {
+  loadDashboardData();
 }
 
-function renderPackageCard(p, s) {
-  const pct = p.totalCredits>0 ? p.adjustedRemaining/p.totalCredits : 0;
-  const barCol = pct>0.4?'#1A7A4A':pct>0.2?'#D4870A':'#C0392B';
-  const adjCol = p.adjustedRemaining<2?'var(--red)':p.adjustedRemaining<4?'var(--yellow)':'var(--green)';
+function worstStatus(packages) {
+  if (packages.some(function(pkg) { return pkg.status === "notify"; })) return "notify";
+  if (packages.some(function(pkg) { return pkg.status === "watch"; })) return "watch";
+  if (packages.some(function(pkg) { return pkg.status === "ok"; })) return "ok";
+  return "nodata";
+}
 
-  const creditBreakdown = p.pendingDeduction>0 ? `
-    <div style="margin-top:10px;padding:10px 12px;background:var(--gray-light);border-radius:var(--radius-sm);font-size:12px;line-height:2">
-      <div style="display:flex;justify-content:space-between;color:var(--text-3)">
-        <span>System shows</span><span>${p.currentRemaining} credits</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;color:var(--yellow)">
-        <span>Pending deduct (teacher feedback pending)</span><span>−${p.pendingDeduction}</span>
-      </div>
-      <div style="border-top:1px solid var(--border);margin-top:4px;padding-top:4px;display:flex;justify-content:space-between;font-weight:700">
-        <span>Actual remaining</span>
-        <span style="color:${adjCol}">${p.adjustedRemaining} credits</span>
-      </div>
-    </div>` : `
-    <div style="margin-top:8px;font-size:13px;color:var(--text-2)">
-      Actual remaining: <b style="color:${adjCol}">${p.adjustedRemaining} credits</b>
-    </div>`;
+function matchesSmartFilter(row, filterName) {
+  if (filterName === "all") return true;
+  if (filterName === "act-now") return row.status === "notify" || row.adjustedRemaining <= 0;
+  if (filterName === "this-week") {
+    return row.daysUntilAlert !== null && row.daysUntilAlert > 0 && row.daysUntilAlert <= 7;
+  }
+  if (filterName === "next-30") {
+    return row.daysUntilAlert !== null && row.daysUntilAlert > 7 && row.daysUntilAlert <= 30;
+  }
+  if (filterName === "missing-data") {
+    return row.dataQualityFlags.indexOf("no-upcoming-sessions") !== -1;
+  }
+  if (filterName === "recently-worsened") return row.statusChange === "worsened";
+  return true;
+}
 
-  return `
-  <div class="pkg-card">
-    <div class="pkg-card-header">
-      <div>
-        <div class="pkg-name">${p.name}</div>
-        <div style="font-size:11px;color:var(--text-3);margin-top:4px">Total: <b style="color:var(--text);font-size:13px">${p.totalCredits}</b> credits</div>
-      </div>
-      <span class="status-chip ${p.status}">${statusLabel(p.status)}</span>
-    </div>
-    <div class="pkg-card-body">
-      ${creditBreakdown}
+function matchesSearch(row) {
+  if (!currentSearch) return true;
+  const haystack = [
+    row.student,
+    row.parent,
+    row.packageName,
+    row.recommendedAction,
+  ].join(" ").toLowerCase();
+  return haystack.indexOf(currentSearch) !== -1;
+}
 
-      <div class="credit-bar-wrap" style="margin-top:12px">
-        <div class="credit-bar-label">
-          <span>0</span>
-          <span style="color:${barCol};font-weight:600">${(pct*100).toFixed(0)}% remaining</span>
-          <span>${p.totalCredits}</span>
+function getSortedFilteredQueue() {
+  const filtered = DATA.actionQueue.filter(function(row) {
+    return matchesSmartFilter(row, currentFilter) && matchesSearch(row);
+  });
+
+  const direction = currentSort.dir === "asc" ? 1 : -1;
+  const field = currentSort.field;
+
+  return filtered.slice().sort(function(a, b) {
+    if (field === "student") return direction * a.student.localeCompare(b.student);
+    if (field === "adjustedRemaining") return direction * (a.adjustedRemaining - b.adjustedRemaining);
+    if (field === "pendingDeduction") return direction * (a.pendingDeduction - b.pendingDeduction);
+    if (field === "daysUntilAlert") return direction * normalizeDayValue(a.daysUntilAlert, b.daysUntilAlert);
+    if (field === "daysUntilExhaust") return direction * normalizeDayValue(a.daysUntilExhaust, b.daysUntilExhaust);
+    if (field === "nextSessionDate") {
+      return direction * normalizeDateValue(a.nextSessionDate, b.nextSessionDate);
+    }
+    return direction * (a.priorityScore - b.priorityScore);
+  });
+}
+
+function normalizeDayValue(dayA, dayB) {
+  const normalizedA = dayA === null ? Number.POSITIVE_INFINITY : dayA;
+  const normalizedB = dayB === null ? Number.POSITIVE_INFINITY : dayB;
+  return normalizedA - normalizedB;
+}
+
+function normalizeDateValue(dateA, dateB) {
+  const normalizedA = dateA ? new Date(dateA).getTime() : Number.POSITIVE_INFINITY;
+  const normalizedB = dateB ? new Date(dateB).getTime() : Number.POSITIVE_INFINITY;
+  return normalizedA - normalizedB;
+}
+
+function getSelectedQueueRow() {
+  const queue = getSortedFilteredQueue();
+  if (!queue.length) return null;
+  const selected = queue.find(function(row) { return row.key === selectedQueueKey; });
+  return selected || queue[0];
+}
+
+function getStudentByIndex(index) {
+  return index === null ? null : DATA.students[index];
+}
+
+function getSidebarStudents() {
+  const matchingKeys = {};
+  getSortedFilteredQueue().forEach(function(row) {
+    matchingKeys[row.student] = true;
+  });
+
+  return DATA.students.filter(function(student) {
+    const searchPass = !currentSearch || [student.student, student.parent].join(" ").toLowerCase().indexOf(currentSearch) !== -1;
+    const filterPass = currentFilter === "all" || matchingKeys[student.student];
+    return searchPass && filterPass;
+  });
+}
+
+function getFilterCount(filterName) {
+  return DATA.actionQueue.filter(function(row) {
+    return matchesSmartFilter(row, filterName);
+  }).length;
+}
+
+function renderHeaderState() {
+  document.getElementById("view-command").classList.toggle("active", currentView === "command");
+  document.getElementById("view-analytics").classList.toggle("active", currentView === "analytics");
+  document.getElementById("view-student").classList.toggle("active", currentView === "student");
+
+  if (isLoading) {
+    document.getElementById("freshness-label").textContent = "Loading dashboard data";
+    document.getElementById("comparison-label").textContent = "Preparing latest package view";
+    return;
+  }
+
+  if (loadError) {
+    document.getElementById("freshness-label").textContent = "Dashboard load failed";
+    document.getElementById("comparison-label").textContent = "Retry to fetch the latest data";
+    return;
+  }
+
+  document.getElementById("freshness-label").textContent = "Last updated " + formatDateTime(DATA.lastUpdatedAt);
+  document.getElementById("comparison-label").textContent = DATA.previousUpdatedAt
+    ? "Compared with " + formatDateTime(DATA.previousUpdatedAt)
+    : "First stored snapshot";
+}
+
+function renderRail() {
+  if (isLoading) {
+    document.getElementById("rail").innerHTML = renderStateCard(
+      "Loading dashboard",
+      "The page shell is ready. Live spreadsheet data, analytics, and student detail are loading now."
+    );
+    return;
+  }
+
+  if (loadError) {
+    document.getElementById("rail").innerHTML = renderStateCard(
+      "Could not load dashboard",
+      loadError,
+      `<button class="ghost-btn" onclick="retryLoadData()">Retry load</button>`
+    );
+    return;
+  }
+
+  const students = getSidebarStudents();
+  const selectedStudent = getStudentByIndex(selectedStudentIndex);
+
+  document.getElementById("rail").innerHTML = `
+    <section class="panel rail-panel">
+      <div class="panel-heading">
+        <div>
+          <div class="panel-title">Work queue</div>
+          <div class="panel-caption">Filter the queue, then drill into the right package or student.</div>
         </div>
-        <div class="credit-bar-track">
-          <div class="credit-bar-fill" style="width:${(pct*100).toFixed(1)}%;background:${barCol}"></div>
-        </div>
       </div>
+      <input
+        class="search-input"
+        type="text"
+        placeholder="Search student, parent, or package"
+        value="${escapeHtml(currentSearch)}"
+        oninput="setSearch(this.value)"
+      />
+      <div style="height:14px"></div>
+      <div class="filter-grid">
+        ${renderFilterChip("all", "All queue", getFilterCount("all"))}
+        ${renderFilterChip("act-now", "Act now", getFilterCount("act-now"))}
+        ${renderFilterChip("this-week", "This week", getFilterCount("this-week"))}
+        ${renderFilterChip("next-30", "Next 30 days", getFilterCount("next-30"))}
+        ${renderFilterChip("missing-data", "Missing data", getFilterCount("missing-data"))}
+        ${renderFilterChip("recently-worsened", "Worsened", getFilterCount("recently-worsened"))}
+      </div>
+    </section>
 
-      ${p.status!=='nodata'?`
-      <div class="alert-info-box ${p.status}" style="margin-top:10px">
-        ${p.alertDate?`<div class="alert-info-row"><span>Balance &lt; 2 on</span><span>${fmtDate(p.alertDate)}</span></div><div class="alert-info-row"><span>Days until alert</span><span>${p.daysUntilAlert} days</span></div>`:''}
-        ${p.exhaustDate?`<div class="alert-info-row"><span>Package exhausted</span><span>${fmtDate(p.exhaustDate)}</span></div>`:''}
-      </div>`:`
-      <div class="alert-info-box nodata" style="margin-top:10px">
-        <div style="color:var(--text-3);font-size:12px">ไม่มี upcoming sessions ที่วางแผนไว้</div>
-      </div>`}
-
-      ${p.projection.length?`
-      <div class="timeline-wrap">
-        <div class="timeline-title">Credit projection</div>
-        <div class="timeline-row header">
-          <span>Date</span><span style="text-align:right">Min</span><span style="text-align:right">−Cr.</span><span>Balance</span><span></span>
-        </div>
-        ${p.projection.map(r=>{
-          const rowCls = r.flag==='alert'?'alert-row':r.flag==='exhaust'?'exhaust-row':'';
-          const balCls = r.bal<0?'red':r.bal<2?'red':r.bal<4?'yellow':'green';
-          const balPct = Math.max(0,Math.min(1,r.bal/p.totalCredits));
-          return `<div class="timeline-row ${rowCls}">
-            <span class="tl-date">${r.date.slice(5)}</span>
-            <span class="tl-dur">${r.dur}m</span>
-            <span class="tl-deduct">−${r.deduct}</span>
-            <div class="tl-bar-wrap">
-              <div style="flex:1;height:4px;background:var(--gray-light);border-radius:2px;overflow:hidden">
-                <div style="height:100%;width:${(balPct*100).toFixed(1)}%;background:${r.bal<2?'#C0392B':r.bal<4?'#D4870A':'#1A7A4A'};border-radius:2px"></div>
+    <section class="panel rail-panel">
+      <div class="panel-heading">
+        <div class="panel-title">Students</div>
+        <div class="panel-caption">${students.length} visible</div>
+      </div>
+      <div class="student-list">
+        ${students.length ? students.map(function(student) {
+          const index = DATA.students.indexOf(student);
+          const worst = worstStatus(student.packages);
+          const riskyCount = student.packages.filter(function(pkg) {
+            return pkg.status === "notify" || pkg.status === "watch";
+          }).length;
+          const palette = avatarPalette(index);
+          return `
+            <div class="student-row ${selectedStudent && selectedStudent.student === student.student ? "active" : ""}" onclick="openStudent(${index})">
+              <div class="avatar" style="background:${palette.bg};color:${palette.fg}">${escapeHtml(getInitials(student.student))}</div>
+              <div class="student-copy">
+                <div class="student-name">${escapeHtml(student.student)}</div>
+                <div class="student-sub">${escapeHtml(student.parent || "Missing parent")} - ${student.packages.length} packages</div>
+              </div>
+              <div class="student-meta">
+                <span class="status-pill ${worst}">${statusLabel(worst)}</span>
+                <span class="student-sub">${riskyCount} risky</span>
               </div>
             </div>
-            <span class="tl-bal" style="color:var(--${balCls})">${r.bal.toFixed(1)}</span>
-          </div>`;
-        }).join('')}
-      </div>`:''}
+          `;
+        }).join("") : `<div class="empty-state">No students match this filter.</div>`}
+      </div>
+    </section>
 
-      ${p.status==='notify'||p.status==='watch'?`
-      <button class="send-msg-btn" onclick="openMsgModal('${s.student}','${s.parent}','${p.name}',${p.adjustedRemaining},'${p.exhaustDate||p.alertDate}')">
-        Send LINE Message to Parent ↗
-      </button>`:''}
-    </div>
-  </div>`;
+    <section class="panel rail-panel">
+      <div class="panel-heading">
+        <div class="panel-title">Top package clusters</div>
+        <div class="panel-caption">Where risk is concentrated now</div>
+      </div>
+      <div class="segment-list">
+        ${DATA.segments.packageNames.slice(0, 4).map(function(segment) {
+          return `
+            <div class="segment-row">
+              <div class="segment-copy">
+                <div class="segment-name">${escapeHtml(segment.name)}</div>
+                <div class="segment-detail">${segment.riskyPackages} risky of ${segment.totalPackages} packages</div>
+              </div>
+              <div class="segment-value">${segment.notifyPackages}</div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    </section>
+  `;
 }
 
-function renderCalendar(s) {
-  const sessionMap = {};
-  s.packages.forEach(p => {
-    p.projection.forEach(r => {
-      if (!sessionMap[r.date]) sessionMap[r.date] = [];
-      sessionMap[r.date].push({pkg:p.name,flag:r.flag,bal:r.bal,deduct:r.deduct});
-    });
-  });
-  if (!Object.keys(sessionMap).length) return '';
-  const dates = Object.keys(sessionMap).map(d=>new Date(d));
-  const minDate = new Date(Math.min(TODAY,...dates));
-  const maxDate = new Date(Math.max(...dates));
-  maxDate.setMonth(maxDate.getMonth()+1);
-  let monthsHtml='';
-  let cur = new Date(minDate.getFullYear(),minDate.getMonth(),1);
-  while (cur<=maxDate) { monthsHtml+=renderCalMonth(cur,sessionMap); cur.setMonth(cur.getMonth()+1); }
+function renderFilterChip(filterName, label, count) {
+  return `
+    <button class="filter-chip ${currentFilter === filterName ? "active" : ""}" onclick="setFilter('${filterName}')">
+      <div class="chip-label">${label}</div>
+      <div class="chip-count">${count}</div>
+    </button>
+  `;
+}
 
-  // Package summary legend
-  const pkgSummaryRows = s.packages.map(p => {
-    const adj = p.adjustedRemaining;
-    let dotColor, statusText;
-    if (adj <= 0) {
-      dotColor = 'var(--red)'; statusText = 'No credits remaining';
-    } else if (adj < 2) {
-      dotColor = 'var(--red)'; statusText = `${adj} credit left — critically low`;
-    } else if (adj < 4) {
-      dotColor = 'var(--yellow)'; statusText = `${adj} credits remaining`;
-    } else {
-      dotColor = 'var(--green)'; statusText = `${adj} credits remaining`;
-    }
-    const exhaustTxt = p.exhaustDate
-      ? ` · exhausted ${fmtDate(p.exhaustDate)}`
-      : (p.alertDate ? ` · drops below 2 on ${fmtDate(p.alertDate)}` : '');
-    return `
-    <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-sm)">
-      <div style="width:10px;height:10px;border-radius:50%;background:${dotColor};flex-shrink:0"></div>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:12px;font-weight:600;color:var(--text)">${p.name}</div>
-        <div style="font-size:11px;color:var(--text-3)">${statusText}${exhaustTxt}</div>
-      </div>
-      <span class="status-chip ${p.status}" style="font-size:10px;padding:2px 8px">${statusLabel(p.status)}</span>
-    </div>`;
-  }).join('');
+function renderContent() {
+  if (isLoading) {
+    document.getElementById("main-area").innerHTML = renderStateCard(
+      "Loading command center",
+      "Fetching the latest package balances, risk queue, analytics, and student detail data."
+    );
+    return;
+  }
+
+  if (loadError) {
+    document.getElementById("main-area").innerHTML = renderStateCard(
+      "Dashboard data unavailable",
+      loadError,
+      `<button class="action-btn" onclick="retryLoadData()">Retry</button>`
+    );
+    return;
+  }
+
+  if (currentView === "analytics") {
+    document.getElementById("main-area").innerHTML = renderAnalyticsView();
+    return;
+  }
+
+  if (currentView === "student" && selectedStudentIndex !== null) {
+    document.getElementById("main-area").innerHTML = renderStudentDetailView();
+    return;
+  }
+
+  document.getElementById("main-area").innerHTML = renderCommandCenterView();
+}
+
+function renderCommandCenterView() {
+  const queue = getSortedFilteredQueue();
+  const selectedRow = getSelectedQueueRow();
+  if (selectedRow) selectedQueueKey = selectedRow.key;
 
   return `
-  <div class="calendar-section">
-    <div class="cal-title">Session calendar — credit projection</div>
-    <div class="cal-months-container"><div class="cal-months">${monthsHtml}</div></div>
-    <div class="cal-legend">
-      <div class="cal-leg"><div class="cal-leg-dot" style="background:var(--green-light);border:1.5px solid var(--green)"></div> Credit ≥ 4</div>
-      <div class="cal-leg"><div class="cal-leg-dot" style="background:var(--yellow-light);border:1.5px solid var(--yellow)"></div> Credit 2–4</div>
-      <div class="cal-leg"><div class="cal-leg-dot" style="background:var(--red-light);border:1.5px solid var(--red)"></div> Below 2</div>
-      <div class="cal-leg"><div class="cal-leg-dot" style="background:var(--red)"></div> Exhausted</div>
+    <div class="metrics-grid">
+      ${renderMetricCard("Need outreach today", DATA.summary.packages.notify, DATA.summary.deltas.packagesNotify, "Packages already below threshold")}
+      ${renderMetricCard("At risk in 7 days", DATA.summary.portfolio.risk7, DATA.summary.deltas.risk7, "Projected to cross threshold within the week")}
+      ${renderMetricCard("At risk in 30 days", DATA.summary.portfolio.risk30, DATA.summary.deltas.risk30, "All projected near-term alerts")}
+      ${renderMetricCard("No schedule data", DATA.summary.portfolio.noSchedule, DATA.summary.deltas.noSchedule, "Packages with weak forecasting confidence")}
+      ${renderMetricCard("Pending deductions", DATA.summary.portfolio.pendingDeductionBacklog, DATA.summary.deltas.pendingDeductionBacklog, "Credits not yet reflected in source balance", " credits")}
     </div>
-    <div style="margin-top:16px">
-      <div style="font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Package summary</div>
-      <div style="display:flex;flex-direction:column;gap:6px">${pkgSummaryRows}</div>
+
+    <div class="command-grid">
+      <div class="queue-panel">
+        <section class="panel queue-card">
+          <div class="queue-toolbar">
+            <div>
+              <div class="queue-title">Prioritized action queue</div>
+              <div class="queue-subtitle">Ranked by urgency, depletion timing, pending deductions, and data confidence.</div>
+            </div>
+            <div class="queue-count">${queue.length} packages in view</div>
+          </div>
+          ${queue.length ? renderQueueTable(queue, selectedRow) : `<div class="empty-state">No packages match the current filter.</div>`}
+        </section>
+      </div>
+
+      <div class="context-column">
+        ${selectedRow ? renderQueueContext(selectedRow) : `<section class="panel context-card"><div class="empty-state">Select a package to inspect its risk brief.</div></section>`}
+        <section class="panel context-card">
+          <div class="panel-heading">
+            <div class="panel-title">What changed</div>
+            <div class="panel-caption">Compared with the previous stored snapshot</div>
+          </div>
+          <div class="insight-list">
+            ${DATA.insights.map(function(insight) {
+              return `
+                <div class="insight-row">
+                  <div class="insight-copy">
+                    <div class="insight-name">${escapeHtml(insight.title)}</div>
+                    <div class="insight-detail">${escapeHtml(insight.detail)}</div>
+                  </div>
+                  <div class="insight-value ${toneClass(insight.tone)}">${escapeHtml(String(insight.value))}</div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        </section>
+
+        <section class="panel context-card">
+          <div class="panel-heading">
+            <div class="panel-title">Risk drivers</div>
+            <div class="panel-caption">Current drivers of workload and low confidence</div>
+          </div>
+          <div class="driver-list">
+            ${DATA.segments.drivers.map(function(driver) {
+              return `
+                <div class="driver-row">
+                  <div class="segment-copy">
+                    <div class="segment-name">${escapeHtml(driver.name)}</div>
+                  </div>
+                  <div class="segment-value ${toneClass(driver.tone)}">${driver.count}</div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        </section>
+      </div>
     </div>
-  </div>`;
+  `;
 }
 
-function renderCalMonth(monthDate, sessionMap) {
-  const monthName = monthDate.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
-  const year=monthDate.getFullYear(), month=monthDate.getMonth();
-  const daysInMonth=new Date(year,month+1,0).getDate();
-  const firstDow=new Date(year,month,1).getDay();
-  const dows=['Su','Mo','Tu','We','Th','Fr','Sa'];
-  let cells=dows.map(d=>`<div class="cal-dow">${d}</div>`).join('');
-  for(let i=0;i<firstDow;i++) cells+=`<div class="cal-day empty"></div>`;
-  const todayStr = TODAY.toISOString().slice(0,10);
-  for(let d=1;d<=daysInMonth;d++){
-    const dateStr=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const isToday=dateStr===todayStr;
-    const sessions=sessionMap[dateStr];
-    if(sessions){
-      const wf=sessions.some(s=>s.flag==='exhaust')?'exhaust':sessions.some(s=>s.flag==='alert')?'alert':sessions.some(s=>s.bal<4)?'watch':'ok';
-      const tip=sessions.map(s=>`${s.pkg}: −${s.deduct}cr → ${s.bal.toFixed(1)}`).join(' | ');
-      cells+=`<div class="cal-day session ${wf}${isToday?' today-mark':''}" onmouseenter="showTip(event,'${dateStr}\\n${tip}')" onmouseleave="hideTip()">${d}</div>`;
-    } else {
-      cells+=`<div class="cal-day${isToday?' today-mark':''}"><span style="color:var(--text-3)">${d}</span></div>`;
-    }
+function renderMetricCard(label, value, delta, subline, suffix) {
+  return `
+    <section class="metric-card">
+      <div class="metric-label">${label}</div>
+      <div class="metric-value">${formatNumber(value)}${suffix || ""}</div>
+      <div class="metric-sub">${subline}</div>
+      <div class="mini-stack" style="margin-top:10px">
+        <span class="delta-pill">${formatSigned(delta, suffix || "")} vs last refresh</span>
+      </div>
+    </section>
+  `;
+}
+
+function renderQueueTable(queue, selectedRow) {
+  return `
+    <div class="queue-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th onclick="toggleSort('priorityScore')">Priority</th>
+            <th onclick="toggleSort('student')">Student</th>
+            <th class="no-sort">Package</th>
+            <th onclick="toggleSort('adjustedRemaining')">Actual</th>
+            <th onclick="toggleSort('daysUntilAlert')">Risk window</th>
+            <th onclick="toggleSort('pendingDeduction')">Pending</th>
+            <th onclick="toggleSort('nextSessionDate')">Next session</th>
+            <th class="no-sort">Recommended action</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${queue.map(function(row) {
+            return `
+              <tr class="queue-row ${selectedRow && selectedRow.key === row.key ? "active" : ""}" onclick="selectQueue('${escapeJs(row.key)}')">
+                <td>
+                  <div class="queue-primary mono">${formatNumber(row.priorityScore)}</div>
+                  <div class="queue-secondary">${escapeHtml(row.changeSummary)}</div>
+                </td>
+                <td>
+                  <div class="queue-primary">${escapeHtml(row.student)}</div>
+                  <div class="queue-secondary">${escapeHtml(row.parent)}</div>
+                </td>
+                <td>
+                  <div class="queue-primary">${escapeHtml(row.packageName)}</div>
+                  <div class="mini-stack" style="margin-top:6px">
+                    <span class="status-pill ${row.status}">${statusLabel(row.status)}</span>
+                    ${row.dataQualityFlags.slice(0, 1).map(function(flag) {
+                      return `<span class="flag-pill">${escapeHtml(flagLabel(flag))}</span>`;
+                    }).join("")}
+                  </div>
+                </td>
+                <td>
+                  <div class="queue-primary">${formatNumber(row.adjustedRemaining)} cr</div>
+                  <div class="queue-secondary">System ${formatNumber(row.currentRemaining)} cr</div>
+                </td>
+                <td>
+                  <div class="queue-primary">${escapeHtml(renderRiskWindowText(row))}</div>
+                  <div class="queue-secondary">${escapeHtml(renderExhaustionText(row))}</div>
+                </td>
+                <td>
+                  <div class="queue-primary">${formatNumber(row.pendingDeduction)} cr</div>
+                  <div class="queue-secondary">${row.pendingDeduction > 0 ? "Awaiting feedback updates" : "No backlog"}</div>
+                </td>
+                <td>
+                  <div class="queue-primary">${escapeHtml(row.nextSessionDate ? formatShortDate(row.nextSessionDate) : "No future session")}</div>
+                  <div class="queue-secondary">${escapeHtml(row.cadenceLabel)} cadence</div>
+                </td>
+                <td>
+                  <div class="queue-primary">${escapeHtml(row.recommendedAction)}</div>
+                  <div class="queue-secondary">${escapeHtml(row.whyNow)}</div>
+                </td>
+              </tr>
+            `;
+          }).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderQueueContext(row) {
+  const student = DATA.students[row.studentIndex];
+  const pkg = student.packages[row.packageIndex];
+  const confidenceText = row.dataQualityFlags.indexOf("no-upcoming-sessions") !== -1
+    ? "Low confidence - no future sessions available"
+    : "Based on " + row.upcomingCount + " upcoming sessions";
+
+  return `
+    <section class="panel context-card">
+      <div class="context-head">
+        <div>
+          <div class="context-title">${escapeHtml(row.student)}</div>
+          <div class="context-subtitle">${escapeHtml(row.packageName)} - ${escapeHtml(row.parent)}</div>
+        </div>
+        <span class="status-pill ${row.status}">${statusLabel(row.status)}</span>
+      </div>
+
+      <div class="context-grid">
+        <div class="context-hero">
+          <div class="context-stat">
+            <div class="context-stat-label">Actual credits</div>
+            <div class="context-stat-value">${formatNumber(row.adjustedRemaining)}</div>
+          </div>
+          <div class="context-stat">
+            <div class="context-stat-label">Days to alert</div>
+            <div class="context-stat-value">${row.daysUntilAlert === null ? "-" : row.daysUntilAlert}</div>
+          </div>
+          <div class="context-stat">
+            <div class="context-stat-label">Priority score</div>
+            <div class="context-stat-value">${formatNumber(row.priorityScore)}</div>
+          </div>
+        </div>
+
+        <div class="context-block">
+          <h4>Why this package is here</h4>
+          <div>${escapeHtml(row.whyNow)}</div>
+          <div class="mini-stack" style="margin-top:10px">
+            <span class="delta-pill">${escapeHtml(confidenceText)}</span>
+            <span class="delta-pill">${escapeHtml(row.changeSummary)}</span>
+          </div>
+        </div>
+
+        <div class="context-block">
+          <h4>What changed</h4>
+          <div class="insight-detail">${escapeHtml(describeContextChange(row))}</div>
+        </div>
+
+        <div class="context-block">
+          <h4>What should happen next</h4>
+          <div class="queue-primary">${escapeHtml(row.recommendedAction)}</div>
+          <div class="insight-detail" style="margin-top:6px">${escapeHtml(renderActionNarrative(row))}</div>
+          <div class="mini-stack" style="margin-top:10px">
+            ${row.dataQualityFlags.map(function(flag) {
+              return `<span class="flag-pill">${escapeHtml(flagLabel(flag))}</span>`;
+            }).join("")}
+          </div>
+        </div>
+
+        <div class="context-block">
+          <h4>Quick actions</h4>
+          <div class="btn-row">
+            <button class="action-btn" onclick="openMsgModalByIndex(${row.studentIndex}, ${row.packageIndex})">Preview LINE message</button>
+            <button class="ghost-btn" onclick="openStudent(${row.studentIndex})">Open student detail</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function describeContextChange(row) {
+  if (!row.previousStatus) {
+    return "This package is new to the stored comparison set, so the current state becomes the new baseline.";
   }
-  return `<div class="cal-month"><div class="cal-month-name">${monthName}</div><div class="cal-grid">${cells}</div></div>`;
+  if (row.statusChange === "worsened") {
+    return "Status worsened from " + statusLabel(row.previousStatus).toLowerCase() + " to " + statusLabel(row.status).toLowerCase() + ".";
+  }
+  if (row.statusChange === "improved") {
+    return "Status improved from " + statusLabel(row.previousStatus).toLowerCase() + " to " + statusLabel(row.status).toLowerCase() + ".";
+  }
+  if (row.balanceDelta !== null && row.balanceDelta !== 0) {
+    return "Actual balance moved by " + formatSigned(row.balanceDelta, " credits") + " since the last stored refresh.";
+  }
+  return "Status and balance are stable since the previous stored refresh.";
 }
 
-function openMsgModal(student, parent, pkg, bal, endDate) {
-  const firstName = student.split(' ')[0];
-  const parentFirst = parent.split(' ')[0];
-  const month = endDate ? new Date(endDate).toLocaleDateString('th-TH', {month:'long', year:'numeric'}) : 'เร็วๆ นี้';
+function renderActionNarrative(row) {
+  if (row.status === "notify") {
+    return row.adjustedRemaining <= 0
+      ? "This package is already exhausted. Outreach should confirm renewal immediately."
+      : "The package is already below the threshold, so outreach should happen now.";
+  }
+  if (row.status === "watch") {
+    return row.daysUntilAlert !== null && row.daysUntilAlert <= 7
+      ? "This is still pre-alert, but the crossing happens within the week."
+      : "Queue this package for pre-emptive renewal follow-up before it becomes urgent.";
+  }
+  if (row.dataQualityFlags.indexOf("no-upcoming-sessions") !== -1) {
+    return "Forecast confidence is low. Confirm the schedule before escalating.";
+  }
+  return "Keep this package monitored and revisit if the balance deteriorates.";
+}
 
-  let creditLine, actionLine;
+function renderAnalyticsView() {
+  return `
+    <div class="analytics-grid">
+      <div class="metrics-grid">
+        ${renderMetricCard("Students monitored", DATA.summary.students.total, null, DATA.summary.students.notify + DATA.summary.students.watch + " students need attention")}
+        ${renderMetricCard("Packages in notify", DATA.summary.packages.notify, DATA.summary.deltas.packagesNotify, "Immediate outreach workload")}
+        ${renderMetricCard("Packages in watch", DATA.summary.packages.watch, DATA.summary.deltas.packagesWatch, "Pre-alert opportunity set")}
+        ${renderMetricCard("Exhausted now", DATA.summary.portfolio.exhaustedNow, null, "Packages with zero credits after pending deductions")}
+        ${renderMetricCard("Multi-risk students", DATA.summary.portfolio.multiRiskStudents, null, "Students carrying more than one risky package")}
+      </div>
 
-  if (bal <= 0) {
-    creditLine = `ตอนนี้ package "${pkg}" ของน้อง${firstName} ใช้เครดิตหมดแล้วค่ะ 🙏`;
-    actionLine = `รบกวนติดต่อกลับเพื่อต่อ package ให้น้องได้เลยนะคะ ทางทีมงานพร้อมดูแลและแนะนำแพ็คเกจที่เหมาะสมให้น้องค่ะ เพื่อให้การเรียนของน้องต่อเนื่องไม่สะดุดค่ะ 💛`;
-  } else if (bal < 2) {
-    creditLine = `ตอนนี้ package "${pkg}" ของน้อง${firstName} เหลือเครดิตอีกเพียง ${bal} credit เท่านั้นแล้วค่ะ ใกล้หมดมากๆ เลยค่ะ 🙏`;
-    actionLine = `รบกวนติดต่อกลับเพื่อวางแผนต่อ package ล่วงหน้าได้เลยนะคะ ทางทีมงานพร้อมช่วยดูแลให้น้องเรียนต่อเนื่องได้อย่างราบรื่นค่ะ 💛`;
+      <div class="analytics-row">
+        <section class="panel analytics-card">
+          <div class="panel-heading">
+            <div>
+              <div class="panel-title">Risk trend</div>
+              <div class="panel-caption">Notify, watch, healthy, and no-data mix across stored refreshes</div>
+            </div>
+          </div>
+          <div class="chart-shell">
+            ${renderTrendChart(DATA.timeline)}
+            <div class="chart-labels">
+              ${renderLegend("#c63d31", "Notify")}
+              ${renderLegend("#d28b15", "Watch")}
+              ${renderLegend("#1d7a4f", "Healthy")}
+              ${renderLegend("#0d3b73", "No data")}
+            </div>
+          </div>
+        </section>
+
+        <section class="panel analytics-card">
+          <div class="panel-heading">
+            <div>
+              <div class="panel-title">Remaining credit distribution</div>
+              <div class="panel-caption">How much usable balance is left across all active packages</div>
+            </div>
+          </div>
+          <div class="chart-shell">
+            ${renderHistogram(DATA.segments.distribution)}
+          </div>
+        </section>
+      </div>
+
+      <div class="analytics-row">
+        <section class="panel analytics-card">
+          <div class="panel-heading">
+            <div>
+              <div class="panel-title">Risk concentration by package</div>
+              <div class="panel-caption">Which package clusters carry the most active risk</div>
+            </div>
+          </div>
+          ${renderSegmentBars(DATA.segments.packageNames, "riskyPackages", "risky")}
+        </section>
+
+        <section class="panel analytics-card">
+          <div class="panel-heading">
+            <div>
+              <div class="panel-title">Parents with multiple risky packages</div>
+              <div class="panel-caption">Where follow-up load is concentrated at the household level</div>
+            </div>
+          </div>
+          ${renderSegmentBars(DATA.segments.parents, "riskyPackages", "risky")}
+        </section>
+      </div>
+
+      <div class="analytics-row">
+        <section class="panel analytics-card">
+          <div class="panel-heading">
+            <div>
+              <div class="panel-title">Cadence segmentation</div>
+              <div class="panel-caption">Projected risk split by weekly session intensity</div>
+            </div>
+          </div>
+          ${renderSegmentBars(DATA.segments.cadence, "riskyPackages", "risky")}
+        </section>
+
+        <section class="panel analytics-card">
+          <div class="panel-heading">
+            <div>
+              <div class="panel-title">Risk drivers</div>
+              <div class="panel-caption">What is making the queue hard to reason about</div>
+            </div>
+          </div>
+          ${renderDriverBreakdown(DATA.segments.drivers)}
+        </section>
+      </div>
+
+      <div class="analytics-row">
+        <section class="panel analytics-card">
+          <div class="panel-heading">
+            <div>
+              <div class="panel-title">Projected outreach load</div>
+              <div class="panel-caption">Packages entering alert by week from today</div>
+            </div>
+          </div>
+          <div class="chart-shell">${renderWeekBars(DATA.segments.outreachByWeek, "#f36a1d")}</div>
+        </section>
+
+        <section class="panel analytics-card">
+          <div class="panel-heading">
+            <div>
+              <div class="panel-title">Projected exhaustion load</div>
+              <div class="panel-caption">Packages likely to hit zero credits by week</div>
+            </div>
+          </div>
+          <div class="chart-shell">${renderWeekBars(DATA.segments.exhaustionByWeek, "#c63d31")}</div>
+        </section>
+      </div>
+
+      <section class="panel analytics-card">
+        <div class="panel-heading">
+          <div>
+            <div class="panel-title">Exhaustion heatmap</div>
+            <div class="panel-caption">Daily density of projected package exhaustion over the next six weeks</div>
+          </div>
+        </div>
+        <div class="chart-shell">
+          ${renderHeatmap(DATA.segments.exhaustionHeatmap)}
+        </div>
+      </section>
+    </div>
+  `;
+}
+
+function renderTrendChart(points) {
+  if (!points.length) return `<div class="empty-state">No stored trend points yet.</div>`;
+
+  const width = 640;
+  const height = 220;
+  const padding = 28;
+  const keys = [
+    { key: "notify", color: "#c63d31" },
+    { key: "watch", color: "#d28b15" },
+    { key: "ok", color: "#1d7a4f" },
+    { key: "nodata", color: "#0d3b73" },
+  ];
+  const maxValue = Math.max(1, ...points.flatMap(function(point) {
+    return keys.map(function(item) { return point[item.key] || 0; });
+  }));
+
+  const xForIndex = function(index) {
+    if (points.length === 1) return width / 2;
+    return padding + ((width - (padding * 2)) * index / (points.length - 1));
+  };
+  const yForValue = function(value) {
+    return height - padding - ((height - (padding * 2)) * (value / maxValue));
+  };
+
+  const polylines = keys.map(function(item) {
+    const pointsString = points.map(function(point, index) {
+      return xForIndex(index) + "," + yForValue(point[item.key] || 0);
+    }).join(" ");
+    return `<polyline fill="none" stroke="${item.color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="${pointsString}"></polyline>`;
+  }).join("");
+
+  const labels = points.map(function(point, index) {
+    return `<text x="${xForIndex(index)}" y="${height - 6}" font-size="11" text-anchor="middle" fill="#8e95a3">${escapeHtml(point.label)}</text>`;
+  }).join("");
+
+  return `
+    <svg viewBox="0 0 ${width} ${height}" width="100%" height="220" role="img" aria-label="Risk trend chart">
+      <line x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}" stroke="#d7d2c8" stroke-width="1"></line>
+      <line x1="${padding}" y1="${padding}" x2="${padding}" y2="${height - padding}" stroke="#d7d2c8" stroke-width="1"></line>
+      ${polylines}
+      ${labels}
+    </svg>
+  `;
+}
+
+function renderLegend(color, label) {
+  return `<span class="legend-pill"><span class="legend-dot" style="background:${color}"></span>${label}</span>`;
+}
+
+function renderSegmentBars(items, valueKey, suffix) {
+  if (!items.length) return `<div class="empty-state">No segment data available.</div>`;
+  const maxValue = Math.max(1, ...items.map(function(item) { return item[valueKey]; }));
+
+  return `
+    <div class="segment-bars">
+      ${items.map(function(item) {
+        const width = Math.max(6, (item[valueKey] / maxValue) * 100);
+        return `
+          <div class="segment-row" style="display:block">
+            <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
+              <div class="segment-copy">
+                <div class="segment-name">${escapeHtml(item.name)}</div>
+                <div class="segment-detail">${item.totalPackages !== undefined ? item.totalPackages + " packages tracked" : item.students + " students"}</div>
+              </div>
+              <div class="segment-value">${item[valueKey]} ${suffix}</div>
+            </div>
+            <div class="segment-bar-track" style="margin-top:12px">
+              <div class="segment-bar-fill" style="width:${width}%;background:linear-gradient(90deg, var(--navy), var(--orange))"></div>
+            </div>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
+function renderDriverBreakdown(drivers) {
+  return `
+    <div class="segment-bars">
+      ${drivers.map(function(driver) {
+        const maxValue = Math.max(1, ...drivers.map(function(item) { return item.count; }));
+        return `
+          <div class="segment-row" style="display:block">
+            <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
+              <div class="segment-name">${escapeHtml(driver.name)}</div>
+              <div class="segment-value ${toneClass(driver.tone)}">${driver.count}</div>
+            </div>
+            <div class="segment-bar-track" style="margin-top:12px">
+              <div class="segment-bar-fill" style="width:${Math.max(6, (driver.count / maxValue) * 100)}%;background:${driver.tone === "critical" ? "var(--red)" : driver.tone === "warning" ? "var(--yellow)" : "var(--navy)"}"></div>
+            </div>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
+function renderHistogram(buckets) {
+  const maxValue = Math.max(1, ...buckets.map(function(bucket) { return bucket.count; }));
+  return `
+    <div class="hist-grid">
+      ${buckets.map(function(bucket) {
+        return `
+          <div class="hist-cell">
+            <div class="stat-label">${escapeHtml(bucket.label)} credits</div>
+            <div class="hist-value">${bucket.count}</div>
+            <div class="hist-bar-track" style="margin-top:12px">
+              <div class="hist-bar-fill" style="width:${Math.max(8, (bucket.count / maxValue) * 100)}%;background:linear-gradient(90deg, var(--orange), var(--navy))"></div>
+            </div>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
+function renderWeekBars(buckets, color) {
+  const maxValue = Math.max(1, ...buckets.map(function(bucket) { return bucket.count; }));
+  return `
+    <div class="week-grid">
+      ${buckets.map(function(bucket) {
+        return `
+          <div class="week-cell">
+            <div class="stat-label">${escapeHtml(bucket.label)}</div>
+            <div class="week-value">${bucket.count}</div>
+            <div class="week-bar-track" style="margin-top:12px">
+              <div class="week-bar-fill" style="width:${Math.max(8, (bucket.count / maxValue) * 100)}%;background:${color}"></div>
+            </div>
+            <div class="segment-detail" style="margin-top:8px">${escapeHtml(formatShortDate(bucket.start))} - ${escapeHtml(formatShortDate(bucket.end))}</div>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
+function renderHeatmap(cells) {
+  if (!cells.length) return `<div class="empty-state">No projected exhaustion dates yet.</div>`;
+  const maxValue = Math.max(1, ...cells.map(function(cell) { return cell.count; }));
+  return `
+    <div class="heatmap-grid">
+      ${cells.map(function(cell) {
+        const intensity = cell.count === 0 ? 0.06 : 0.16 + (cell.count / maxValue) * 0.56;
+        return `
+          <div class="heatmap-cell" title="${escapeHtml(cell.date)}: ${cell.count} packages" style="background:rgba(198,61,49,${intensity});color:${cell.count > 0 ? "white" : "var(--ink-soft)"}">
+            ${new Date(cell.date).getDate()}
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
+function renderStudentDetailView() {
+  const student = DATA.students[selectedStudentIndex];
+  if (!student) {
+    currentView = "command";
+    return renderCommandCenterView();
+  }
+
+  const riskyPackages = student.packages.filter(function(pkg) {
+    return pkg.status === "notify" || pkg.status === "watch";
+  });
+  const totalPending = student.packages.reduce(function(sum, pkg) {
+    return sum + pkg.pendingDeduction;
+  }, 0);
+  const nextAlert = student.packages
+    .filter(function(pkg) { return !!pkg.alertDate; })
+    .map(function(pkg) { return pkg.alertDate; })
+    .sort()[0];
+
+  return `
+    <div class="detail-layout">
+      <section class="panel detail-header">
+        <button class="back-btn" onclick="goCommand()">Back to command center</button>
+        <div class="detail-top" style="margin-top:14px">
+          <div>
+            <div class="detail-name">${escapeHtml(student.student)}</div>
+            <div class="detail-sub">${escapeHtml(student.parent || "Missing parent")} - ${student.packages.length} active packages</div>
+            <div class="mini-stack" style="margin-top:12px">
+              <span class="status-pill ${worstStatus(student.packages)}">${statusLabel(worstStatus(student.packages))}</span>
+              ${student.dataQualityFlags.map(function(flag) {
+                return `<span class="flag-pill">${escapeHtml(flagLabel(flag))}</span>`;
+              }).join("")}
+            </div>
+          </div>
+        </div>
+        <div class="detail-summary-grid">
+          <div class="detail-summary-card">
+            <div class="metric-label">Risky packages</div>
+            <div class="metric-value">${riskyPackages.length}</div>
+          </div>
+          <div class="detail-summary-card">
+            <div class="metric-label">Pending deductions</div>
+            <div class="metric-value">${formatNumber(totalPending)}</div>
+          </div>
+          <div class="detail-summary-card">
+            <div class="metric-label">Next alert date</div>
+            <div class="metric-value" style="font-size:22px">${nextAlert ? escapeHtml(formatShortDate(nextAlert)) : "-"}</div>
+          </div>
+          <div class="detail-summary-card">
+            <div class="metric-label">Worst status</div>
+            <div class="metric-value" style="font-size:22px">${escapeHtml(statusLabel(worstStatus(student.packages)))}</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="package-stack">
+        ${student.packages.map(function(pkg, packageIndex) {
+          return renderPackageDetailCard(student, pkg, selectedStudentIndex, packageIndex);
+        }).join("")}
+      </section>
+
+      <section class="panel detail-card">
+        <div class="panel-heading">
+          <div>
+            <div class="panel-title">Upcoming sessions</div>
+            <div class="panel-caption">Cross-package upcoming schedule for this student</div>
+          </div>
+        </div>
+        <div class="upcoming-list">
+          ${renderUpcomingSessionRows(student)}
+        </div>
+      </section>
+    </div>
+  `;
+}
+
+function renderPackageDetailCard(student, pkg, studentIndex, packageIndex) {
+  return `
+    <section class="panel package-card">
+      <div class="package-head">
+        <div>
+          <div class="package-title">${escapeHtml(pkg.name)}</div>
+          <div class="package-subtitle">${escapeHtml(pkg.recommendedAction)} - ${escapeHtml(pkg.whyNow)}</div>
+        </div>
+        <div class="mini-stack">
+          <span class="status-pill ${pkg.status}">${statusLabel(pkg.status)}</span>
+          <span class="delta-pill">Priority ${formatNumber(pkg.priorityScore)}</span>
+        </div>
+      </div>
+
+      <div class="package-grid">
+        <div class="detail-card" style="padding:0">
+          <h3>Where are we now?</h3>
+          <div class="stat-grid">
+            <div class="stat-card">
+              <div class="stat-label">Actual remaining</div>
+              <div class="stat-value">${formatNumber(pkg.adjustedRemaining)} credits</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">System balance</div>
+              <div class="stat-value">${formatNumber(pkg.currentRemaining)} credits</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Pending deduction</div>
+              <div class="stat-value">${formatNumber(pkg.pendingDeduction)} credits</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Total package</div>
+              <div class="stat-value">${formatNumber(pkg.totalCredits)} credits</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-card" style="padding:0">
+          <h3>Why are we here?</h3>
+          ${renderWaterfall(pkg)}
+        </div>
+
+        <div class="detail-card" style="padding:0">
+          <h3>What happens next?</h3>
+          <div class="stat-grid">
+            <div class="stat-card">
+              <div class="stat-label">Balance below 2</div>
+              <div class="stat-value">${pkg.alertDate ? escapeHtml(formatShortDate(pkg.alertDate)) : "-"}</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Exhausted</div>
+              <div class="stat-value">${pkg.exhaustDate ? escapeHtml(formatShortDate(pkg.exhaustDate)) : "-"}</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Next session</div>
+              <div class="stat-value">${pkg.nextSessionDate ? escapeHtml(formatShortDate(pkg.nextSessionDate)) : "None"}</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Cadence</div>
+              <div class="stat-value">${escapeHtml(pkg.cadenceLabel)}</div>
+            </div>
+          </div>
+          <div style="height:14px"></div>
+          ${renderProjectionChart(pkg)}
+          ${renderProjectionTable(pkg)}
+        </div>
+
+        <div class="detail-card" style="padding:0">
+          <h3>What should we do?</h3>
+          <div class="context-block" style="background:white">
+            <div class="queue-primary">${escapeHtml(pkg.recommendedAction)}</div>
+            <div class="insight-detail" style="margin-top:6px">${escapeHtml(pkg.whyNow)}</div>
+            <div class="mini-stack" style="margin-top:12px">
+              ${pkg.dataQualityFlags.map(function(flag) {
+                return `<span class="flag-pill">${escapeHtml(flagLabel(flag))}</span>`;
+              }).join("")}
+              ${!pkg.dataQualityFlags.length ? `<span class="flag-pill">No data-quality warnings</span>` : ""}
+            </div>
+            <div class="btn-row" style="margin-top:16px">
+              <button class="action-btn" onclick="openMsgModalByIndex(${studentIndex}, ${packageIndex})">Preview LINE message</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function renderWaterfall(pkg) {
+  const safeTotal = Math.max(1, pkg.totalCredits || 1);
+  const systemPct = Math.max(0, Math.min(100, (pkg.currentRemaining / safeTotal) * 100));
+  const pendingPct = Math.max(0, Math.min(100, (pkg.pendingDeduction / safeTotal) * 100));
+  const actualPct = Math.max(0, Math.min(100, (pkg.adjustedRemaining / safeTotal) * 100));
+
+  return `
+    <div class="waterfall">
+      <div class="waterfall-row">
+        <div class="waterfall-label">System balance</div>
+        <div class="waterfall-track"><div class="waterfall-fill" style="width:${systemPct}%;background:var(--navy)"></div></div>
+        <div class="waterfall-value">${formatNumber(pkg.currentRemaining)}</div>
+      </div>
+      <div class="waterfall-row">
+        <div class="waterfall-label">Pending deduction</div>
+        <div class="waterfall-track"><div class="waterfall-fill" style="width:${pendingPct}%;background:var(--yellow)"></div></div>
+        <div class="waterfall-value">-${formatNumber(pkg.pendingDeduction)}</div>
+      </div>
+      <div class="waterfall-row">
+        <div class="waterfall-label">Actual remaining</div>
+        <div class="waterfall-track"><div class="waterfall-fill" style="width:${actualPct}%;background:${pkg.adjustedRemaining < 2 ? "var(--red)" : pkg.adjustedRemaining < 4 ? "var(--yellow)" : "var(--green)"}"></div></div>
+        <div class="waterfall-value">${formatNumber(pkg.adjustedRemaining)}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderProjectionChart(pkg) {
+  if (!pkg.projection.length) {
+    return `<div class="empty-state" style="padding:16px 0">No upcoming sessions available for projection.</div>`;
+  }
+
+  const maxBalance = Math.max(pkg.totalCredits || 1, ...pkg.projection.map(function(item) { return Math.max(0, item.bal); }));
+
+  return `
+    <div class="chart-shell">
+      <div class="projection-bars">
+        ${pkg.projection.slice(0, 8).map(function(item) {
+          const height = Math.max(18, (Math.max(0, item.bal) / maxBalance) * 96);
+          const color = item.bal <= 0 ? "var(--red)" : item.bal < 2 ? "var(--red)" : item.bal < 4 ? "var(--yellow)" : "var(--green)";
+          return `
+            <div class="projection-bar-wrap">
+              <div class="projection-bar" style="height:${height}px;background:${color}"></div>
+              <div class="projection-label">${escapeHtml(formatShortDate(item.date))}</div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderProjectionTable(pkg) {
+  if (!pkg.projection.length) return "";
+
+  return `
+    <div class="projection-table">
+      <table>
+        <thead>
+          <tr>
+            <th class="no-sort">Date</th>
+            <th class="no-sort">Minutes</th>
+            <th class="no-sort">Deduction</th>
+            <th class="no-sort">Balance after</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${pkg.projection.slice(0, 6).map(function(item) {
+            return `
+              <tr>
+                <td class="mono">${escapeHtml(item.date)}</td>
+                <td>${item.dur}</td>
+                <td>${formatNumber(item.deduct)} cr</td>
+                <td>${formatNumber(item.bal)} cr</td>
+              </tr>
+            `;
+          }).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderUpcomingSessionRows(student) {
+  const rows = [];
+  student.packages.forEach(function(pkg) {
+    (pkg.upcomingSessions || []).forEach(function(session) {
+      rows.push({
+        packageName: pkg.name,
+        date: session.date,
+        durationMin: session.durationMin,
+        deduct: session.deduct,
+      });
+    });
+  });
+
+  rows.sort(function(a, b) {
+    return new Date(a.date) - new Date(b.date);
+  });
+
+  if (!rows.length) {
+    return `<div class="empty-state">No upcoming sessions are scheduled for this student.</div>`;
+  }
+
+  return rows.slice(0, 10).map(function(row) {
+    return `
+      <div class="upcoming-row">
+        <div class="segment-copy">
+          <div class="segment-name">${escapeHtml(row.packageName)}</div>
+          <div class="segment-detail">${escapeHtml(formatDate(row.date))}</div>
+        </div>
+        <div class="segment-value">${row.durationMin}m / ${formatNumber(row.deduct)} cr</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderRiskWindowText(row) {
+  if (row.adjustedRemaining <= 0) return "Already exhausted";
+  if (row.status === "notify") return "Below 2 credits now";
+  if (row.alertDate) return "Below 2 on " + formatShortDate(row.alertDate);
+  if (row.dataQualityFlags.indexOf("no-upcoming-sessions") !== -1) return "No future sessions";
+  return "No near-term alert";
+}
+
+function renderExhaustionText(row) {
+  if (!row.exhaustDate) return row.nextSessionDate ? "Next " + formatShortDate(row.nextSessionDate) : "No projected exhaustion";
+  return "Exhausts " + formatShortDate(row.exhaustDate);
+}
+
+function setView(viewName) {
+  if (isLoading || loadError) {
+    currentView = viewName === "student" ? "command" : viewName;
+    renderAll();
+    return;
+  }
+
+  if (viewName === "student" && selectedStudentIndex === null) {
+    currentView = "command";
   } else {
-    creditLine = `ตอนนี้ package "${pkg}" ของน้อง${firstName} เหลือเครดิตอีกประมาณ ${bal} credits แล้วค่ะ คาดว่าจะหมดในช่วง${month}นี้ค่ะ 🙏`;
-    actionLine = `รบกวนติดต่อกลับเพื่อวางแผนต่อ package ล่วงหน้าได้เลยนะคะ เพื่อให้น้องได้เรียนต่อเนื่องโดยไม่มีสะดุดค่ะ 💛`;
+    currentView = viewName;
+  }
+  renderAll();
+}
+
+function setFilter(filterName) {
+  if (!hasLoadedData()) return;
+  currentFilter = filterName;
+  const firstRow = getSortedFilteredQueue()[0];
+  selectedQueueKey = firstRow ? firstRow.key : null;
+  renderAll();
+}
+
+function setSearch(value) {
+  if (!hasLoadedData()) return;
+  currentSearch = String(value || "").trim().toLowerCase();
+  const firstRow = getSortedFilteredQueue()[0];
+  selectedQueueKey = firstRow ? firstRow.key : null;
+  renderAll();
+}
+
+function selectQueue(key) {
+  if (!hasLoadedData()) return;
+  selectedQueueKey = key;
+  renderContent();
+}
+
+function openStudent(index) {
+  if (!hasLoadedData()) return;
+  selectedStudentIndex = index;
+  currentView = "student";
+  renderAll();
+}
+
+function goCommand() {
+  currentView = "command";
+  renderAll();
+}
+
+function toggleSort(field) {
+  if (!hasLoadedData()) return;
+  if (currentSort.field === field) {
+    currentSort.dir = currentSort.dir === "asc" ? "desc" : "asc";
+  } else {
+    currentSort = {
+      field: field,
+      dir: field === "student" ? "asc" : "desc",
+    };
+  }
+  renderContent();
+}
+
+function buildParentMessage(student, pkg) {
+  const studentFirst = String(student.student || "").split(" ")[0];
+  const parentFirst = String(student.parent || "").split(" ")[0] || "ผู้ปกครอง";
+  const referenceDate = pkg.exhaustDate || pkg.alertDate;
+  const monthLabel = referenceDate
+    ? new Date(referenceDate).toLocaleDateString("th-TH", { month: "long", year: "numeric" })
+    : "เร็วๆ นี้";
+
+  let creditLine = "";
+  let actionLine = "";
+
+  if (pkg.adjustedRemaining <= 0) {
+    creditLine = `ตอนนี้ package "${pkg.name}" ของน้อง${studentFirst} ใช้เครดิตหมดแล้วค่ะ`;
+    actionLine = "รบกวนติดต่อกลับเพื่อวางแผนต่อ package ให้น้องได้เลยนะคะ เพื่อให้การเรียนต่อเนื่องไม่สะดุดค่ะ";
+  } else if (pkg.adjustedRemaining < 2) {
+    creditLine = `ตอนนี้ package "${pkg.name}" ของน้อง${studentFirst} เหลือเครดิตอีกเพียง ${formatNumber(pkg.adjustedRemaining)} credit เท่านั้นค่ะ`;
+    actionLine = "รบกวนติดต่อกลับเพื่อวางแผนต่อ package ล่วงหน้าได้เลยนะคะ ทางทีมงานพร้อมช่วยดูแลให้น้องเรียนต่อเนื่องค่ะ";
+  } else {
+    creditLine = `ตอนนี้ package "${pkg.name}" ของน้อง${studentFirst} เหลือเครดิตอีกประมาณ ${formatNumber(pkg.adjustedRemaining)} credits แล้วค่ะ คาดว่าจะลดลงต่ำกว่าเกณฑ์ในช่วง${monthLabel}`;
+    actionLine = "ทีมงานอยากแจ้งล่วงหน้าเพื่อช่วยวางแผนต่อ package ได้ทันก่อนเครดิตใกล้หมดนะคะ";
   }
 
-  const msg =
-`สวัสดีค่ะคุณ${parentFirst} 😊
-
-ทีมงาน BeGifted ขอรบกวนแจ้งให้ทราบเรื่อง package การเรียนของน้อง${firstName} นะคะ
-
-${creditLine}
-
-${actionLine}
-
-หากมีข้อสงสัยหรืออยากสอบถามเพิ่มเติม ติดต่อทีมงานได้เลยนะคะ ยินดีให้คำแนะนำทุกเรื่องเลยค่ะ 🤍`;
-
-  document.getElementById('modal-msg').textContent = msg;
-  document.getElementById('modal-overlay').classList.add('open');
+  return [
+    `สวัสดีค่ะคุณ${parentFirst} 😊`,
+    "",
+    `ทีมงาน BeGifted ขอแจ้งอัปเดต package การเรียนของน้อง${studentFirst} นะคะ`,
+    "",
+    creditLine,
+    "",
+    actionLine,
+    "",
+    "หากต้องการให้ทีมงานช่วยแนะนำ package ที่เหมาะสม สามารถแจ้งกลับมาได้เลยนะคะ ขอบคุณค่ะ 🤍",
+  ].join("\n");
 }
-function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
-function copyMsg(){
-  navigator.clipboard.writeText(document.getElementById('modal-msg').textContent);
-  const btn=document.querySelector('.modal-btn.primary');
-  btn.textContent='Copied!';
-  setTimeout(()=>btn.textContent='Copy Message',1500);
-}
-function showTip(e,text){
-  const tip=document.getElementById('tooltip');
-  tip.textContent=text.replace(/\\n/g,'\n');
-  tip.style.whiteSpace='pre';
-  tip.style.left=(e.clientX+12)+'px';
-  tip.style.top=(e.clientY-10)+'px';
-  tip.style.opacity='1';
-}
-function hideTip(){document.getElementById('tooltip').style.opacity='0';}
-function selectStudent(idx){selectedStudent=DATA[idx];currentView='detail';renderList();renderDetail(selectedStudent);}
-function goOverview(){selectedStudent=null;currentView='overview';renderList();renderOverview();}
-function setFilter(f){
-  currentFilter=f;
-  document.querySelectorAll('.s-pill').forEach(p=>p.classList.remove('active'));
-  document.querySelector(`.s-pill.${f}`).classList.add('active');
-  renderList();
-}
-function handleSearch(v){currentSearch=v.toLowerCase();renderList();}
 
-document.getElementById('today-label').textContent='Today: '+TODAY.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
-const counts=computeCounts();
-document.getElementById('cnt-all').textContent=counts.total;
-document.getElementById('cnt-notify').textContent=counts.notify;
-document.getElementById('cnt-watch').textContent=counts.watch;
-document.getElementById('cnt-ok').textContent=counts.ok;
-renderList();
-renderOverview();
+function openMsgModalByIndex(studentIndex, packageIndex) {
+  if (!hasLoadedData()) return;
+  const student = DATA.students[studentIndex];
+  const pkg = student && student.packages ? student.packages[packageIndex] : null;
+  if (!student || !pkg) return;
+  document.getElementById("modal-msg").textContent = buildParentMessage(student, pkg);
+  document.getElementById("modal-copy-btn").textContent = "Copy message";
+  document.getElementById("modal-overlay").classList.add("open");
+}
+
+function closeModal() {
+  document.getElementById("modal-overlay").classList.remove("open");
+}
+
+function copyMsg() {
+  if (!hasLoadedData()) return;
+  navigator.clipboard.writeText(document.getElementById("modal-msg").textContent);
+  document.getElementById("modal-copy-btn").textContent = "Copied";
+}
+
+function escapeJs(value) {
+  return String(value).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+}
+
+function renderAll() {
+  renderHeaderState();
+  renderRail();
+  renderContent();
+}
+
+renderAll();
+loadDashboardData();
 </script>
 </body>
 </html>
