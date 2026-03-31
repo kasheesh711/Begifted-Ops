@@ -10,12 +10,15 @@ This file is the Codex-facing and general agent operating guide for this reposit
 - Before editing, identify likely write scope and avoid overlapping changes with other active agents.
 - Keep one branch and one PR per issue or workstream.
 - Prefer smaller, composable PRs when file ownership overlaps.
+- For backend work, claim ownership by `.gs` slice rather than "server logic" broadly whenever possible.
 
 ## Shared Project Rules
 
 - `.clasp.json` and `appsscript.json` are part of the repo baseline and should stay in sync with the shared Apps Script project.
 - `.clasprc.local.json` is ignored and must remain local-only.
 - Record deployment impact in every substantial PR or handoff, even if no deployment is performed.
+- Keep backend logic split across the tracked `.gs` files; do not reintroduce a monolithic `Code.gs`.
+- For web app changes, call out both the Apps Script source push state and whether a fresh versioned deployment was created.
 
 ## Documentation Rules
 

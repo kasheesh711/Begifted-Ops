@@ -26,6 +26,8 @@ This repository is set up for parallel work by humans and coding agents. GitHub 
 - Parallel work is preferred only when write scopes are disjoint.
 - If work overlaps, split into smaller sequential PRs instead of racing on the same files.
 - Rebase or merge from `main` before opening or updating the PR when the base moved.
+- Prefer backend ownership at the `.gs` file level instead of claiming the entire Apps Script layer.
+- Current backend ownership slices are `Code.gs` for bootstrap, `DashboardDataLoading.gs` for sheet access, `DashboardPackages.gs` plus `DashboardProjection.gs` for package rules, `DashboardAnalytics.gs` plus `DashboardState.gs` for analytics/state, and `SharedHelpers.gs` for cross-cutting helpers.
 
 ## Pull Requests
 
@@ -57,6 +59,12 @@ Documentation updates are required in the same PR whenever the change affects:
 - `.clasprc.local.json` is local-only and must never be committed.
 - Use the shared Apps Script project unless the issue explicitly calls for an isolated test project.
 - Record deployment impact in the PR even if no deployment was performed.
+- Treat `SharedHelpers.gs` as a cross-cutting ownership area and avoid unrelated helper edits in otherwise isolated backend workstreams.
+- The server source is split across multiple tracked `.gs` files; do not collapse new backend work back into a monolithic `Code.gs`.
+- For web app changes, distinguish between source push and web app release:
+  - `clasp push` updates the Apps Script project source.
+  - `clasp deploy` creates or updates a versioned web app deployment.
+- If a versioned web app URL still shows stale behavior after an apparent push, verify the remote project state and use `clasp push --force` before creating a fresh deployment.
 
 ## Handoff Format
 

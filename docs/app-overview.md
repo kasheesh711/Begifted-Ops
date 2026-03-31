@@ -153,6 +153,7 @@ The current technical flow is:
 - The async bootstrap avoids the prior blank-screen behavior where HTML delivery was blocked on spreadsheet reads.
 - The cached payload keeps `lastUpdatedAt` stable across cache hits because it reflects payload generation time, not page-open time.
 - Snapshot persistence happens only on fresh recomputes so delta and trend baselines do not churn on repeated page loads.
+- Source push and web app release are separate steps: `clasp push` updates the Apps Script project source, while a fresh `clasp deploy` is required for a new versioned web app URL to reflect UI changes.
 
 ## Expected Staff Actions
 

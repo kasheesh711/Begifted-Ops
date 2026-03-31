@@ -15,6 +15,15 @@ The dashboard now uses an async bootstrap path instead of embedding the full dat
 - the Apps Script backend caches the computed dashboard payload in chunked `CacheService` entries for 2 minutes so warm refreshes can reuse the same payload
 - snapshot history and delta baselines are only persisted during a fresh recompute, not on cache hits
 
+## Apps Script Release Notes
+
+The shared Apps Script project now uses a split source layout instead of keeping all backend logic inside one monolithic `Code.gs`.
+
+- `Code.gs` is the bootstrap and shared constants entrypoint.
+- The package, analytics, projection, cache, and helper logic live in separate tracked `.gs` files.
+- A successful `clasp push` updates the server source, but versioned web app URLs still require a fresh `clasp deploy` to expose new UI or backend behavior.
+- If `clasp push` unexpectedly reports `Skipping push.` while the remote project is clearly stale, verify the remote state and rerun with `clasp push --force` before deploying a new web app version.
+
 ## Current Product Surfaces
 
 The live app is now organized into two primary surfaces:
