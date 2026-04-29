@@ -37,7 +37,7 @@
 
 ### Service Cutover
 
-- [ ] **SVC-01**: `cacheComponents: true` enabled in `next.config.ts`
+- [x] **SVC-01**: `cacheComponents: true` enabled in `next.config.ts` (Plan 03-01, commit cdc2ebe, 2026-04-29)
 - [ ] **SVC-02**: `lib/dashboard/service.ts::getDashboardPayload` rewritten to compose Wisenet read + Postgres read; cached via `'use cache: remote'` + `cacheTag('dashboard-payload')` + `cacheLife`
 - [ ] **SVC-03**: Every mutating service method (`setStudentAction`, `clearStudentAction`, `bulk*`, `markInactive`, `clearInactive`) calls `updateTag('dashboard-payload')` after its Postgres commit
 - [ ] **SVC-04**: Route handlers `/api/dashboard`, `/api/actions`, `/api/actions/bulk`, `/api/actions/history`, `/api/inactive`, `/api/health` updated to new service methods; public JSON response shapes unchanged for existing clients
@@ -137,7 +137,7 @@ Which phases cover which requirements. Populated during roadmap creation.
 | DB-06 | Phase 2 | Complete |
 | DB-07 | Phase 2 | Complete |
 | DB-08 | Phase 2 | Complete |
-| SVC-01 | Phase 3 | Pending |
+| SVC-01 | Phase 3 | Complete (Plan 03-01, 2026-04-29) |
 | SVC-02 | Phase 3 | Pending |
 | SVC-03 | Phase 3 | Pending |
 | SVC-04 | Phase 3 | Pending |

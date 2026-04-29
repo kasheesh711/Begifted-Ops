@@ -85,7 +85,7 @@ Five-phase migration from the Google Sheets + Apps Script hybrid stack to a sing
   5. A mocked chunked-transfer / Wisenet streaming response simulation still renders (TEST-06 reframed); cache-invalidation integration test exists gated on TEST_DATABASE_URL (TEST-03)
 **Plans**: 11 plans
 - [x] 03-00-PLAN.md — Wave 0: Baseline reconciliation — restore Sheets-era routes from prod-snapshot; commit Phase 1+2 source; commit .planning/ artifacts (D-40, D-41, D-43) (complete 2026-04-29; commits e339f39 / de8e5a2 / 396d7c8; 176 files)
-- [ ] 03-01-PLAN.md — Wave 1: Enable cacheComponents in next.config.ts (SVC-01)
+- [x] 03-01-PLAN.md — Wave 1: Enable cacheComponents in next.config.ts (SVC-01) (complete 2026-04-29; commit cdc2ebe; 10 files — 1 config + 6 route handler runtime drops + 3 page Suspense wraps; build green, 164/164 tests)
 - [ ] 03-02-PLAN.md — Wave 1: Student Detail archive-link affordance + ARCHIVE_ACTION_SHEET_URL constant (SVC-08, D-30, D-36)
 - [ ] 03-03-PLAN.md — Wave 2: Rewrite service.ts to compose Wisenet + Postgres with use-cache-remote + cacheTag + cacheLife; create logger.ts; flip lint (SVC-02, D-37)
 - [ ] 03-04-PLAN.md — Wave 3: 'use server' actions.ts facade with 5 mutation methods + revalidateTag(tag, \max\) (SVC-03, Critical Finding #1)

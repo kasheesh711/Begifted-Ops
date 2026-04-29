@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Plan 03-00 baseline reconciliation complete 2026-04-29: 7 Sheets-era routes restored, Phase 1+2 source committed (97 files), .planning/ artifacts committed (72 files); next plan 03-01 SVC-01"
-last_updated: "2026-04-29T15:46:25Z"
+stopped_at: "Plan 03-01 SVC-01 cacheComponents enabled 2026-04-29: cdc2ebe — flag added in next.config.ts; forced compat fixes (drop runtime=nodejs from 6 routes, Suspense-wrap 3 auth pages); build green, 164/164 tests; next 03-02 SVC-08 archive-link affordance"
+last_updated: "2026-04-29T15:56:45Z"
 last_activity: 2026-04-29
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 26
-  completed_plans: 17
-  percent: 65
+  completed_plans: 18
+  percent: 69
 ---
 
 # STATE: BeGifted Ops — Wisenet Migration
@@ -27,11 +27,11 @@ progress:
 ## Current Position
 
 Phase: 03 (service-cutover) — EXECUTING
-Plan: 2 of 11 (03-00 complete; next: 03-01 SVC-01 enable cacheComponents)
+Plan: 3 of 11 (03-00 + 03-01 complete; next: 03-02 SVC-08 archive-link affordance)
 **Phase:** 3 — Service Cutover (EXECUTING)
-**Status:** Executing Phase 03 (baseline reconciliation done)
+**Status:** Executing Phase 03 (cacheComponents enabled; build/tests green)
 **Last Activity:** 2026-04-29
-**Progress:** [█▱▱▱▱▱▱▱▱▱▱] 9% (1 of 11 plans complete — 03-00 baseline reconciliation)
+**Progress:** [██▱▱▱▱▱▱▱▱▱] 18% (2 of 11 plans complete — 03-00 baseline + 03-01 cacheComponents)
 
 ### Phase Overview
 
@@ -39,7 +39,7 @@ Plan: 2 of 11 (03-00 complete; next: 03-01 SVC-01 enable cacheComponents)
 |---|-------|--------------|--------|
 | 1 | Wisenet Discovery | 6 (WISE-01..06) | Complete (5/5 plans, all 6 WISE-* requirements closed, 01-PHASE-SUMMARY.md shipped) |
 | 2 | Data Layer | 19 (WCLI + DB + TEST subset) | Complete — all 10 plans shipped (Waves 0-4): Wave 0 scaffolding + Wave 1 Wisenet client core + Drizzle schema/driver lifecycle + Wave 2 Drizzle query layer + Wave 3 Wisenet→DashboardSources mappers + TEST-01 batch A/B + Wave 4 TEST-05 parametric coercion + TEST-03 deferral lint + 02-10 ops scripts (DB-08 + D-21 + D-22); 19/19 requirements closed: DB-01..DB-08 + WCLI-01..WCLI-07 + TEST-01 + TEST-02 + TEST-03 (deferral carve-out) + TEST-05 (WCLI-05 covered by TEST-05) |
-| 3 | Service Cutover | 10 (SVC + TEST-04, TEST-06) | Executing — 1/11 plans complete (03-00 baseline reconciliation 2026-04-29: 7 routes restored from prod-snapshot + 97 Phase 1+2 source files + 72 .planning artifacts; 3 atomic commits e339f39/de8e5a2/396d7c8); TEST-04 deferred to Phase 4 per D-34; next 03-01 SVC-01 |
+| 3 | Service Cutover | 10 (SVC + TEST-04, TEST-06) | Executing — 2/11 plans complete (03-00 baseline reconciliation 2026-04-29: 7 routes restored + 97 Phase 1+2 source files + 72 .planning artifacts; 03-01 cacheComponents 2026-04-29: cdc2ebe one-line flag + forced compat — 6 route runtime drops + 3 auth-page Suspense wraps; build green, 164/164 tests); TEST-04 deferred to Phase 4 per D-34; next 03-02 SVC-08 |
 | 4 | Deploy Hardening | 6 (DEPL-01..06) | Not started |
 | 5 | Apps Script Retirement | 6 (RETI-01..06) | Not started |
 
@@ -111,6 +111,8 @@ Plan: 2 of 11 (03-00 complete; next: 03-01 SVC-01 enable cacheComponents)
 | Three atomic commits in additive-then-deletion order honored D-33 (03-00) | Plan 03-00 chose chore(03-00) → feat(02-retroactive) → docs(planning) ordering. First commit restored 7 Sheets-era route handler files verbatim from `../Begifted-Ops-prod-snapshot/web/src/app/`; second committed 97 Phase 1+2 source files (wisenet client, drizzle layer, dashboard logic ports, tests, scripts, CI workflow, configs); third committed 72 .planning artifacts (PROJECT.md, REQUIREMENTS.md, codebase/, research/ minus gitignored postman dump, phase 01/02 dirs). Each commit individually buildable. |
 | Sub-task 2 consolidated to single commit instead of optional A/B/C split (03-00) | Plan offered a 3-way split (wisenet / db / remaining); chose single commit for atomic readability since pre-Plan-03-00 history has no Phase 2 source at all (anyone bisecting Phase 2 work would land on this single commit's contents anyway). Explicit per-path `git add` enforced the same security gates the split would have provided. |
 | D-41 invariant verified post-copy in Plan 03-00 | After cp batch from prod-snapshot, re-grepped `web/src/lib/runtime/env.ts` for `getWisenetEnv|getDbEnv` — present, confirming env.ts (Phase 2-aware) was NOT clobbered by prod-snapshot's older Sheets-era version. Same applies to analytics.ts and dashboard-logic.test.ts (those paths were never in the cp scope). |
+| `cacheComponents: true` forces drop of `export const runtime = "nodejs"` from all 6 route handlers (03-01) | Next.js 16 errors with "Route segment config 'runtime' is not compatible with `nextConfig.cacheComponents`" because Node.js becomes the default route runtime under the flag. Removing the redundant segment is the documented migration step (`docs/01-app/02-guides/migrating-to-cache-components.mdx`). Routes still execute on Node.js — confirmed by build output classifying them as `ƒ (Dynamic)`. Drizzle HTTP + WebSocket Pool unaffected. |
+| `cacheComponents: true` requires `<Suspense>` around `await auth()` page bodies (03-01) | The plan's threat-register T-03-01-1 assumed auth-gated pages "are dynamic anyway" but Next.js 16 rejects uncached I/O at the page-component top with "Uncached data was accessed outside of <Suspense>". Pattern fix: lift the auth-dependent body into an async sub-component and wrap it in `<Suspense fallback={null}>`. Build now classifies `/`, `/signin`, `/dashboard` as `◐ (Partial Prerender)` — static shell prerenders, auth streams in per request. Behavior unchanged. `HomeRedirect()` needed an explicit `return null` after `redirect()` because tsc cannot prove control-flow termination through the `redirect()` throw. |
 
 **Performance metrics:**
 
@@ -131,6 +133,7 @@ Plan: 2 of 11 (03-00 complete; next: 03-01 SVC-01 enable cacheComponents)
 | Phase 02 P09 | 8min | 2 tasks | 4 files |
 | Phase 02 P10 | 13min | 3 tasks | 4 files |
 | Phase 03 P00 | 3min | 3 sub-tasks | 176 files (7 + 97 + 72) |
+| Phase 03 P01 | 5min | 1 task (+2 Rule-3 cascades) | 10 files (1 config + 6 routes + 3 pages) |
 
 ### Active Todos
 
@@ -200,12 +203,12 @@ None yet — will populate when `/gsd-plan-phase 1` decomposes Phase 1 into exec
 2. Run `/gsd-plan-phase 3` to decompose Phase 3 (Service Cutover) — 10 requirements: SVC-01..10 + TEST-04 + TEST-06. Waves 1-3 of Phase 2 landed the Wisenet client + Drizzle queries + mappers; Phase 3 rewires `service.ts` + API routes to the new data layer and lands the runtime cache-invalidation test (TEST-03 PR must remove `service.ts:20` `revalidateTag(_, "max")` AND the `lint-no-revalidate-max.sh` allowlist entry in one PR).
 3. Kevin reviews manual-only verifications checklist in `.planning/phases/01-wisenet-discovery/01-PHASE-SUMMARY.md` (5 items): RED-block soundness, fixture PII eyeball, AEST probe window, rate-limit budget acceptance, secret-warn eyeball.
 
-**Last session:** 2026-04-29T15:46:25Z
-**Stopped at:** Plan 03-00 baseline reconciliation complete: 7 Sheets-era routes restored from prod-snapshot, 97 Phase 1+2 source files committed, 72 .planning artifacts committed (commits e339f39, de8e5a2, 396d7c8). `npm run build` exits 0; 164/164 tests pass. Ready for Plan 03-01 (SVC-01 enable cacheComponents).
+**Last session:** 2026-04-29T15:56:45Z
+**Stopped at:** Plan 03-01 SVC-01 cacheComponents enabled (cdc2ebe). Single-line `cacheComponents: true` in next.config.ts cascaded into 2 Rule-3 forced compatibility fixes per Next.js 16 migration contract: dropped redundant `runtime="nodejs"` from 6 route handlers (Node.js is default under cacheComponents; explicit segment now errors), and Suspense-wrapped 3 auth-gated pages (`/`, `/signin`, `/dashboard`) so partial prerender succeeds without blocking on uncached `auth()` I/O. `npm run build` green ("Cache Components enabled"); 164/164 tests pass. Ready for Plan 03-02 (SVC-08 archive-link affordance).
 
 ---
 *State initialized: 2026-04-20 after roadmap creation*
 
 **Planned Phase:** 03 (service-cutover) — 11 plans — 2026-04-29T15:23:42.222Z
 
-**Executing Phase:** 03 (service-cutover) — Plan 03-00 complete 2026-04-29T15:46:25Z (3min, 3 sub-tasks, 176 files)
+**Executing Phase:** 03 (service-cutover) — Plan 03-00 complete 2026-04-29T15:46:25Z (3min, 3 sub-tasks, 176 files); Plan 03-01 complete 2026-04-29T15:56:45Z (5min, 1 task + 2 forced cascades, 10 files, commit cdc2ebe)
