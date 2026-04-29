@@ -2,9 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: Completed 02-10-PLAN.md (DB-08 migration runner + CI workflow + D-21 admin-ownership seed + operator runbook)
-last_updated: "2026-04-29T07:44:47.792Z"
+status: verifying
+stopped_at: "Phase 03 re-baselined 2026-04-29: source-state mismatch reconciled. New Plan 03-00 (baseline reconciliation) added; full replan requested"
+last_updated: "2026-04-29T08:31:49.030Z"
+last_activity: 2026-04-29 — `/gsd-plan-phase 3 --skip-ui` complete; ready for `/gsd-execute-phase 3`
 progress:
   total_phases: 5
   completed_phases: 2
@@ -195,8 +196,8 @@ None yet — will populate when `/gsd-plan-phase 1` decomposes Phase 1 into exec
 2. Run `/gsd-plan-phase 3` to decompose Phase 3 (Service Cutover) — 10 requirements: SVC-01..10 + TEST-04 + TEST-06. Waves 1-3 of Phase 2 landed the Wisenet client + Drizzle queries + mappers; Phase 3 rewires `service.ts` + API routes to the new data layer and lands the runtime cache-invalidation test (TEST-03 PR must remove `service.ts:20` `revalidateTag(_, "max")` AND the `lint-no-revalidate-max.sh` allowlist entry in one PR).
 3. Kevin reviews manual-only verifications checklist in `.planning/phases/01-wisenet-discovery/01-PHASE-SUMMARY.md` (5 items): RED-block soundness, fixture PII eyeball, AEST probe window, rate-limit budget acceptance, secret-warn eyeball.
 
-**Last session:** 2026-04-22T05:25:51.076Z
-**Stopped at:** Completed 02-10-PLAN.md (DB-08 migration runner + CI workflow + D-21 admin-ownership seed + operator runbook)
+**Last session:** --stopped-at
+**Stopped at:** Phase 03 re-baselined 2026-04-29: source-state mismatch reconciled. New Plan 03-00 (baseline reconciliation) added; full replan requested
 
 ---
 *State initialized: 2026-04-20 after roadmap creation*
