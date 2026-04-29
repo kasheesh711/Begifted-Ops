@@ -83,7 +83,7 @@ Five-phase migration from the Google Sheets + Apps Script hybrid stack to a sing
   3. `lib/sheets/`, `lib/cache/memory-cache.ts`, `lib/dashboard/snapshot-store.ts`, `lib/dashboard/actions.ts` are deleted and `googleapis` is removed from `web/package.json` — production build succeeds with zero references
   4. `/api/health` probes both Wisenet and Postgres and returns structured status; Student Detail renders a visible Day-1 archive-link affordance pointing operators at the legacy action sheets
   5. 50 concurrent `/api/actions` load test passes with no Neon pool exhaustion and p95 < 500ms; a mocked chunked-transfer / HTTP -1 streaming response simulation still renders
-**Plans**: 9 plans
+**Plans**: 10 plans
 - [ ] 03-01-PLAN.md — Wave 1: Enable cacheComponents in next.config.ts (SVC-01)
 - [ ] 03-02-PLAN.md — Wave 1: Student Detail archive-link affordance + ARCHIVE_ACTION_SHEET_URL constant (SVC-08, D-30, D-36)
 - [ ] 03-03-PLAN.md — Wave 2: Rewrite service.ts to use cache: remote + cacheTag + cacheLife; empty + repurpose lint allowlist (SVC-02, TEST-03 partial — Pitfall 5 path i)
@@ -93,6 +93,7 @@ Five-phase migration from the Google Sheets + Apps Script hybrid stack to a sing
 - [ ] 03-07-PLAN.md — Wave 4: cache-invalidation.test.ts (TEST-03) + chunked-transfer-regression.test.ts (TEST-06 reframed per D-34)
 - [ ] 03-08-PLAN.md — Wave 5: Delete lib/sheets, memory-cache, snapshot-store, build.ts, compare-live, ensure-* (SVC-05)
 - [ ] 03-09-PLAN.md — Wave 5: Remove googleapis dep + 3 Sheets-era npm scripts; refresh package-lock (SVC-06)
+- [ ] 03-10-PLAN.md — Wave 6: Pre-Merge Gate (operator-only) — D-31 admin seed + RESEARCH §A8 cache tag purge + D-35 gate 4 manual QA
 **UI hint**: yes
 **Note**: TEST-04 (50-concurrent load test) DEFERRED to Phase 4 DEPL-04 per D-34 — covered in Phase 4 plan list.
 
@@ -124,7 +125,7 @@ Five-phase migration from the Google Sheets + Apps Script hybrid stack to a sing
 |-------|----------------|--------|-----------|
 | 1. Wisenet Discovery | 5/5 | Complete | 2026-04-21 |
 | 2. Data Layer | 10/10 | Complete | 2026-04-21 |
-| 3. Service Cutover | 0/9 | Not started | - |
+| 3. Service Cutover | 0/10 | Not started | - |
 | 4. Deploy Hardening | 0/? | Not started | - |
 | 5. Apps Script Retirement | 0/? | Not started | - |
 

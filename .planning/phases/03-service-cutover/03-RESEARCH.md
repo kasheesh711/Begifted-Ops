@@ -1267,24 +1267,24 @@ export function log(
 
 **If any of A3, A7, A8 fail empirically, Phase 3 may need a corrective amendment before merge.** All others are low-risk.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Should the planner choose Path A (`revalidateTag(tag, "max")`) or Path B (`revalidateTag(tag, { expire: 0 })`) for D-28's invalidation function?**
+1. **RESOLVED: Should the planner choose Path A (`revalidateTag(tag, "max")`) or Path B (`revalidateTag(tag, { expire: 0 })`) for D-28's invalidation function?** Planner chose Path A — implemented in Plan 03-04 actions.ts (5 mutations × `revalidateTag(DASHBOARD_CACHE_TAG, "max")`).
    - What we know: Both work in route handlers per Next.js 16 docs.
    - What's unclear: The operator usage pattern. Multi-action workflows favor Path A (stale-while-revalidate, less origin pressure); single-action-then-verify-on-screen workflows favor Path B (true read-your-own-writes).
    - Recommendation: Path A. The dashboard's existing `unstable_cache + revalidateTag` is a stale-while-revalidate pattern in spirit (60s revalidate window). Maintaining behavior parity through cutover is the safer call.
 
-2. **Should `web/scripts/lint-no-revalidate-max.sh` be repurposed (Path i) or re-allowlisted (Path ii)?**
+2. **RESOLVED: Should `web/scripts/lint-no-revalidate-max.sh` be repurposed (Path i) or re-allowlisted (Path ii)?** Planner chose Path i — implemented in Plan 03-03 Task 3 (regex flipped to forbid deprecated single-arg form; allowlist emptied).
    - What we know: The Next.js 15 anti-pattern is the Next.js 16 best practice.
    - What's unclear: Whether D-23 + D-28's "empty allowlist" instruction was an artifact of the Phase 2 anti-pattern definition (which is now obsolete) or a positive signal value (catch all uses). Repurposing (Path i, forbid bare `revalidateTag(tag)`) preserves the original lint's spirit; re-allowlisting (Path ii) preserves the literal CONTEXT instruction.
    - Recommendation: Path i. Forbid the deprecated single-arg form; the lint is still useful and aligned with Next.js 16 best practice.
 
-3. **Should TEST-03 be implemented as a unit test (Postgres-side correctness) or deferred to Phase 4 as a Playwright-against-preview-deploy E2E test?**
+3. **RESOLVED: Should TEST-03 be implemented as a unit test (Postgres-side correctness) or deferred to Phase 4 as a Playwright-against-preview-deploy E2E test?** Planner chose both — Plan 03-07 implements Postgres-correctness gated on `TEST_DATABASE_URL`; Phase 4 DEPL-04 will add the full-stack Playwright variant.
    - What we know: Vitest may not reach the Vercel Runtime Cache backend.
    - What's unclear: Whether testing only the Postgres write + read flow (without exercising the cache backend) satisfies D-29's "regression test that catches the revalidateTag(*, 'max') class of bugs" intent.
    - Recommendation: Implement TEST-03 as a Postgres-correctness unit test in Phase 3 (gates SVC-03), AND add an E2E variant in Phase 4 DEPL-04 for full-stack proof. The Phase 2 lint-test still catches the bare `revalidateTag(tag)` bug class.
 
-4. **Should the `actions.ts` facade be `'use server'`, or should the route handlers call `lib/db/queries` + `revalidateTag` directly (Claude's Discretion option (a))?**
+4. **RESOLVED: Should the `actions.ts` facade be `'use server'`, or should the route handlers call `lib/db/queries` + `revalidateTag` directly (Claude's Discretion option (a))?** Planner chose Path (b) — implemented in Plan 03-04 ('use server' facade with 5 mutation methods + single-source-of-truth invalidation).
    - What we know: CONTEXT prefers (b) facade for single-source-of-truth.
    - What's unclear: Whether the facade adds enough value to justify the indirection in 4-5 mutation sites. Direct calls (Path (a)) are smaller and less abstract.
    - Recommendation: Path (b). The single-source-of-truth-on-revalidateTag-placement argument outweighs the indirection cost. Marking actions.ts `'use server'` future-proofs against any later change to use Server Actions from React forms (Phase 5+ scope).
