@@ -61,6 +61,14 @@ export const INACTIVE_STUDENTS_HEADERS = [
   "marked_by_name",
 ] as const;
 
+// SVC-08 / D-36 — URL to pre-cutover DashboardActionsState tab in the BeGifted Education Analytics spreadsheet.
+// Phase 5 RETI-06 updates to immutable archive URL per RETI-03 snapshot.
+// OPERATOR ACTION REQUIRED: Before merging the cutover PR, replace the placeholder below with the
+// real Google Sheets URL to the DashboardActionsState tab.
+// Format: https://docs.google.com/spreadsheets/d/<SHEET_ID>/edit#gid=<TAB_GID>
+export const ARCHIVE_ACTION_SHEET_URL =
+  "https://docs.google.com/spreadsheets/d/TODO_REPLACE_WITH_REAL_SHEET_ID/edit#gid=TODO_REPLACE_WITH_TAB_GID";
+
 export const REQUIRED_COLUMNS = Object.freeze({
   aggregations: [
     "Student Name",
