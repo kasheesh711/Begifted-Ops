@@ -74,28 +74,29 @@ Five-phase migration from the Google Sheets + Apps Script hybrid stack to a sing
 - [x] 02-10-PLAN.md — Wave 4 Operational scripts (db-migrate.ts + GH workflow + seed-admin-ownership.ts + README-db-ops.md) — DB-08
 
 ### Phase 3: Service Cutover
-**Goal**: Atomically rewire `service.ts` from Sheets to Wisenet + Postgres in one high-risk PR. Enable `cacheComponents`, route handlers unchanged to external clients, delete the old Sheets path and the per-process caches, remove `googleapis`. Ship the Day-1 archive-link affordance on Student Detail so operators can find pre-cutover history.
+**Goal**: Atomically rewire `service.ts` from Sheets to Wisenet + Postgres in one high-risk PR. Preceded by a baseline-reconciliation plan that restores Sheets-era route handlers and commits the uncommitted Phase 1+2 work. Enable `cacheComponents`, route handlers unchanged to external clients, delete the old Sheets path and the per-process caches, remove `googleapis`. Ship the Day-1 archive-link affordance on Student Detail so operators can find pre-cutover history. Transfer cutover diff to prod-snapshot for Vercel deploy.
 **Depends on**: Phase 2 (both WCLI and DB halves must be green; TEST-01 Validation.gs ports must pass before this ships)
-**Requirements**: SVC-01, SVC-02, SVC-03, SVC-04, SVC-05, SVC-06, SVC-07, SVC-08, TEST-04, TEST-06
+**Requirements**: SVC-01, SVC-02, SVC-03, SVC-04, SVC-05, SVC-06, SVC-07, SVC-08, TEST-06
 **Success Criteria** (what must be TRUE):
   1. `/api/dashboard` round-trip returns the payload composed from real Wisenet + Postgres data with the JSON shape unchanged for existing clients; `/api/actions`, `/api/actions/bulk`, `/api/actions/history`, `/api/inactive`, `/api/health` route handlers all hit the new service methods
-  2. Every write path (`setStudentAction`, `clearStudentAction`, `bulk*`, `markInactive`, `clearInactive`) triggers `updateTag('dashboard-payload')` after its Postgres commit, and subsequent reads reflect the write
-  3. `lib/sheets/`, `lib/cache/memory-cache.ts`, `lib/dashboard/snapshot-store.ts`, `lib/dashboard/actions.ts` are deleted and `googleapis` is removed from `web/package.json` — production build succeeds with zero references
-  4. `/api/health` probes both Wisenet and Postgres and returns structured status; Student Detail renders a visible Day-1 archive-link affordance pointing operators at the legacy action sheets
-  5. 50 concurrent `/api/actions` load test passes with no Neon pool exhaustion and p95 < 500ms; a mocked chunked-transfer / HTTP -1 streaming response simulation still renders
-**Plans**: 10 plans
+  2. Every write path (`setStudentAction`, `clearStudentAction`, `bulk*`, `markInactive`, `clearInactive`) calls `revalidateTag('dashboard-payload', 'max')` after its Postgres commit (via 'use server' actions.ts facade), and subsequent reads reflect the write
+  3. `lib/sheets/`, `lib/cache/memory-cache.ts`, `lib/dashboard/snapshot-store.ts`, `lib/dashboard/build.ts` are deleted and `googleapis` is removed from `web/package.json` — production build succeeds with zero references
+  4. `/api/health` probes both Wisenet and Postgres and returns structured status (D-32 shape); Student Detail renders a visible Day-1 archive-link affordance pointing operators at the legacy action sheets
+  5. A mocked chunked-transfer / Wisenet streaming response simulation still renders (TEST-06 reframed); cache-invalidation integration test exists gated on TEST_DATABASE_URL (TEST-03)
+**Plans**: 11 plans
+- [ ] 03-00-PLAN.md — Wave 0: Baseline reconciliation — restore Sheets-era routes from prod-snapshot; commit Phase 1+2 source; commit .planning/ artifacts (D-40, D-41, D-43)
 - [ ] 03-01-PLAN.md — Wave 1: Enable cacheComponents in next.config.ts (SVC-01)
 - [ ] 03-02-PLAN.md — Wave 1: Student Detail archive-link affordance + ARCHIVE_ACTION_SHEET_URL constant (SVC-08, D-30, D-36)
-- [ ] 03-03-PLAN.md — Wave 2: Rewrite service.ts to use cache: remote + cacheTag + cacheLife; empty + repurpose lint allowlist (SVC-02, TEST-03 partial — Pitfall 5 path i)
-- [ ] 03-04-PLAN.md — Wave 3: 'use server' actions.ts facade with 5 mutation methods + revalidateTag invocation (SVC-03, Critical Finding #1)
+- [ ] 03-03-PLAN.md — Wave 2: Rewrite service.ts to compose Wisenet + Postgres with use-cache-remote + cacheTag + cacheLife; create logger.ts; flip lint (SVC-02, D-37)
+- [ ] 03-04-PLAN.md — Wave 3: 'use server' actions.ts facade with 5 mutation methods + revalidateTag(tag, \max\) (SVC-03, Critical Finding #1)
 - [ ] 03-05-PLAN.md — Wave 3: Swap 5 route handlers to new service methods + update actions-route.test.ts mock surface (SVC-04)
 - [ ] 03-06-PLAN.md — Wave 3: Structured /api/health per-subsystem probe + new health-route.test.ts (SVC-07, D-32)
-- [ ] 03-07-PLAN.md — Wave 4: cache-invalidation.test.ts (TEST-03) + chunked-transfer-regression.test.ts (TEST-06 reframed per D-34)
+- [ ] 03-07-PLAN.md — Wave 4: cache-invalidation.test.ts (TEST-03, gated) + chunked-transfer-regression.test.ts (TEST-06 reframed per D-34)
 - [ ] 03-08-PLAN.md — Wave 5: Delete lib/sheets, memory-cache, snapshot-store, build.ts, compare-live, ensure-* (SVC-05)
-- [ ] 03-09-PLAN.md — Wave 5: Remove googleapis dep + 3 Sheets-era npm scripts; refresh package-lock (SVC-06)
-- [ ] 03-10-PLAN.md — Wave 6: Pre-Merge Gate (operator-only) — D-31 admin seed + RESEARCH §A8 cache tag purge + D-35 gate 4 manual QA
+- [ ] 03-09-PLAN.md — Wave 5: Remove googleapis dep + Sheets-era npm scripts; refresh package-lock (SVC-06)
+- [ ] 03-10-PLAN.md — Wave 6: Pre-Merge Gate (operator-only) — D-31 admin seed + D-35 checklist + D-42 prod-snapshot transfer + Vercel deploy
 **UI hint**: yes
-**Note**: TEST-04 (50-concurrent load test) DEFERRED to Phase 4 DEPL-04 per D-34 — covered in Phase 4 plan list.
+**Note**: TEST-04 (50-concurrent load test, p95 < 500ms) DEFERRED to Phase 4 DEPL-04 per D-34 — requires load-gen tooling and deployed Vercel preview URL.
 
 ### Phase 4: Deploy Hardening
 **Goal**: Make the migrated app production-ready with timezone correctness, auth regression coverage, version-stamped responses for incident triage, and observability. This phase exists to eliminate the HTTP -1 / stale-deployment class of incidents flagged in `CLAUDE.md` and to prevent NextAuth beta bumps from silently breaking sign-in.
@@ -125,7 +126,7 @@ Five-phase migration from the Google Sheets + Apps Script hybrid stack to a sing
 |-------|----------------|--------|-----------|
 | 1. Wisenet Discovery | 5/5 | Complete | 2026-04-21 |
 | 2. Data Layer | 10/10 | Complete | 2026-04-21 |
-| 3. Service Cutover | 0/10 | Not started | - |
+| 3. Service Cutover | 0/11 | Planned 2026-04-29 | - |
 | 4. Deploy Hardening | 0/? | Not started | - |
 | 5. Apps Script Retirement | 0/? | Not started | - |
 
