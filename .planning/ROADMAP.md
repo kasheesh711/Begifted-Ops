@@ -84,7 +84,7 @@ Five-phase migration from the Google Sheets + Apps Script hybrid stack to a sing
   4. `/api/health` probes both Wisenet and Postgres and returns structured status (D-32 shape); Student Detail renders a visible Day-1 archive-link affordance pointing operators at the legacy action sheets
   5. A mocked chunked-transfer / Wisenet streaming response simulation still renders (TEST-06 reframed); cache-invalidation integration test exists gated on TEST_DATABASE_URL (TEST-03)
 **Plans**: 11 plans
-- [ ] 03-00-PLAN.md — Wave 0: Baseline reconciliation — restore Sheets-era routes from prod-snapshot; commit Phase 1+2 source; commit .planning/ artifacts (D-40, D-41, D-43)
+- [x] 03-00-PLAN.md — Wave 0: Baseline reconciliation — restore Sheets-era routes from prod-snapshot; commit Phase 1+2 source; commit .planning/ artifacts (D-40, D-41, D-43) (complete 2026-04-29; commits e339f39 / de8e5a2 / 396d7c8; 176 files)
 - [ ] 03-01-PLAN.md — Wave 1: Enable cacheComponents in next.config.ts (SVC-01)
 - [ ] 03-02-PLAN.md — Wave 1: Student Detail archive-link affordance + ARCHIVE_ACTION_SHEET_URL constant (SVC-08, D-30, D-36)
 - [ ] 03-03-PLAN.md — Wave 2: Rewrite service.ts to compose Wisenet + Postgres with use-cache-remote + cacheTag + cacheLife; create logger.ts; flip lint (SVC-02, D-37)
@@ -126,7 +126,7 @@ Five-phase migration from the Google Sheets + Apps Script hybrid stack to a sing
 |-------|----------------|--------|-----------|
 | 1. Wisenet Discovery | 5/5 | Complete | 2026-04-21 |
 | 2. Data Layer | 10/10 | Complete | 2026-04-21 |
-| 3. Service Cutover | 0/11 | Planned 2026-04-29 | - |
+| 3. Service Cutover | 1/11 | Executing (Plan 03-00 complete 2026-04-29) | - |
 | 4. Deploy Hardening | 0/? | Not started | - |
 | 5. Apps Script Retirement | 0/? | Not started | - |
 

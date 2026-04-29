@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: "Phase 03 re-baselined 2026-04-29: source-state mismatch reconciled. New Plan 03-00 (baseline reconciliation) added; full replan requested"
-last_updated: "2026-04-29T15:23:42.229Z"
-last_activity: 2026-04-29 — `/gsd-plan-phase 3 --skip-ui` complete; ready for `/gsd-execute-phase 3`
+status: executing
+stopped_at: "Plan 03-00 baseline reconciliation complete 2026-04-29: 7 Sheets-era routes restored, Phase 1+2 source committed (97 files), .planning/ artifacts committed (72 files); next plan 03-01 SVC-01"
+last_updated: "2026-04-29T15:46:25Z"
+last_activity: 2026-04-29
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 26
-  completed_plans: 16
-  percent: 62
+  completed_plans: 17
+  percent: 65
 ---
 
 # STATE: BeGifted Ops — Wisenet Migration
@@ -22,16 +22,16 @@ progress:
 
 **Core Value:** Operators can trust the dashboard as a single source of truth for who to follow up with and what credit / package state each student is in — without any manual sheet syncing.
 
-**Current Focus:** Phase 03 — service-cutover (PLANNED, ready to execute)
+**Current Focus:** Phase 03 — service-cutover
 
 ## Current Position
 
-Phase: 03 (service-cutover) — PLANNED, ready to execute
-Plan: 0 of 10 plans executed; 10 PLAN.md files + RESEARCH + VALIDATION + PATTERNS shipped
-**Phase:** 3 — Service Cutover (READY TO EXECUTE)
-**Status:** All 10 PLAN.md files committed (`dea50c5` initial + `8ff7ff4` revisions); plan-checker verification PASSED on iteration 2/3 after the planner addressed 4 warnings (W-1 frontmatter reconciliation; W-2/W-3/W-4 operator-gate checkpoints captured in new 03-10 Wave 6 Pre-Merge Gate). Requirements coverage: 9/9 in-scope IDs covered (SVC-01..08 + TEST-06); TEST-04 deferred to Phase 4 DEPL-04 per CONTEXT D-34. 03-RESEARCH.md surfaced 5 critical findings overriding CONTEXT.md: (1) `updateTag` is Server-Actions-only → use `revalidateTag(tag, "max")` from a `'use server'` actions.ts facade; (2) `cacheLife({ expire: 60 })` shorthand silently inherits 15-min revalidate → explicit `cacheLife({ stale: 60, revalidate: 60, expire: 300 })`; (3) Phase 2 lint regex flips meaning in Next.js 16 → repurpose `lint-no-revalidate-max.sh` to forbid the deprecated single-arg `revalidateTag(tag)` form; (4) 1.8 MB payload-size sanity warn vs 2 MB Vercel Runtime Cache limit; (5) TEST-03 implemented as Postgres-correctness, full E2E deferred to Phase 4 DEPL-04 Playwright. Wave structure: 1 (config + UI affordance), 2 (service.ts rewire + lint flip), 3 (mutation facade + 5 routes + structured /api/health), 4 (regression tests TEST-03 + TEST-06), 5 (deletions + dep cleanup), 6 (operator pre-merge gate — D-31 admin seed + RESEARCH §A8 cache purge + D-35 gate 4 manual QA).
-**Last Activity:** 2026-04-29 — `/gsd-plan-phase 3 --skip-ui` complete; ready for `/gsd-execute-phase 3`
-**Progress:** [▱▱▱▱▱▱▱▱▱▱] 0% (planning complete, execution pending)
+Phase: 03 (service-cutover) — EXECUTING
+Plan: 2 of 11 (03-00 complete; next: 03-01 SVC-01 enable cacheComponents)
+**Phase:** 3 — Service Cutover (EXECUTING)
+**Status:** Executing Phase 03 (baseline reconciliation done)
+**Last Activity:** 2026-04-29
+**Progress:** [█▱▱▱▱▱▱▱▱▱▱] 9% (1 of 11 plans complete — 03-00 baseline reconciliation)
 
 ### Phase Overview
 
@@ -39,7 +39,7 @@ Plan: 0 of 10 plans executed; 10 PLAN.md files + RESEARCH + VALIDATION + PATTERN
 |---|-------|--------------|--------|
 | 1 | Wisenet Discovery | 6 (WISE-01..06) | Complete (5/5 plans, all 6 WISE-* requirements closed, 01-PHASE-SUMMARY.md shipped) |
 | 2 | Data Layer | 19 (WCLI + DB + TEST subset) | Complete — all 10 plans shipped (Waves 0-4): Wave 0 scaffolding + Wave 1 Wisenet client core + Drizzle schema/driver lifecycle + Wave 2 Drizzle query layer + Wave 3 Wisenet→DashboardSources mappers + TEST-01 batch A/B + Wave 4 TEST-05 parametric coercion + TEST-03 deferral lint + 02-10 ops scripts (DB-08 + D-21 + D-22); 19/19 requirements closed: DB-01..DB-08 + WCLI-01..WCLI-07 + TEST-01 + TEST-02 + TEST-03 (deferral carve-out) + TEST-05 (WCLI-05 covered by TEST-05) |
-| 3 | Service Cutover | 10 (SVC + TEST-04, TEST-06) | Planned — 10 PLAN.md files + RESEARCH + VALIDATION + PATTERNS committed; 9/9 in-scope reqs covered; TEST-04 deferred to Phase 4 per D-34; ready for `/gsd-execute-phase 3` |
+| 3 | Service Cutover | 10 (SVC + TEST-04, TEST-06) | Executing — 1/11 plans complete (03-00 baseline reconciliation 2026-04-29: 7 routes restored from prod-snapshot + 97 Phase 1+2 source files + 72 .planning artifacts; 3 atomic commits e339f39/de8e5a2/396d7c8); TEST-04 deferred to Phase 4 per D-34; next 03-01 SVC-01 |
 | 4 | Deploy Hardening | 6 (DEPL-01..06) | Not started |
 | 5 | Apps Script Retirement | 6 (RETI-01..06) | Not started |
 
@@ -108,6 +108,9 @@ Plan: 0 of 10 plans executed; 10 PLAN.md files + RESEARCH + VALIDATION + PATTERN
 | D-21 seed-admin-ownership.ts with fallback-JSON on any failure path (02-10) | Every failure — clasp run fails, JSON parse fails, empty/invalid ownership map, malformed entry, allowlist-reject — writes the suspicious payload to `.planning/research/admin-ownership-seed.json` with error context and exits 1 without inserting. Fallback content varies per failure type (clasp-fail writes error+timestamp; parse-fail writes raw claspOutput; allowlist-reject writes offending entry + full ownership). Never insert half-baked data. |
 | VALID_ADMIN_KEYS allowlist built from single sources of truth (02-10) | `new Set<string>([...ADMIN_OWNER_REGISTRY.map(a => a.key), UNASSIGNED_ADMIN_KEY])` — no hardcoded duplication. If the registry changes, allowlist tracks automatically. 500-row batching on the onConflictDoUpdate insert bounds parameter count well under PostgreSQL's 65535 limit (500 * 3 params = 1500; hundreds of students = one batch in practice). |
 | RESEARCH.md Q3 + Q4 open questions addressed in README-db-ops.md (02-10) | Q3 (Neon preview-branch migration ordering): Vercel Marketplace Neon creates a branch per preview; `__drizzle_migrations` table inherits from parent so preview migrations are idempotent. Preview deploy blocks on migration failure same as main. Q4 (seed idempotency vs future edit UI): re-running the seed post-cutover WILL OVERWRITE dashboard-edited ownership. Mitigation = run once at cutover only (Phase 3 checklist entry) + Phase 3+ guard refusing to run if `updated_at > assigned_at` for any row. Phase 5 retires the sheet; seed marked deprecated then. |
+| Three atomic commits in additive-then-deletion order honored D-33 (03-00) | Plan 03-00 chose chore(03-00) → feat(02-retroactive) → docs(planning) ordering. First commit restored 7 Sheets-era route handler files verbatim from `../Begifted-Ops-prod-snapshot/web/src/app/`; second committed 97 Phase 1+2 source files (wisenet client, drizzle layer, dashboard logic ports, tests, scripts, CI workflow, configs); third committed 72 .planning artifacts (PROJECT.md, REQUIREMENTS.md, codebase/, research/ minus gitignored postman dump, phase 01/02 dirs). Each commit individually buildable. |
+| Sub-task 2 consolidated to single commit instead of optional A/B/C split (03-00) | Plan offered a 3-way split (wisenet / db / remaining); chose single commit for atomic readability since pre-Plan-03-00 history has no Phase 2 source at all (anyone bisecting Phase 2 work would land on this single commit's contents anyway). Explicit per-path `git add` enforced the same security gates the split would have provided. |
+| D-41 invariant verified post-copy in Plan 03-00 | After cp batch from prod-snapshot, re-grepped `web/src/lib/runtime/env.ts` for `getWisenetEnv|getDbEnv` — present, confirming env.ts (Phase 2-aware) was NOT clobbered by prod-snapshot's older Sheets-era version. Same applies to analytics.ts and dashboard-logic.test.ts (those paths were never in the cp scope). |
 
 **Performance metrics:**
 
@@ -127,6 +130,7 @@ Plan: 0 of 10 plans executed; 10 PLAN.md files + RESEARCH + VALIDATION + PATTERN
 | Phase 02 P04 | 10min | 3 tasks | 4 files |
 | Phase 02 P09 | 8min | 2 tasks | 4 files |
 | Phase 02 P10 | 13min | 3 tasks | 4 files |
+| Phase 03 P00 | 3min | 3 sub-tasks | 176 files (7 + 97 + 72) |
 
 ### Active Todos
 
@@ -196,10 +200,12 @@ None yet — will populate when `/gsd-plan-phase 1` decomposes Phase 1 into exec
 2. Run `/gsd-plan-phase 3` to decompose Phase 3 (Service Cutover) — 10 requirements: SVC-01..10 + TEST-04 + TEST-06. Waves 1-3 of Phase 2 landed the Wisenet client + Drizzle queries + mappers; Phase 3 rewires `service.ts` + API routes to the new data layer and lands the runtime cache-invalidation test (TEST-03 PR must remove `service.ts:20` `revalidateTag(_, "max")` AND the `lint-no-revalidate-max.sh` allowlist entry in one PR).
 3. Kevin reviews manual-only verifications checklist in `.planning/phases/01-wisenet-discovery/01-PHASE-SUMMARY.md` (5 items): RED-block soundness, fixture PII eyeball, AEST probe window, rate-limit budget acceptance, secret-warn eyeball.
 
-**Last session:** --stopped-at
-**Stopped at:** Phase 03 re-baselined 2026-04-29: source-state mismatch reconciled. New Plan 03-00 (baseline reconciliation) added; full replan requested
+**Last session:** 2026-04-29T15:46:25Z
+**Stopped at:** Plan 03-00 baseline reconciliation complete: 7 Sheets-era routes restored from prod-snapshot, 97 Phase 1+2 source files committed, 72 .planning artifacts committed (commits e339f39, de8e5a2, 396d7c8). `npm run build` exits 0; 164/164 tests pass. Ready for Plan 03-01 (SVC-01 enable cacheComponents).
 
 ---
 *State initialized: 2026-04-20 after roadmap creation*
 
 **Planned Phase:** 03 (service-cutover) — 11 plans — 2026-04-29T15:23:42.222Z
+
+**Executing Phase:** 03 (service-cutover) — Plan 03-00 complete 2026-04-29T15:46:25Z (3min, 3 sub-tasks, 176 files)
