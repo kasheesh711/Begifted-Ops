@@ -2,8 +2,6 @@ import { auth } from "@/auth";
 import { getDashboardPayload } from "@/lib/dashboard/service";
 import { NextResponse } from "next/server";
 
-export const runtime = "nodejs";
-
 export async function GET() {
   const session = await auth();
   if (!session?.user?.email) {

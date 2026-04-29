@@ -4,8 +4,6 @@ import { getSheetsEnv } from "@/lib/runtime/env";
 import { getSheetsClient } from "@/lib/sheets/client";
 import { NextResponse } from "next/server";
 
-export const runtime = "nodejs";
-
 export async function GET(request: Request) {
   try {
     await requireSessionUser();

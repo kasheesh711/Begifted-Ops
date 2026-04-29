@@ -3,8 +3,6 @@ import { getHealthState } from "@/lib/dashboard/health-state";
 import { loadDashboardSources } from "@/lib/sheets/source-loader";
 import { NextResponse } from "next/server";
 
-export const runtime = "nodejs";
-
 export async function GET() {
   const session = await auth();
   const health = getHealthState();

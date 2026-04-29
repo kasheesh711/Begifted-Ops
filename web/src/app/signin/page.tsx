@@ -1,7 +1,8 @@
+import { Suspense } from "react";
 import { auth, signIn } from "@/auth";
 import { redirect } from "next/navigation";
 
-export default async function SignInPage() {
+async function SignInBody() {
   const session = await auth();
   if (session?.user?.email) {
     redirect("/dashboard");
@@ -27,5 +28,13 @@ export default async function SignInPage() {
         </form>
       </div>
     </main>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={null}>
+      <SignInBody />
+    </Suspense>
   );
 }

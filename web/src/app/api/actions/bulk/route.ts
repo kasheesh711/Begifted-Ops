@@ -4,8 +4,6 @@ import { getDashboardPayload, invalidateDashboardPayloadCache } from "@/lib/dash
 import { clearStudentActionInSheets, setStudentActionInSheets } from "@/lib/sheets/actions";
 import { NextResponse } from "next/server";
 
-export const runtime = "nodejs";
-
 export async function POST(request: Request) {
   try {
     const sessionUser = await requireSessionUser();

@@ -3,8 +3,6 @@ import { getDashboardPayload, invalidateDashboardPayloadCache } from "@/lib/dash
 import { markStudentInactive, clearStudentInactive } from "@/lib/sheets/inactive-students";
 import { NextResponse } from "next/server";
 
-export const runtime = "nodejs";
-
 /** Mark a student as inactive (no longer taking classes). */
 export async function POST(request: Request) {
   try {
