@@ -1,0 +1,40 @@
+name: db-migrate
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths:
+      - "web/drizzle/**"
+      - "web/src/lib/db/schema.ts"
+      - "web/scripts/db-migrate.ts"
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    env:
+      DATABASE_URL_UNPOOLED: ${{ secrets.DATABASE_URL_UNPOOLED }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: web/package-lock.json
+      - name: Install deps
+        run: npm ci
+      - name: Verify env
+        run: |
+          if [ -z "$DATABASE_URL_UNPOOLED" ]; then
+            echo "::error::DATABASE_URL_UNPOOLED secret is not set"
+            echo "Fix: copy DATABASE_URL_UNPOOLED from Vercel project env to GH repo Settings → Secrets → Actions"
+            exit 1
+          fi
+          echo "DATABASE_URL_UNPOOLED is set (length=${#DATABASE_URL_UNPOOLED})"
+      - name: Apply migrations
+        run: npx tsx scripts/db-migrate.ts

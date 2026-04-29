@@ -1,0 +1,127 @@
+{
+  "_note": "Auth headers redacted. Student PII synthetic-replaced per RESEARCH.md Pitfall 2. IDs preserved for cross-fixture joins.",
+  "_redaction": "names=synthetic, contact=synthetic, dates=dob-only, ids=preserved",
+  "probed_at": "2026-04-21T04:00:10.299Z",
+  "probed_at_aest": "21/04/2026, 2:00:10 pm",
+  "endpoint": "GET /user/v2/classes/{{classId}}?full=true",
+  "response_status": 200,
+  "response_headers": {
+    "access-control-allow-origin": "*",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-type": "application/json; charset=utf-8",
+    "date": "Tue, 21 Apr 2026 04:00:13 GMT",
+    "strict-transport-security": "max-age=15552000; includeSubDomains",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-content-type-options": "nosniff",
+    "x-dns-prefetch-control": "off",
+    "x-download-options": "noopen",
+    "x-frame-options": "SAMEORIGIN",
+    "x-xss-protection": "1; mode=block"
+  },
+  "_field_paths_candidates": {
+    "Class name → data.name or data.className": "FOUND at data.name",
+    "Class subject → data.subject": "FOUND at data.subject",
+    "Class status → data.status": "NOT FOUND",
+    "Student list → data.students": "NOT FOUND",
+    "Credit/session info → data.credits or data.sessionCredits": "NOT FOUND",
+    "Start date → data.startDate": "NOT FOUND",
+    "End date → data.endDate": "NOT FOUND",
+    "Teacher → data.teacher": "NOT FOUND",
+    "Session duration → data.sessionDuration or data.duration": "NOT FOUND",
+    "Package name → data.packageName": "NOT FOUND"
+  },
+  "body": {
+    "status": 200,
+    "message": "Success",
+    "data": {
+      "_id": "69e5e68bbe918dab105e5298",
+      "name": "Student_data",
+      "subject": "Y9-11 / G8-10 (Int.)",
+      "namespace": "{{WISENET_NAMESPACE}}",
+      "classCovers": [
+        {
+          "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-9.png",
+          "type": "image"
+        }
+      ],
+      "schedule": {
+        "occurrences": []
+      },
+      "zoomLink": {
+        "join_url": "",
+        "mettingEnded": false,
+        "startTime": "2026-04-20T08:40:43.467Z"
+      },
+      "userId": {
+        "_id": "{{WISENET_USER_ID}}",
+        "createdAt": "2025-12-08T05:47:20.685Z",
+        "email": "studentdata_userId@example.test",
+        "name": "Student_data_userId",
+        "profilePicture": ""
+      },
+      "classNumber": 378553142,
+      "pendingRequest": [],
+      "joinedRequest": [
+        "69d0cf9c98ee51775fba7866"
+      ],
+      "coTeacherRequests": [],
+      "coTeachers": [
+        {
+          "_id": "695369c028118f629edcba05",
+          "name": "Student_data_coTeachers_0",
+          "phoneNumber": "0000000000",
+          "profilePicture": "",
+          "settings": {
+            "timezone": "Asia/Bangkok"
+          },
+          "email": "studentdata_coTeachers_0@example.test"
+        }
+      ],
+      "hidden": false,
+      "archived": false,
+      "disableReminder": false,
+      "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-15.png",
+      "settings": {
+        "disableStudentDiscussions": false,
+        "disableStudentComments": false,
+        "lockClassroom": false,
+        "lockAfter": 0,
+        "openClassroom": false,
+        "admissionsDisabled": false,
+        "autoAccept": true,
+        "studentSlotBooking": {
+          "enabled": false,
+          "slotDurations": []
+        },
+        "validityInDays": -1,
+        "provideCertification": false,
+        "videoPlayRestriction": -1,
+        "requireCreditsForSession": true,
+        "allowBookingWithoutCredits": "ADMIN_TEACHER"
+      },
+      "instituteId": "{{WISENET_CENTER_ID}}",
+      "metadata": {
+        "tags": []
+      },
+      "classType": "ONE_TO_ONE",
+      "published": false,
+      "deletedStudents": [],
+      "suspendedStudents": [],
+      "createdAt": "2026-04-20T08:40:43.470Z",
+      "updatedAt": "2026-04-20T09:09:38.127Z",
+      "__v": 0,
+      "joinMagicLink": "",
+      "isStudent": false,
+      "isTeacher": true,
+      "isCoTeacher": false,
+      "isAdmin": true,
+      "defaultCoverBackground": "https://cdn.wiseapp.live/marketing_template_resources/course/course_cover.png",
+      "isSuspendedStudent": false,
+      "isSubscriptionRequired": false,
+      "timing": [],
+      "timingVersion": 2
+    }
+  }
+}

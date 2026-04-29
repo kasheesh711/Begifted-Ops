@@ -1,0 +1,202 @@
+{
+  "_note": "Auth headers redacted. Student PII synthetic-replaced per RESEARCH.md Pitfall 2. IDs preserved for cross-fixture joins.",
+  "_redaction": "names=synthetic, contact=synthetic, dates=dob-only, ids=preserved",
+  "probed_at": "2026-04-21T04:00:10.299Z",
+  "probed_at_aest": "21/04/2026, 2:00:10 pm",
+  "endpoint": "GET /institutes/{{WISENET_CENTER_ID}}/participants/{{studentId}}?showRegistrationData=true",
+  "response_status": 200,
+  "response_headers": {
+    "access-control-allow-origin": "*",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-type": "application/json; charset=utf-8",
+    "date": "Tue, 21 Apr 2026 04:00:11 GMT",
+    "strict-transport-security": "max-age=15552000; includeSubDomains",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-content-type-options": "nosniff",
+    "x-dns-prefetch-control": "off",
+    "x-download-options": "noopen",
+    "x-frame-options": "SAMEORIGIN",
+    "x-xss-protection": "1; mode=block"
+  },
+  "_field_paths_candidates": {
+    "Name → data.name (or nested)": "NOT FOUND",
+    "Email → data.email": "NOT FOUND",
+    "Parents → data.parents": "NOT FOUND",
+    "Parent name → data.parents[0].name": "NOT FOUND",
+    "Parent email → data.parents[0].email": "NOT FOUND",
+    "Phone → data.mobile or data.phone": "NOT FOUND",
+    "DOB → data.dateOfBirth": "NOT FOUND",
+    "Classrooms → data.classrooms": "NOT FOUND",
+    "Enrolments → data.enrolments": "NOT FOUND",
+    "Credit balance → data.creditBalance or data.balance": "NOT FOUND",
+    "Registration data → data.registrationData": "FOUND at data.registrationData"
+  },
+  "body": {
+    "status": 200,
+    "message": "Success",
+    "data": {
+      "user": {
+        "_id": "69e60a1798ee51775fc60a31",
+        "identities": [
+          {
+            "type": "FIREBASE_ID",
+            "displayIdentifier": "studentdata_user_identities_0_displayIdentifier@example.test"
+          }
+        ],
+        "namespace": "{{WISENET_NAMESPACE}}",
+        "email": "studentdata_user@example.test",
+        "name": "Student_data_user",
+        "profilePicture": "",
+        "uuid": "0abab44a-d27c-4d0d-89df-a5408c8c1415",
+        "loginPin": "<REDACTED>",
+        "parentIds": [
+          "69e6e0ec98ee51775fa7f284"
+        ]
+      },
+      "status": "ACCEPTED",
+      "relation": "STUDENT",
+      "tags": [],
+      "registrationData": {
+        "_id": "697b5355af7fbc5ac84dbed4",
+        "instituteId": "{{WISENET_CENTER_ID}}",
+        "classId": null,
+        "__v": 0,
+        "createdAt": "2026-01-29T12:32:21.933Z",
+        "enabled": true,
+        "fields": [
+          {
+            "questionText": "Student First Name ",
+            "questionId": "user_name",
+            "required": true,
+            "type": "TEXT",
+            "answer": "<REDACTED_ANSWER>"
+          },
+          {
+            "questionText": "Student  Nickname",
+            "questionId": "nk1q2bwg",
+            "required": true,
+            "type": "TEXT",
+            "answer": "<REDACTED_ANSWER>"
+          },
+          {
+            "questionText": "Student  Last Name",
+            "questionId": "zmfbqhl7",
+            "required": true,
+            "type": "TEXT",
+            "answer": "<REDACTED_ANSWER>"
+          },
+          {
+            "questionText": "Phone Number",
+            "questionId": "user_phone_number",
+            "required": false,
+            "type": "PHONE",
+            "validated": false
+          },
+          {
+            "questionText": "Email",
+            "questionId": "user_email",
+            "required": true,
+            "type": "EMAIL",
+            "answer": "studentdata_registrationData_fields_4_answer@example.test",
+            "validated": true
+          },
+          {
+            "questionText": "Profile Picture",
+            "questionId": "user_profile_picture",
+            "required": false,
+            "type": "IMAGE",
+            "answer": ""
+          },
+          {
+            "questionText": "Gender",
+            "questionId": "souio5d1",
+            "required": false,
+            "type": "TEXT"
+          },
+          {
+            "questionText": "Birthday",
+            "questionId": "wyt7lq86",
+            "required": true,
+            "type": "DATE",
+            "answer": "<REDACTED_ANSWER>"
+          },
+          {
+            "questionText": "School Name",
+            "questionId": "5l92yygp",
+            "required": true,
+            "type": "TEXT",
+            "answer": "<REDACTED_ANSWER>"
+          },
+          {
+            "questionText": "Student since (To be filled by BeGifted Team)",
+            "questionId": "3uxn9eff",
+            "required": false,
+            "type": "DATE"
+          },
+          {
+            "questionText": "Current Year/Grade level",
+            "questionId": "if89sblj",
+            "required": true,
+            "type": "TEXT",
+            "answer": "<REDACTED_ANSWER>"
+          },
+          {
+            "questionText": "Curriculum",
+            "questionId": "hukliyn6",
+            "required": true,
+            "type": "POLL",
+            "options": {
+              "A": "UK/US/IB",
+              "B": "Thai/EP",
+              "C": "CA (ON)",
+              "D": "SG",
+              "E": "CA (BC)",
+              "F": "AU",
+              "G": "FR",
+              "H": "NZ",
+              "I": "IN (CBSE)",
+              "J": "SG+UK",
+              "K": "IEC"
+            },
+            "answer": "<REDACTED_ANSWER>"
+          },
+          {
+            "questionText": "Preferred Language for communication",
+            "questionId": "hnltej0b",
+            "required": false,
+            "type": "TEXT"
+          },
+          {
+            "questionText": "Parent First Name",
+            "questionId": "z1porsd5",
+            "required": true,
+            "type": "TEXT",
+            "answer": "<REDACTED_ANSWER>"
+          },
+          {
+            "questionText": "Parent Last Name",
+            "questionId": "smf66ar7",
+            "required": true,
+            "type": "TEXT",
+            "answer": "<REDACTED_ANSWER>"
+          },
+          {
+            "questionText": "Parent Phone number",
+            "questionId": "z0e0m3qj",
+            "required": true,
+            "type": "NUMBER",
+            "answer": "0000000000"
+          }
+        ],
+        "settings": {
+          "requiredForStudents": true,
+          "disableUpdatingSubmission": true
+        },
+        "updatedAt": "2026-03-27T02:59:41.786Z",
+        "status": "SUBMITTED"
+      }
+    }
+  }
+}
