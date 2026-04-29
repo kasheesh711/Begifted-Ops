@@ -1,0 +1,52 @@
+{
+  "_note": "Auth headers redacted. No body content beyond 500-char snippet.",
+  "probed_at": "2026-04-21T03:46:07.014Z",
+  "probed_at_aest": "21/04/2026, 1:46:07 pm",
+  "aest_timing_note": "Ran during AEST teaching hours (13:40ish AEST) — accepted vendor-visibility risk per D-09 / Task 1 'ready but teaching hours, proceed'",
+  "endpoint_tested": "GET /institutes/v3/{{WISENET_CENTER_ID}}/students?page_number=1&page_size=1",
+  "base_url": "https://api.wiseapp.live",
+  "variants": [
+    {
+      "variant_id": 1,
+      "description": "HTTP Basic (userId:apiKey) + x-api-key + x-wise-namespace (Postman-confirmed per 01-02)",
+      "request_url": "https://api.wiseapp.live/institutes/v3/{{WISENET_CENTER_ID}}/students?page_number=1&page_size=1",
+      "request_headers": {
+        "Authorization": "<REDACTED>",
+        "x-api-key": "<REDACTED>",
+        "x-wise-namespace": "{{WISENET_NAMESPACE}}",
+        "Content-Type": "application/json",
+        "user-agent": "begifted-ops-phase1-probe/0.1"
+      },
+      "response_status": 200,
+      "response_headers": {
+        "access-control-allow-origin": "*",
+        "connection": "keep-alive",
+        "content-length": "379",
+        "content-type": "application/json; charset=utf-8",
+        "date": "Tue, 21 Apr 2026 03:46:07 GMT",
+        "strict-transport-security": "max-age=15552000; includeSubDomains",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-dns-prefetch-control": "off",
+        "x-download-options": "noopen",
+        "x-frame-options": "SAMEORIGIN",
+        "x-xss-protection": "1; mode=block"
+      },
+      "body_length": 379,
+      "body_snippet": "{\"status\":200,\"message\":\"Success\",\"data\":{\"students\":[{\"joinedOn\":\"2026-04-20T11:12:23.512Z\",\"classrooms\":[],\"_id\":\"000000000000000000000000\",\"name\":\"<REDACTED_NAME>\",\"profilePicture\":\"\",\"email\":\"redacted@example.test\",\"uuid\":\"00000000-0000-0000-0000-000000000000\",\"activated\":false,\"loginPin\":\"<REDACTED>\",\"linkedDeviceCount\":0,\"tags\":[],\"parents\":[]}],\"count\":945}}",
+      "www_authenticate": null,
+      "elapsed_ms": 483,
+      "success": true
+    }
+  ],
+  "confirmed_variant": 1,
+  "required_headers": {
+    "Authorization": "Basic base64({{WISENET_USER_ID}}:{{WISENET_API_KEY}})",
+    "x-api-key": "{{WISENET_API_KEY}}",
+    "x-wise-namespace": "{{WISENET_NAMESPACE}}",
+    "Content-Type": "application/json",
+    "user-agent": "begifted-ops-phase1-probe/0.1"
+  },
+  "notes": "Variant 1 returned 200. Subsequent probes should use this header set.",
+  "rate_limit_hint": {}
+}

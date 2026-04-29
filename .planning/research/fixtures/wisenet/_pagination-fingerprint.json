@@ -1,0 +1,117 @@
+{
+  "_note": "Auth headers redacted. Body content captured as top-level keys + record count only (no nested values).",
+  "probed_at": "2026-04-21T03:49:21.990Z",
+  "probed_at_aest": "21/04/2026, 1:49:21 pm",
+  "aest_timing_note": "Ran during AEST teaching hours (~13:46) — accepted vendor-visibility risk per D-09",
+  "endpoint": "GET /institutes/v3/{{WISENET_CENTER_ID}}/students",
+  "auth_variant_used": 1,
+  "pattern": "page-number",
+  "request_shape": {
+    "param_names": [
+      "page_number",
+      "page_size"
+    ],
+    "default_take": 50,
+    "max_take_observed": 25
+  },
+  "response_shape": {
+    "total_field_path": "data.count",
+    "items_field_path": "data.students",
+    "next_indicator": null,
+    "empty_set_body": {
+      "top_level_keys": [
+        "status",
+        "message",
+        "data"
+      ],
+      "record_count": 0
+    }
+  },
+  "iteration_termination": "records.length < page_size → stop OR iterate until top-level count reached",
+  "link_header_present": false,
+  "requests_made": [
+    {
+      "step": 1,
+      "description": "baseline, no pagination params",
+      "url": "https://api.wiseapp.live/institutes/v3/{{WISENET_CENTER_ID}}/students",
+      "status": 200,
+      "body_top_level_keys": [
+        "status",
+        "message",
+        "data"
+      ],
+      "record_count": 50,
+      "observed_pagination_fields": [
+        "count"
+      ],
+      "link_header": null
+    },
+    {
+      "step": 2,
+      "description": "page_number=1&page_size=25",
+      "url": "https://api.wiseapp.live/institutes/v3/{{WISENET_CENTER_ID}}/students?page_number=1&page_size=25",
+      "status": 200,
+      "body_top_level_keys": [
+        "status",
+        "message",
+        "data"
+      ],
+      "record_count": 25,
+      "observed_pagination_fields": [
+        "count"
+      ],
+      "link_header": null
+    },
+    {
+      "step": 3,
+      "description": "page_number=2&page_size=25 — confirms distinct page",
+      "url": "https://api.wiseapp.live/institutes/v3/{{WISENET_CENTER_ID}}/students?page_number=2&page_size=25",
+      "status": 200,
+      "body_top_level_keys": [
+        "status",
+        "message",
+        "data"
+      ],
+      "record_count": 25,
+      "observed_pagination_fields": [
+        "count"
+      ],
+      "link_header": null
+    },
+    {
+      "step": 4,
+      "description": "skip=0&take=25 disambiguation attempt",
+      "url": "https://api.wiseapp.live/institutes/v3/{{WISENET_CENTER_ID}}/students?skip=0&take=25",
+      "status": 200,
+      "body_top_level_keys": [
+        "status",
+        "message",
+        "data"
+      ],
+      "record_count": 50,
+      "observed_pagination_fields": [
+        "count"
+      ],
+      "link_header": null,
+      "note": "skip/take IGNORED — returned 50 records matching baseline; server silently dropped unknown params. page_number/page_size is the only honored pattern."
+    },
+    {
+      "step": 5,
+      "description": "past-end: page_number=99999&page_size=25",
+      "url": "https://api.wiseapp.live/institutes/v3/{{WISENET_CENTER_ID}}/students?page_number=99999&page_size=25",
+      "status": 200,
+      "body_top_level_keys": [
+        "status",
+        "message",
+        "data"
+      ],
+      "record_count": 0,
+      "observed_pagination_fields": [
+        "count"
+      ],
+      "link_header": null
+    }
+  ],
+  "notes": "Pattern detection: page-number. Postman catalogue page_number/page_size confirmed live. skip/take status=200. Phase 2 WCLI-03 iterates via page_number+=1 until records.length < page_size or count reached.",
+  "budget_consumed": 5
+}

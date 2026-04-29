@@ -1,0 +1,1920 @@
+{
+  "_note": "Auth headers redacted. Student PII synthetic-replaced per RESEARCH.md Pitfall 2. IDs preserved for cross-fixture joins.",
+  "_redaction": "names=synthetic, contact=synthetic, dates=dob-only, ids=preserved",
+  "probed_at": "2026-04-21T04:00:10.299Z",
+  "probed_at_aest": "21/04/2026, 2:00:10 pm",
+  "endpoint": "GET /institutes/{{WISENET_CENTER_ID}}/sessions?status=PAST&paginateBy=DATE&startDate=2026-01-21&endDate=2026-04-21&page_number=1&page_size=25",
+  "response_status": 200,
+  "response_headers": {
+    "access-control-allow-origin": "*",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-type": "application/json; charset=utf-8",
+    "date": "Tue, 21 Apr 2026 04:00:17 GMT",
+    "strict-transport-security": "max-age=15552000; includeSubDomains",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-content-type-options": "nosniff",
+    "x-dns-prefetch-control": "off",
+    "x-download-options": "noopen",
+    "x-frame-options": "SAMEORIGIN",
+    "x-xss-protection": "1; mode=block"
+  },
+  "_field_paths_candidates": {
+    "Sessions array → data.sessions": "FOUND at data.sessions",
+    "Session _id → data.sessions[*]._id": "FOUND at data.sessions.[0]._id",
+    "Final status → data.sessions[*].status or finalStatus": "NOT FOUND",
+    "Teacher feedback → data.sessions[*].teacherFeedback or feedback": "NOT FOUND",
+    "Credits consumed → data.sessions[*].creditsConsumed": "NOT FOUND",
+    "Session duration → data.sessions[*].duration or sessionDuration": "FOUND at data.sessions.[0].duration",
+    "Session date → data.sessions[*].date or sessionDate or startDate": "NOT FOUND",
+    "Class id → data.sessions[*].classId": "FOUND at data.sessions.[0].classId",
+    "Attendees → data.sessions[*].attendees": "NOT FOUND"
+  },
+  "body": {
+    "status": 200,
+    "message": "Success",
+    "data": {
+      "sessions": [
+        {
+          "_id": "6994778ab50e50f4cc210b60",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "698fb48173d98e8b11aec14f",
+            "name": "Student_data_sessions_0_classId",
+            "subject": "SAT",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-75.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-14.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcba5a",
+            "name": "Student_data_sessions_0_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T15:30:00.000Z",
+          "end_time": null,
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}"
+          },
+          "location": "Focus",
+          "scheduledStartTime": "2026-04-20T15:30:00.000Z",
+          "scheduledEndTime": "2026-04-20T16:30:00.000Z",
+          "title": "On-site Session - SAT Math (Cancelled)",
+          "type": "OFFLINE",
+          "meetingStatus": "CANCELLED",
+          "participants": [],
+          "createdAt": "2026-02-17T14:13:32.895Z",
+          "duration": 3600000,
+          "students": [
+            "696e26ee43579bbada1c1e7f"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69e2eea529099ba139842c91",
+          "attendanceRecorded": true,
+          "mettingEnded": true,
+          "classId": {
+            "_id": "698e7b3e444ac4ea9091c2d7",
+            "name": "Student_data_sessions_1_classId",
+            "subject": "SAT Master",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-24.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-18.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcb9cb",
+            "name": "Student_data_sessions_1_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T13:30:23.125Z",
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69e2eea529099ba139842c8d",
+            "paidUser": true,
+            "isOwnerZoom": false,
+            "zoomUserId": "5Ly8zAffROi3dBuWjl2bCQ",
+            "lensEnabled": false,
+            "webinar": false,
+            "restartedSessions": [],
+            "zoomAdminAccountId": "63f8b2037eb779515cf43d21",
+            "poolName": "DEFAULT",
+            "zoomUserAccountId": "681db2a0d7bfefa6dad4cf3a",
+            "autoRecord": true
+          },
+          "scheduledStartTime": "2026-04-20T13:30:00.000Z",
+          "scheduledEndTime": "2026-04-20T14:30:00.000Z",
+          "title": "Live Session",
+          "type": "SCHEDULED",
+          "meetingStatus": "ENDED",
+          "participants": [
+            {
+              "wiseUserId": "696e2a1f43579bbada1fee2f",
+              "name": "Student_data_sessions_1_participants_0",
+              "duration": 0,
+              "inMeetingDuration": 0,
+              "isTeacher": false
+            },
+            {
+              "wiseUserId": "695369c028118f629edcb9cb",
+              "name": "Student_data_sessions_1_participants_1",
+              "user_email": "studentdata_sessions_1_participants_1_user_email@example.test",
+              "duration": 1194,
+              "inMeetingDuration": 1194,
+              "isTeacher": true,
+              "firstEntryTime": "2026-04-20T13:31:28.000Z",
+              "lastExitTime": "2026-04-20T13:51:22.000Z"
+            }
+          ],
+          "createdAt": "2026-04-18T02:38:29.414Z",
+          "duration": 1194000,
+          "end_time": "2026-04-20T13:51:22.000Z",
+          "participant": 0,
+          "students": [
+            "696e2a1f43579bbada1fee2f"
+          ],
+          "studentCount": 1,
+          "recordings": [
+            {
+              "type": "RECORDING",
+              "url": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F69e2eea529099ba139842c91-1.1%2Fvideo.m3u8",
+              "duration": 1190,
+              "sessionIndex": 1,
+              "partIndex": 1,
+              "file": {
+                "path": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F69e2eea529099ba139842c91-1.1%2Fvideo.m3u8",
+                "filename": "video.m3u8",
+                "s3Key": "streaming_videos/{{WISENET_USER_ID}}/69e2eea529099ba139842c91-1.1/video.m3u8",
+                "s3FilePath": "https://wise-app-s3-bucket.s3-ap-south-1.amazonaws.com/streaming_videos/{{WISENET_USER_ID}}/69e2eea529099ba139842c91-1.1/video.m3u8",
+                "subtype": "hls_video",
+                "type": "video",
+                "size": 7051692
+              },
+              "_id": "69e6304b239df5677f437c2d"
+            }
+          ]
+        },
+        {
+          "_id": "69d366a5387944182cdd0646",
+          "attendanceRecorded": false,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "699040b1b21d029e8d3b161c",
+            "name": "Student_data_sessions_2_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-53.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-20.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada234162",
+            "name": "Student_data_sessions_2_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T13:30:00.000Z",
+          "end_time": null,
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69d366a5387944182cdd0642"
+          },
+          "scheduledStartTime": "2026-04-20T13:30:00.000Z",
+          "scheduledEndTime": "2026-04-20T14:30:00.000Z",
+          "title": "Live Session - Math (Cancelled)",
+          "type": "SCHEDULED",
+          "meetingStatus": "CANCELLED",
+          "participants": [],
+          "createdAt": "2026-04-06T07:54:13.341Z",
+          "students": [
+            "696e2a2043579bbada1ff55e"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69d361aec53c1c7b0939a457",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "698fb5a019cf67738c027969",
+            "name": "Student_data_sessions_3_classId",
+            "subject": "Y12-13 / G11-12 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-20.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-9.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcba5a",
+            "name": "Student_data_sessions_3_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T12:30:00.000Z",
+          "end_time": null,
+          "duration": 3600000,
+          "participant": 0,
+          "participants": [],
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69d361aec53c1c7b0939a453"
+          },
+          "scheduledStartTime": "2026-04-20T12:30:00.000Z",
+          "scheduledEndTime": "2026-04-20T13:30:00.000Z",
+          "title": "In-Person Session - Math (Cancelled)",
+          "type": "OFFLINE",
+          "meetingStatus": "CANCELLED",
+          "createdAt": "2026-04-06T07:33:02.892Z",
+          "students": [
+            "696e2a1d43579bbada1fdca5"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69e44cb6c9df4f0a81a2ec45",
+          "attendanceRecorded": true,
+          "mettingEnded": true,
+          "classId": {
+            "_id": "69b1320a3539692cf58022bf",
+            "name": "Student_data_sessions_4_classId",
+            "subject": "Y12-13 / G11-12 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-24.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-8.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada234096",
+            "name": "Student_data_sessions_4_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T12:27:57.649Z",
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69e44cb6c9df4f0a81a2ec41",
+            "paidUser": true,
+            "isOwnerZoom": false,
+            "zoomUserId": "JY2HmDFNSde-ByIaGJT5LQ",
+            "lensEnabled": false,
+            "webinar": false,
+            "restartedSessions": [],
+            "zoomAdminAccountId": "63f8b2037eb779515cf43d21",
+            "poolName": "DEFAULT",
+            "zoomUserAccountId": "681db2a0d7bfefa6dad4cf24",
+            "autoRecord": true
+          },
+          "scheduledStartTime": "2026-04-20T12:30:00.000Z",
+          "scheduledEndTime": "2026-04-20T13:30:00.000Z",
+          "title": "Live Session",
+          "type": "SCHEDULED",
+          "meetingStatus": "ENDED",
+          "participants": [
+            {
+              "wiseUserId": "696e2c4343579bbada234096",
+              "name": "Student_data_sessions_4_participants_0",
+              "user_email": "studentdata_sessions_4_participants_0_user_email@example.test",
+              "duration": 3772,
+              "inMeetingDuration": 3772,
+              "isTeacher": true,
+              "firstEntryTime": "2026-04-20T12:28:23.000Z",
+              "lastExitTime": "2026-04-20T13:31:15.000Z"
+            },
+            {
+              "wiseUserId": "69b0130713cc1073af029660",
+              "name": "Student_data_sessions_4_participants_1",
+              "user_email": "",
+              "duration": 3675,
+              "inMeetingDuration": 3675,
+              "relativePercentAttendance": 100,
+              "absolutePercentAttendance": 97,
+              "isTeacher": false,
+              "firstEntryTime": "2026-04-20T12:29:48.000Z",
+              "lastExitTime": "2026-04-20T13:31:03.000Z"
+            }
+          ],
+          "createdAt": "2026-04-19T03:32:06.990Z",
+          "duration": 3772000,
+          "end_time": "2026-04-20T13:31:15.000Z",
+          "participant": 1,
+          "students": [
+            "69b0130713cc1073af029660"
+          ],
+          "studentCount": 1,
+          "recordings": [
+            {
+              "type": "RECORDING",
+              "url": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F69e44cb6c9df4f0a81a2ec45-1.1%2Fvideo.m3u8",
+              "duration": 3769,
+              "sessionIndex": 1,
+              "partIndex": 1,
+              "file": {
+                "path": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F69e44cb6c9df4f0a81a2ec45-1.1%2Fvideo.m3u8",
+                "filename": "video.m3u8",
+                "s3Key": "streaming_videos/{{WISENET_USER_ID}}/69e44cb6c9df4f0a81a2ec45-1.1/video.m3u8",
+                "s3FilePath": "https://wise-app-s3-bucket.s3-ap-south-1.amazonaws.com/streaming_videos/{{WISENET_USER_ID}}/69e44cb6c9df4f0a81a2ec45-1.1/video.m3u8",
+                "subtype": "hls_video",
+                "type": "video",
+                "size": 221368758
+              },
+              "_id": "69e632ec239df5677f439ca6"
+            }
+          ]
+        },
+        {
+          "_id": "699477ecb50e50f4cc21f59a",
+          "attendanceRecorded": true,
+          "mettingEnded": true,
+          "classId": {
+            "_id": "698fb8c1444ac4ea90bb0dfd",
+            "name": "Student_data_sessions_5_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-38.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-15.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada23415b",
+            "name": "Student_data_sessions_5_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T12:03:36.050Z",
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "paidUser": true,
+            "isOwnerZoom": false,
+            "zoomUserId": "eMC0WaR8RLmnILj3o1LntA",
+            "lensEnabled": false,
+            "webinar": false,
+            "restartedSessions": [],
+            "zoomAdminAccountId": "63f8b2037eb779515cf43d21",
+            "poolName": "DEFAULT",
+            "zoomUserAccountId": "66fa9426c493790018d7b541",
+            "autoRecord": true
+          },
+          "scheduledStartTime": "2026-04-20T12:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T13:00:00.000Z",
+          "title": "Online Session - Science",
+          "type": "SCHEDULED",
+          "meetingStatus": "ENDED",
+          "participants": [
+            {
+              "wiseUserId": "696e2c4343579bbada23415b",
+              "name": "Student_data_sessions_5_participants_0",
+              "user_email": "studentdata_sessions_5_participants_0_user_email@example.test",
+              "duration": 3758,
+              "inMeetingDuration": 3758,
+              "isTeacher": true,
+              "firstEntryTime": "2026-04-20T12:04:35.000Z",
+              "lastExitTime": "2026-04-20T13:07:13.000Z"
+            },
+            {
+              "name": "Student_data_sessions_5_participants_1",
+              "user_email": "",
+              "duration": 3027,
+              "inMeetingDuration": 3027,
+              "relativePercentAttendance": 97,
+              "absolutePercentAttendance": 78,
+              "isTeacher": false,
+              "firstEntryTime": "2026-04-20T12:06:46.000Z",
+              "lastExitTime": "2026-04-20T12:57:13.000Z"
+            },
+            {
+              "wiseUserId": "698c243bb0e4b23fd535cb30",
+              "name": "Student_data_sessions_5_participants_2",
+              "user_email": "",
+              "duration": 3136,
+              "inMeetingDuration": 3136,
+              "relativePercentAttendance": 100,
+              "absolutePercentAttendance": 81,
+              "isTeacher": false,
+              "firstEntryTime": "2026-04-20T12:04:49.000Z",
+              "lastExitTime": "2026-04-20T12:57:23.000Z"
+            }
+          ],
+          "createdAt": "2026-02-17T14:15:11.577Z",
+          "duration": 3878000,
+          "end_time": "2026-04-20T13:09:13.000Z",
+          "participant": 2,
+          "students": [
+            "698c243bb0e4b23fd535cb30"
+          ],
+          "studentCount": 1,
+          "recordings": [
+            {
+              "type": "RECORDING",
+              "url": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F699477ecb50e50f4cc21f59a-1.1%2Fvideo.m3u8",
+              "duration": 3874,
+              "sessionIndex": 1,
+              "partIndex": 1,
+              "file": {
+                "path": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F699477ecb50e50f4cc21f59a-1.1%2Fvideo.m3u8",
+                "filename": "video.m3u8",
+                "s3Key": "streaming_videos/{{WISENET_USER_ID}}/699477ecb50e50f4cc21f59a-1.1/video.m3u8",
+                "s3FilePath": "https://wise-app-s3-bucket.s3-ap-south-1.amazonaws.com/streaming_videos/{{WISENET_USER_ID}}/699477ecb50e50f4cc21f59a-1.1/video.m3u8",
+                "subtype": "hls_video",
+                "type": "video",
+                "size": 108429722
+              },
+              "_id": "69e63316239df5677f439e60"
+            }
+          ]
+        },
+        {
+          "_id": "69e5e81b4f3c9e9b27eddb1e",
+          "attendanceRecorded": true,
+          "mettingEnded": true,
+          "classId": {
+            "_id": "69903581b21d029e8d397bd5",
+            "name": "Student_data_sessions_6_classId",
+            "subject": "Y9-11 / G8-10 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-38.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-13.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada234239",
+            "name": "Student_data_sessions_6_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T12:03:28.902Z",
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69e5e81b4f3c9e9b27eddb15",
+            "paidUser": true,
+            "isOwnerZoom": false,
+            "zoomUserId": "bzjB2b9ySRGEPVvO_S_8Lg",
+            "lensEnabled": false,
+            "webinar": false,
+            "restartedSessions": [],
+            "zoomAdminAccountId": "63f8b2037eb779515cf43d21",
+            "poolName": "DEFAULT",
+            "zoomUserAccountId": "66fa9429c493790018d7b549",
+            "autoRecord": true
+          },
+          "scheduledStartTime": "2026-04-20T12:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T13:30:00.000Z",
+          "title": "Live Session - Biology",
+          "type": "SCHEDULED",
+          "meetingStatus": "ENDED",
+          "participants": [
+            {
+              "wiseUserId": "696e2a7a43579bbada2090e4",
+              "name": "Student_data_sessions_6_participants_0",
+              "user_email": "",
+              "duration": 4284,
+              "inMeetingDuration": 4284,
+              "relativePercentAttendance": 100,
+              "absolutePercentAttendance": 80,
+              "isTeacher": false,
+              "firstEntryTime": "2026-04-20T12:04:21.000Z",
+              "lastExitTime": "2026-04-20T13:33:07.000Z"
+            },
+            {
+              "wiseUserId": "696e2c4343579bbada234239",
+              "name": "Student_data_sessions_6_participants_1",
+              "user_email": "studentdata_sessions_6_participants_1_user_email@example.test",
+              "duration": 5379,
+              "inMeetingDuration": 5379,
+              "isTeacher": true,
+              "firstEntryTime": "2026-04-20T12:03:35.000Z",
+              "lastExitTime": "2026-04-20T13:33:14.000Z"
+            },
+            {
+              "name": "Student_data_sessions_6_participants_2",
+              "user_email": "",
+              "duration": 1056,
+              "inMeetingDuration": 1056,
+              "relativePercentAttendance": 25,
+              "absolutePercentAttendance": 20,
+              "isTeacher": false,
+              "firstEntryTime": "2026-04-20T12:47:36.000Z",
+              "lastExitTime": "2026-04-20T13:05:12.000Z"
+            }
+          ],
+          "createdAt": "2026-04-20T08:47:23.935Z",
+          "duration": 5379000,
+          "end_time": "2026-04-20T13:33:14.000Z",
+          "participant": 2,
+          "students": [
+            "696e2a7a43579bbada2090e4"
+          ],
+          "studentCount": 1,
+          "recordings": [
+            {
+              "type": "RECORDING",
+              "url": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F69e5e81b4f3c9e9b27eddb1e-1.1%2Fvideo.m3u8",
+              "duration": 5376,
+              "sessionIndex": 1,
+              "partIndex": 1,
+              "file": {
+                "path": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F69e5e81b4f3c9e9b27eddb1e-1.1%2Fvideo.m3u8",
+                "filename": "video.m3u8",
+                "s3Key": "streaming_videos/{{WISENET_USER_ID}}/69e5e81b4f3c9e9b27eddb1e-1.1/video.m3u8",
+                "s3FilePath": "https://wise-app-s3-bucket.s3-ap-south-1.amazonaws.com/streaming_videos/{{WISENET_USER_ID}}/69e5e81b4f3c9e9b27eddb1e-1.1/video.m3u8",
+                "subtype": "hls_video",
+                "type": "video",
+                "size": 312391786
+              },
+              "_id": "69e63c1b11d98f04557c421b"
+            }
+          ]
+        },
+        {
+          "_id": "699477edb50e50f4cc21ffc6",
+          "attendanceRecorded": true,
+          "mettingEnded": true,
+          "classId": {
+            "_id": "69903bb019cf67738c129fa3",
+            "name": "Student_data_sessions_7_classId",
+            "subject": "Y9-11 / G8-10 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-29.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-11.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada2340f8",
+            "name": "Student_data_sessions_7_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T12:01:53.925Z",
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "paidUser": true,
+            "isOwnerZoom": false,
+            "zoomUserId": "Yivf0p3xQzqvv1fSBy7aZA",
+            "lensEnabled": false,
+            "webinar": false,
+            "restartedSessions": [],
+            "zoomAdminAccountId": "63f8b2037eb779515cf43d21",
+            "poolName": "DEFAULT",
+            "zoomUserAccountId": "681db2a0d7bfefa6dad4cf06",
+            "autoRecord": true
+          },
+          "scheduledStartTime": "2026-04-20T12:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T13:30:00.000Z",
+          "title": "Online Session - Chemistry",
+          "type": "SCHEDULED",
+          "meetingStatus": "ENDED",
+          "participants": [
+            {
+              "wiseUserId": "696e2a1f43579bbada1fef3c",
+              "name": "Student_data_sessions_7_participants_0",
+              "user_email": "",
+              "duration": 5251,
+              "inMeetingDuration": 5251,
+              "relativePercentAttendance": 100,
+              "absolutePercentAttendance": 99,
+              "isTeacher": false,
+              "firstEntryTime": "2026-04-20T12:03:10.000Z",
+              "lastExitTime": "2026-04-20T13:30:41.000Z"
+            },
+            {
+              "wiseUserId": "696e2c4343579bbada2340f8",
+              "name": "Student_data_sessions_7_participants_1",
+              "user_email": "studentdata_sessions_7_participants_1_user_email@example.test",
+              "duration": 5317,
+              "inMeetingDuration": 5317,
+              "isTeacher": true,
+              "firstEntryTime": "2026-04-20T12:02:08.000Z",
+              "lastExitTime": "2026-04-20T13:30:45.000Z"
+            }
+          ],
+          "createdAt": "2026-02-17T14:15:11.803Z",
+          "duration": 5317000,
+          "end_time": "2026-04-20T13:30:45.000Z",
+          "participant": 1,
+          "students": [
+            "696e2a1f43579bbada1fef3c"
+          ],
+          "studentCount": 1,
+          "recordings": [
+            {
+              "type": "RECORDING",
+              "url": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F699477edb50e50f4cc21ffc6-1.1%2Fvideo.m3u8",
+              "duration": 5314,
+              "sessionIndex": 1,
+              "partIndex": 1,
+              "file": {
+                "path": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F699477edb50e50f4cc21ffc6-1.1%2Fvideo.m3u8",
+                "filename": "video.m3u8",
+                "s3Key": "streaming_videos/{{WISENET_USER_ID}}/699477edb50e50f4cc21ffc6-1.1/video.m3u8",
+                "s3FilePath": "https://wise-app-s3-bucket.s3-ap-south-1.amazonaws.com/streaming_videos/{{WISENET_USER_ID}}/699477edb50e50f4cc21ffc6-1.1/video.m3u8",
+                "subtype": "hls_video",
+                "type": "video",
+                "size": 220457305
+              },
+              "_id": "69e63860dbb0076b53176a21"
+            }
+          ]
+        },
+        {
+          "_id": "699477ecb50e50f4cc21ea46",
+          "attendanceRecorded": true,
+          "mettingEnded": true,
+          "classId": {
+            "_id": "69904c6f63d0a038a9a5ac3b",
+            "name": "Student_data_sessions_8_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-23.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-6.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "6976680baf7fbc5ac88c3ea9",
+            "name": "Student_data_sessions_8_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T12:01:19.767Z",
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "paidUser": true,
+            "isOwnerZoom": false,
+            "zoomUserId": "Z4VGpDUTSQeWQ0WvG4KYfg",
+            "lensEnabled": false,
+            "webinar": false,
+            "restartedSessions": [],
+            "zoomAdminAccountId": "63f8b2037eb779515cf43d21",
+            "poolName": "DEFAULT",
+            "zoomUserAccountId": "66fa93e9c493790018d7b4a3",
+            "autoRecord": true
+          },
+          "scheduledStartTime": "2026-04-20T12:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T13:00:00.000Z",
+          "title": "Online Session - Math",
+          "type": "SCHEDULED",
+          "meetingStatus": "ENDED",
+          "participants": [
+            {
+              "wiseUserId": "6976680baf7fbc5ac88c3ea9",
+              "name": "Student_data_sessions_8_participants_0",
+              "user_email": "studentdata_sessions_8_participants_0_user_email@example.test",
+              "duration": 105,
+              "inMeetingDuration": 105,
+              "isTeacher": true,
+              "firstEntryTime": "2026-04-20T12:01:25.000Z",
+              "lastExitTime": "2026-04-20T12:03:10.000Z"
+            },
+            {
+              "wiseUserId": "696e2a2043579bbada1ff7d7",
+              "name": "Student_data_sessions_8_participants_1",
+              "duration": 226,
+              "inMeetingDuration": 0,
+              "relativePercentAttendance": 100,
+              "absolutePercentAttendance": 100,
+              "isTeacher": false,
+              "offline": true
+            }
+          ],
+          "createdAt": "2026-02-17T14:15:11.241Z",
+          "duration": 226000,
+          "end_time": "2026-04-20T12:05:11.000Z",
+          "participant": 1,
+          "students": [
+            "696e2a2043579bbada1ff7d7"
+          ],
+          "studentCount": 1,
+          "recordings": [
+            {
+              "type": "RECORDING",
+              "url": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F699477ecb50e50f4cc21ea46-1.1%2Fvideo.m3u8",
+              "duration": 221,
+              "sessionIndex": 1,
+              "partIndex": 1,
+              "file": {
+                "path": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F699477ecb50e50f4cc21ea46-1.1%2Fvideo.m3u8",
+                "filename": "video.m3u8",
+                "s3Key": "streaming_videos/{{WISENET_USER_ID}}/699477ecb50e50f4cc21ea46-1.1/video.m3u8",
+                "s3FilePath": "https://wise-app-s3-bucket.s3-ap-south-1.amazonaws.com/streaming_videos/{{WISENET_USER_ID}}/699477ecb50e50f4cc21ea46-1.1/video.m3u8",
+                "subtype": "hls_video",
+                "type": "video",
+                "size": 1309622
+              },
+              "_id": "69e6170548dbd2e91ef02e32"
+            }
+          ]
+        },
+        {
+          "_id": "699477adb50e50f4cc2167a9",
+          "attendanceRecorded": true,
+          "mettingEnded": true,
+          "classId": {
+            "_id": "699027e2444ac4ea90c89b85",
+            "name": "Student_data_sessions_9_classId",
+            "subject": "Y9-11 / G8-10 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-18.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-4.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada23423d",
+            "name": "Student_data_sessions_9_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T12:01:11.461Z",
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "paidUser": true,
+            "isOwnerZoom": false,
+            "zoomUserId": "Q8gUwk2GR3G9MKHYdnwZkQ",
+            "lensEnabled": false,
+            "webinar": false,
+            "restartedSessions": [],
+            "zoomAdminAccountId": "63f8b2037eb779515cf43d21",
+            "poolName": "DEFAULT",
+            "zoomUserAccountId": "66fa9390c493790018d7b3b5",
+            "autoRecord": true
+          },
+          "scheduledStartTime": "2026-04-20T12:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T13:00:00.000Z",
+          "title": "Online Session - Physics",
+          "type": "SCHEDULED",
+          "meetingStatus": "ENDED",
+          "participants": [
+            {
+              "wiseUserId": "696e2a1f43579bbada1fece4",
+              "name": "Student_data_sessions_9_participants_0",
+              "user_email": "",
+              "duration": 3649,
+              "inMeetingDuration": 3649,
+              "relativePercentAttendance": 100,
+              "absolutePercentAttendance": 100,
+              "isTeacher": false,
+              "firstEntryTime": "2026-04-20T12:01:59.000Z",
+              "lastExitTime": "2026-04-20T13:02:48.000Z"
+            },
+            {
+              "wiseUserId": "696e2c4343579bbada23423d",
+              "name": "Student_data_sessions_9_participants_1",
+              "user_email": "studentdata_sessions_9_participants_1_user_email@example.test",
+              "duration": 3659,
+              "inMeetingDuration": 3659,
+              "isTeacher": true,
+              "firstEntryTime": "2026-04-20T12:01:50.000Z",
+              "lastExitTime": "2026-04-20T13:02:49.000Z"
+            }
+          ],
+          "createdAt": "2026-02-17T14:14:06.723Z",
+          "duration": 3659000,
+          "end_time": "2026-04-20T13:02:49.000Z",
+          "participant": 1,
+          "students": [
+            "696e2a1f43579bbada1fece4"
+          ],
+          "studentCount": 1,
+          "recordings": [
+            {
+              "type": "RECORDING",
+              "url": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F699477adb50e50f4cc2167a9-1.1%2Fvideo.m3u8",
+              "duration": 3655,
+              "sessionIndex": 1,
+              "partIndex": 1,
+              "file": {
+                "path": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F699477adb50e50f4cc2167a9-1.1%2Fvideo.m3u8",
+                "filename": "video.m3u8",
+                "s3Key": "streaming_videos/{{WISENET_USER_ID}}/699477adb50e50f4cc2167a9-1.1/video.m3u8",
+                "s3FilePath": "https://wise-app-s3-bucket.s3-ap-south-1.amazonaws.com/streaming_videos/{{WISENET_USER_ID}}/699477adb50e50f4cc2167a9-1.1/video.m3u8",
+                "subtype": "hls_video",
+                "type": "video",
+                "size": 112479291
+              },
+              "_id": "69e62c36dbb0076b5316d833"
+            }
+          ]
+        },
+        {
+          "_id": "69c0d323b2cee1a6a54df77b",
+          "attendanceRecorded": true,
+          "mettingEnded": true,
+          "classId": {
+            "_id": "69903bf273d98e8b11bf1e1e",
+            "name": "Student_data_sessions_10_classId",
+            "subject": "Y9-11 / G8-10 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-56.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-14.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada23422b",
+            "name": "Student_data_sessions_10_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T12:00:52.032Z",
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69c0d322b2cee1a6a54df771",
+            "paidUser": true,
+            "isOwnerZoom": false,
+            "zoomUserId": "7qc3iPuPSZqMOfqPc-zD5g",
+            "lensEnabled": false,
+            "webinar": false,
+            "restartedSessions": [],
+            "zoomAdminAccountId": "63f8b2037eb779515cf43d21",
+            "poolName": "DEFAULT",
+            "zoomUserAccountId": "66fa9425c493790018d7b53f",
+            "autoRecord": true
+          },
+          "scheduledStartTime": "2026-04-20T12:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T13:30:00.000Z",
+          "title": "Live Session - Bio",
+          "type": "SCHEDULED",
+          "meetingStatus": "ENDED",
+          "participants": [
+            {
+              "wiseUserId": "696e2a1d43579bbada1fdd65",
+              "name": "Student_data_sessions_10_participants_0",
+              "user_email": "",
+              "duration": 5422,
+              "inMeetingDuration": 5422,
+              "relativePercentAttendance": 100,
+              "absolutePercentAttendance": 100,
+              "isTeacher": false,
+              "firstEntryTime": "2026-04-20T12:01:14.000Z",
+              "lastExitTime": "2026-04-20T13:31:36.000Z"
+            },
+            {
+              "wiseUserId": "696e2c4343579bbada23422b",
+              "name": "Student_data_sessions_10_participants_1",
+              "user_email": "studentdata_sessions_10_participants_1_user_email@example.test",
+              "duration": 5435,
+              "inMeetingDuration": 5435,
+              "isTeacher": true,
+              "firstEntryTime": "2026-04-20T12:01:02.000Z",
+              "lastExitTime": "2026-04-20T13:31:37.000Z"
+            }
+          ],
+          "createdAt": "2026-03-23T05:44:03.014Z",
+          "duration": 5435000,
+          "end_time": "2026-04-20T13:31:37.000Z",
+          "participant": 1,
+          "students": [
+            "696e2a1d43579bbada1fdd65"
+          ],
+          "studentCount": 1,
+          "recordings": [
+            {
+              "type": "RECORDING",
+              "url": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F69c0d323b2cee1a6a54df77b-1.1%2Fvideo.m3u8",
+              "duration": 5432,
+              "sessionIndex": 1,
+              "partIndex": 1,
+              "file": {
+                "path": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F69c0d323b2cee1a6a54df77b-1.1%2Fvideo.m3u8",
+                "filename": "video.m3u8",
+                "s3Key": "streaming_videos/{{WISENET_USER_ID}}/69c0d323b2cee1a6a54df77b-1.1/video.m3u8",
+                "s3FilePath": "https://wise-app-s3-bucket.s3-ap-south-1.amazonaws.com/streaming_videos/{{WISENET_USER_ID}}/69c0d323b2cee1a6a54df77b-1.1/video.m3u8",
+                "subtype": "hls_video",
+                "type": "video",
+                "size": 238627565
+              },
+              "_id": "69e632faa2b5981fc4c65acd"
+            }
+          ]
+        },
+        {
+          "_id": "699477adb50e50f4cc21699d",
+          "attendanceRecorded": true,
+          "mettingEnded": true,
+          "classId": {
+            "_id": "698fb949444ac4ea90bb13b3",
+            "name": "Student_data_sessions_11_classId",
+            "subject": "Y9-11 / G8-10 (Int.) Master",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-4.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-4.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcb9cb",
+            "name": "Student_data_sessions_11_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T12:00:48.102Z",
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "paidUser": true,
+            "isOwnerZoom": false,
+            "zoomUserId": "yM5PeQlTS7SAmuS10YzkHQ",
+            "lensEnabled": false,
+            "webinar": false,
+            "restartedSessions": [],
+            "zoomAdminAccountId": "63f8b2037eb779515cf43d21",
+            "poolName": "DEFAULT",
+            "zoomUserAccountId": "66fa77c2763295008ca2dd61",
+            "autoRecord": true
+          },
+          "scheduledStartTime": "2026-04-20T12:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T13:00:00.000Z",
+          "title": "Online Session - Biology",
+          "type": "SCHEDULED",
+          "meetingStatus": "ENDED",
+          "participants": [
+            {
+              "wiseUserId": "696e2a7843579bbada208024",
+              "name": "Student_data_sessions_11_participants_0",
+              "user_email": "",
+              "duration": 3466,
+              "inMeetingDuration": 3466,
+              "relativePercentAttendance": 100,
+              "absolutePercentAttendance": 99,
+              "isTeacher": false,
+              "firstEntryTime": "2026-04-20T12:01:18.000Z",
+              "lastExitTime": "2026-04-20T12:59:04.000Z"
+            },
+            {
+              "wiseUserId": "695369c028118f629edcb9cb",
+              "name": "Student_data_sessions_11_participants_1",
+              "user_email": "studentdata_sessions_11_participants_1_user_email@example.test",
+              "duration": 3491,
+              "inMeetingDuration": 3491,
+              "isTeacher": true,
+              "firstEntryTime": "2026-04-20T12:00:54.000Z",
+              "lastExitTime": "2026-04-20T12:59:05.000Z"
+            }
+          ],
+          "createdAt": "2026-02-17T14:14:06.749Z",
+          "duration": 3491000,
+          "end_time": "2026-04-20T12:59:05.000Z",
+          "participant": 1,
+          "students": [
+            "696e2a7843579bbada208024"
+          ],
+          "studentCount": 1,
+          "recordings": [
+            {
+              "type": "RECORDING",
+              "url": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F699477adb50e50f4cc21699d-1.1%2Fvideo.m3u8",
+              "duration": 3488,
+              "sessionIndex": 1,
+              "partIndex": 1,
+              "file": {
+                "path": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F699477adb50e50f4cc21699d-1.1%2Fvideo.m3u8",
+                "filename": "video.m3u8",
+                "s3Key": "streaming_videos/{{WISENET_USER_ID}}/699477adb50e50f4cc21699d-1.1/video.m3u8",
+                "s3FilePath": "https://wise-app-s3-bucket.s3-ap-south-1.amazonaws.com/streaming_videos/{{WISENET_USER_ID}}/699477adb50e50f4cc21699d-1.1/video.m3u8",
+                "subtype": "hls_video",
+                "type": "video",
+                "size": 170466655
+              },
+              "_id": "69e62cbbdbb0076b5316dc19"
+            }
+          ]
+        },
+        {
+          "_id": "699477ebb50e50f4cc21d977",
+          "attendanceRecorded": false,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "698fb7fa569e897dbc3a37be",
+            "name": "Student_data_sessions_12_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-82.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-17.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada2340dd",
+            "name": "Student_data_sessions_12_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T12:00:00.000Z",
+          "end_time": null,
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}"
+          },
+          "scheduledStartTime": "2026-04-20T12:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T13:00:00.000Z",
+          "title": "Online Session - Math (Cancelled)",
+          "type": "SCHEDULED",
+          "meetingStatus": "CANCELLED",
+          "participants": [],
+          "createdAt": "2026-02-17T14:15:10.761Z",
+          "students": [
+            "696e2a7843579bbada20804b"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69bd270d1cac21de0de17a54",
+          "attendanceRecorded": true,
+          "mettingEnded": true,
+          "classId": {
+            "_id": "698cb2a52e1cff6a268ce19b",
+            "name": "Student_data_sessions_13_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-35.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-19.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada233f5a",
+            "name": "Student_data_sessions_13_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T11:56:47.384Z",
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69bd270d1cac21de0de17a4b",
+            "paidUser": true,
+            "isOwnerZoom": false,
+            "zoomUserId": "pomcrNnPRnmRaLe5tzPXvA",
+            "lensEnabled": false,
+            "webinar": false,
+            "restartedSessions": [],
+            "zoomAdminAccountId": "63f8b2037eb779515cf43d21",
+            "poolName": "DEFAULT",
+            "zoomUserAccountId": "66fa93f4c493790018d7b4bf",
+            "autoRecord": true
+          },
+          "scheduledStartTime": "2026-04-20T12:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T13:00:00.000Z",
+          "title": "Live Session - Science",
+          "type": "SCHEDULED",
+          "meetingStatus": "ENDED",
+          "participants": [
+            {
+              "wiseUserId": "696e29c543579bbada1f61e6",
+              "name": "Student_data_sessions_13_participants_0",
+              "user_email": "",
+              "duration": 3627,
+              "inMeetingDuration": 3627,
+              "relativePercentAttendance": 100,
+              "absolutePercentAttendance": 95,
+              "isTeacher": false,
+              "firstEntryTime": "2026-04-20T12:00:46.000Z",
+              "lastExitTime": "2026-04-20T13:01:23.000Z"
+            },
+            {
+              "wiseUserId": "696e2c4343579bbada233f5a",
+              "name": "Student_data_sessions_13_participants_1",
+              "user_email": "studentdata_sessions_13_participants_1_user_email@example.test",
+              "duration": 3824,
+              "inMeetingDuration": 3824,
+              "isTeacher": true,
+              "firstEntryTime": "2026-04-20T11:57:40.000Z",
+              "lastExitTime": "2026-04-20T13:01:24.000Z"
+            }
+          ],
+          "createdAt": "2026-03-20T10:53:01.947Z",
+          "duration": 3824000,
+          "end_time": "2026-04-20T13:01:24.000Z",
+          "participant": 1,
+          "students": [
+            "696e29c543579bbada1f61e6"
+          ],
+          "studentCount": 1,
+          "recordings": [
+            {
+              "type": "RECORDING",
+              "url": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F69bd270d1cac21de0de17a54-1.1%2Fvideo.m3u8",
+              "duration": 3820,
+              "sessionIndex": 1,
+              "partIndex": 1,
+              "file": {
+                "path": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F69bd270d1cac21de0de17a54-1.1%2Fvideo.m3u8",
+                "filename": "video.m3u8",
+                "s3Key": "streaming_videos/{{WISENET_USER_ID}}/69bd270d1cac21de0de17a54-1.1/video.m3u8",
+                "s3FilePath": "https://wise-app-s3-bucket.s3-ap-south-1.amazonaws.com/streaming_videos/{{WISENET_USER_ID}}/69bd270d1cac21de0de17a54-1.1/video.m3u8",
+                "subtype": "hls_video",
+                "type": "video",
+                "size": 106625773
+              },
+              "_id": "69e62760a2b5981fc4c5dc55"
+            }
+          ]
+        },
+        {
+          "_id": "69bcfb51454842a0601b4795",
+          "attendanceRecorded": true,
+          "mettingEnded": true,
+          "classId": {
+            "_id": "69b76d56a34933901e1de79a",
+            "name": "Student_data_sessions_14_classId",
+            "subject": "11+/13+",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-67.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-3.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada234170",
+            "name": "Student_data_sessions_14_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T11:56:46.769Z",
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69bcfb51454842a0601b4787",
+            "paidUser": true,
+            "isOwnerZoom": false,
+            "zoomUserId": "k-FESNzHTK-ofMMOdSIcDg",
+            "lensEnabled": false,
+            "webinar": false,
+            "restartedSessions": [],
+            "zoomAdminAccountId": "63f8b2037eb779515cf43d21",
+            "poolName": "DEFAULT",
+            "zoomUserAccountId": "66fa93b0c493790018d7b409",
+            "autoRecord": true
+          },
+          "scheduledStartTime": "2026-04-20T12:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T13:00:00.000Z",
+          "title": "Live Session-Math",
+          "type": "SCHEDULED",
+          "meetingStatus": "ENDED",
+          "participants": [
+            {
+              "wiseUserId": "696e2c4343579bbada234170",
+              "name": "Student_data_sessions_14_participants_0",
+              "user_email": "studentdata_sessions_14_participants_0_user_email@example.test",
+              "duration": 3948,
+              "inMeetingDuration": 3948,
+              "isTeacher": true,
+              "firstEntryTime": "2026-04-20T11:57:06.000Z",
+              "lastExitTime": "2026-04-20T13:02:54.000Z"
+            },
+            {
+              "wiseUserId": "69b76d5524bc164822686e6f",
+              "name": "Student_data_sessions_14_participants_1",
+              "user_email": "",
+              "duration": 3822,
+              "inMeetingDuration": 3822,
+              "relativePercentAttendance": 100,
+              "absolutePercentAttendance": 97,
+              "isTeacher": false,
+              "firstEntryTime": "2026-04-20T11:59:11.000Z",
+              "lastExitTime": "2026-04-20T13:02:53.000Z"
+            }
+          ],
+          "createdAt": "2026-03-20T07:46:25.835Z",
+          "duration": 3948000,
+          "end_time": "2026-04-20T13:02:54.000Z",
+          "participant": 1,
+          "students": [
+            "69b76d5524bc164822686e6f"
+          ],
+          "studentCount": 1,
+          "recordings": [
+            {
+              "type": "RECORDING",
+              "url": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F69bcfb51454842a0601b4795-1.1%2Fvideo.m3u8",
+              "duration": 3947,
+              "sessionIndex": 1,
+              "partIndex": 1,
+              "file": {
+                "path": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F69bcfb51454842a0601b4795-1.1%2Fvideo.m3u8",
+                "filename": "video.m3u8",
+                "s3Key": "streaming_videos/{{WISENET_USER_ID}}/69bcfb51454842a0601b4795-1.1/video.m3u8",
+                "s3FilePath": "https://wise-app-s3-bucket.s3-ap-south-1.amazonaws.com/streaming_videos/{{WISENET_USER_ID}}/69bcfb51454842a0601b4795-1.1/video.m3u8",
+                "subtype": "hls_video",
+                "type": "video",
+                "size": 100049079
+              },
+              "_id": "69e6288a11d98f04557b6279"
+            }
+          ]
+        },
+        {
+          "_id": "699477ecb50e50f4cc21e8b6",
+          "attendanceRecorded": false,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "6990e98a16387f23c09c90bb",
+            "name": "Student_data_sessions_15_classId",
+            "subject": "Y12-13 / G11-12 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-9.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-8.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada2341d5",
+            "name": "Student_data_sessions_15_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T11:30:00.000Z",
+          "end_time": null,
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}"
+          },
+          "scheduledStartTime": "2026-04-20T11:30:00.000Z",
+          "scheduledEndTime": "2026-04-20T12:30:00.000Z",
+          "title": "Online Session - Economics (Cancelled)",
+          "type": "SCHEDULED",
+          "meetingStatus": "CANCELLED",
+          "participants": [],
+          "createdAt": "2026-02-17T14:15:11.211Z",
+          "students": [
+            "696e2a2043579bbada1ff806"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69d360b1f258a33fed757553",
+          "attendanceRecorded": false,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "698eba5b7cf248f04e2bb0f6",
+            "name": "Student_data_sessions_16_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-18.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-12.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada234162",
+            "name": "Student_data_sessions_16_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T11:30:00.000Z",
+          "end_time": null,
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69d360b1f258a33fed75754e"
+          },
+          "scheduledStartTime": "2026-04-20T11:30:00.000Z",
+          "scheduledEndTime": "2026-04-20T12:30:00.000Z",
+          "title": "Live Session - Math (Cancelled)",
+          "type": "SCHEDULED",
+          "meetingStatus": "CANCELLED",
+          "participants": [],
+          "createdAt": "2026-04-06T07:28:49.530Z",
+          "students": [
+            "696e29c343579bbada1f4ff0"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "699477ecb50e50f4cc21f27a",
+          "attendanceRecorded": true,
+          "mettingEnded": true,
+          "classId": {
+            "_id": "69902a5519cf67738c1043a6",
+            "name": "Student_data_sessions_17_classId",
+            "subject": "Y9-11 / G8-10 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-61.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-9.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada233f6b",
+            "name": "Student_data_sessions_17_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T11:29:29.950Z",
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "paidUser": true,
+            "isOwnerZoom": false,
+            "zoomUserId": "citm-zvsS8OtQowmL3Y_-Q",
+            "lensEnabled": false,
+            "webinar": false,
+            "restartedSessions": [],
+            "zoomAdminAccountId": "63f8b2037eb779515cf43d21",
+            "poolName": "DEFAULT",
+            "zoomUserAccountId": "66fa9394c493790018d7b3bf",
+            "autoRecord": true
+          },
+          "scheduledStartTime": "2026-04-20T11:30:00.000Z",
+          "scheduledEndTime": "2026-04-20T12:30:00.000Z",
+          "title": "Online Session - Physics",
+          "type": "SCHEDULED",
+          "meetingStatus": "ENDED",
+          "participants": [
+            {
+              "wiseUserId": "696e2c4343579bbada233f6b",
+              "name": "Student_data_sessions_17_participants_0",
+              "user_email": "studentdata_sessions_17_participants_0_user_email@example.test",
+              "duration": 3753,
+              "inMeetingDuration": 3753,
+              "isTeacher": true,
+              "firstEntryTime": "2026-04-20T11:29:40.000Z",
+              "lastExitTime": "2026-04-20T12:32:13.000Z"
+            },
+            {
+              "name": "Student_data_sessions_17_participants_1",
+              "user_email": "",
+              "duration": 3464,
+              "inMeetingDuration": 3464,
+              "relativePercentAttendance": 100,
+              "absolutePercentAttendance": 92,
+              "isTeacher": false,
+              "firstEntryTime": "2026-04-20T11:31:50.000Z",
+              "lastExitTime": "2026-04-20T12:31:38.000Z"
+            },
+            {
+              "wiseUserId": "696e2a1f43579bbada1fef84",
+              "name": "Student_data_sessions_17_participants_2",
+              "duration": 0,
+              "inMeetingDuration": 0,
+              "isTeacher": false
+            }
+          ],
+          "createdAt": "2026-02-17T14:15:11.449Z",
+          "duration": 3753000,
+          "end_time": "2026-04-20T12:32:13.000Z",
+          "participant": 1,
+          "students": [
+            "696e2a1f43579bbada1fef84"
+          ],
+          "studentCount": 1,
+          "recordings": [
+            {
+              "type": "RECORDING",
+              "url": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F699477ecb50e50f4cc21f27a-1.1%2Fvideo.m3u8",
+              "duration": 3749,
+              "sessionIndex": 1,
+              "partIndex": 1,
+              "file": {
+                "path": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F699477ecb50e50f4cc21f27a-1.1%2Fvideo.m3u8",
+                "filename": "video.m3u8",
+                "s3Key": "streaming_videos/{{WISENET_USER_ID}}/699477ecb50e50f4cc21f27a-1.1/video.m3u8",
+                "s3FilePath": "https://wise-app-s3-bucket.s3-ap-south-1.amazonaws.com/streaming_videos/{{WISENET_USER_ID}}/699477ecb50e50f4cc21f27a-1.1/video.m3u8",
+                "subtype": "hls_video",
+                "type": "video",
+                "size": 136689595
+              },
+              "_id": "69e625a448dbd2e91ef0988d"
+            }
+          ]
+        },
+        {
+          "_id": "699477ceb50e50f4cc21a833",
+          "attendanceRecorded": true,
+          "mettingEnded": true,
+          "classId": {
+            "_id": "699033d463d0a038a9a23c12",
+            "name": "Student_data_sessions_18_classId",
+            "subject": "Y9-11 / G8-10 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-43.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-10.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada2340f8",
+            "name": "Student_data_sessions_18_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T11:02:15.846Z",
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "paidUser": true,
+            "isOwnerZoom": false,
+            "zoomUserId": "NAfWTQq7QLuDmvmOfmxHIg",
+            "lensEnabled": false,
+            "webinar": false,
+            "restartedSessions": [],
+            "zoomAdminAccountId": "63f8b2037eb779515cf43d21",
+            "poolName": "DEFAULT",
+            "zoomUserAccountId": "66fa9420c493790018d7b531",
+            "autoRecord": true
+          },
+          "scheduledStartTime": "2026-04-20T11:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T12:00:00.000Z",
+          "title": "Online Session - Chemistry",
+          "type": "SCHEDULED",
+          "meetingStatus": "ENDED",
+          "participants": [
+            {
+              "wiseUserId": "696e2a7b43579bbada2095fe",
+              "name": "Student_data_sessions_18_participants_0",
+              "user_email": "",
+              "duration": 3459,
+              "inMeetingDuration": 3459,
+              "relativePercentAttendance": 100,
+              "absolutePercentAttendance": 98,
+              "isTeacher": false,
+              "firstEntryTime": "2026-04-20T11:03:42.000Z",
+              "lastExitTime": "2026-04-20T12:01:21.000Z"
+            },
+            {
+              "wiseUserId": "696e2c4343579bbada2340f8",
+              "name": "Student_data_sessions_18_participants_1",
+              "user_email": "studentdata_sessions_18_participants_1_user_email@example.test",
+              "duration": 3541,
+              "inMeetingDuration": 3541,
+              "isTeacher": true,
+              "firstEntryTime": "2026-04-20T11:02:26.000Z",
+              "lastExitTime": "2026-04-20T12:01:27.000Z"
+            }
+          ],
+          "createdAt": "2026-02-17T14:14:40.238Z",
+          "duration": 3541000,
+          "end_time": "2026-04-20T12:01:27.000Z",
+          "participant": 1,
+          "students": [
+            "696e2a7b43579bbada2095fe"
+          ],
+          "studentCount": 1,
+          "recordings": [
+            {
+              "type": "RECORDING",
+              "url": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F699477ceb50e50f4cc21a833-1.1%2Fvideo.m3u8",
+              "duration": 3537,
+              "sessionIndex": 1,
+              "partIndex": 1,
+              "file": {
+                "path": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F699477ceb50e50f4cc21a833-1.1%2Fvideo.m3u8",
+                "filename": "video.m3u8",
+                "s3Key": "streaming_videos/{{WISENET_USER_ID}}/699477ceb50e50f4cc21a833-1.1/video.m3u8",
+                "s3FilePath": "https://wise-app-s3-bucket.s3-ap-south-1.amazonaws.com/streaming_videos/{{WISENET_USER_ID}}/699477ceb50e50f4cc21a833-1.1/video.m3u8",
+                "subtype": "hls_video",
+                "type": "video",
+                "size": 135174524
+              },
+              "_id": "69e61ededbb0076b53166194"
+            }
+          ]
+        },
+        {
+          "_id": "6995618c54a77951a57696a5",
+          "attendanceRecorded": true,
+          "mettingEnded": true,
+          "classId": {
+            "_id": "69903836239190f41d16710b",
+            "name": "Student_data_sessions_19_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-29.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-6.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada234239",
+            "name": "Student_data_sessions_19_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T11:01:22.701Z",
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "6995618c54a77951a5769699",
+            "paidUser": true,
+            "isOwnerZoom": false,
+            "zoomUserId": "3GjHC8F_RKiIoGuzsJ9udg",
+            "lensEnabled": false,
+            "webinar": false,
+            "restartedSessions": [],
+            "zoomAdminAccountId": "63f8b2037eb779515cf43d21",
+            "poolName": "DEFAULT",
+            "zoomUserAccountId": "66fa9391c493790018d7b3b7",
+            "autoRecord": true
+          },
+          "scheduledStartTime": "2026-04-20T11:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T12:00:00.000Z",
+          "title": "Live Session-Science",
+          "type": "SCHEDULED",
+          "meetingStatus": "ENDED",
+          "participants": [
+            {
+              "wiseUserId": "696e2a2043579bbada1ff406",
+              "name": "Student_data_sessions_19_participants_0",
+              "user_email": "",
+              "duration": 3661,
+              "inMeetingDuration": 3661,
+              "relativePercentAttendance": 100,
+              "absolutePercentAttendance": 100,
+              "isTeacher": false,
+              "firstEntryTime": "2026-04-20T11:01:35.000Z",
+              "lastExitTime": "2026-04-20T12:02:36.000Z"
+            },
+            {
+              "wiseUserId": "696e2c4343579bbada234239",
+              "name": "Student_data_sessions_19_participants_1",
+              "user_email": "studentdata_sessions_19_participants_1_user_email@example.test",
+              "duration": 3668,
+              "inMeetingDuration": 3668,
+              "isTeacher": true,
+              "firstEntryTime": "2026-04-20T11:01:29.000Z",
+              "lastExitTime": "2026-04-20T12:02:37.000Z"
+            }
+          ],
+          "createdAt": "2026-02-18T06:51:56.235Z",
+          "duration": 3668000,
+          "end_time": "2026-04-20T12:02:37.000Z",
+          "participant": 1,
+          "students": [
+            "696e2a2043579bbada1ff406"
+          ],
+          "studentCount": 1,
+          "recordings": [
+            {
+              "type": "RECORDING",
+              "url": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F6995618c54a77951a57696a5-1.1%2Fvideo.m3u8",
+              "duration": 3665,
+              "sessionIndex": 1,
+              "partIndex": 1,
+              "file": {
+                "path": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F6995618c54a77951a57696a5-1.1%2Fvideo.m3u8",
+                "filename": "video.m3u8",
+                "s3Key": "streaming_videos/{{WISENET_USER_ID}}/6995618c54a77951a57696a5-1.1/video.m3u8",
+                "s3FilePath": "https://wise-app-s3-bucket.s3-ap-south-1.amazonaws.com/streaming_videos/{{WISENET_USER_ID}}/6995618c54a77951a57696a5-1.1/video.m3u8",
+                "subtype": "hls_video",
+                "type": "video",
+                "size": 274056417
+              },
+              "_id": "69e61b8348dbd2e91ef04819"
+            }
+          ]
+        },
+        {
+          "_id": "69b628d159d30f085c0738f3",
+          "attendanceRecorded": true,
+          "mettingEnded": true,
+          "classId": {
+            "_id": "69ad2ebba4dbd9ea76d553fd",
+            "name": "Student_data_sessions_20_classId",
+            "subject": "Y9-11 / G8-10 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-6.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-9.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada234179",
+            "name": "Student_data_sessions_20_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T11:00:39.166Z",
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69b628d159d30f085c0738ee",
+            "paidUser": true,
+            "isOwnerZoom": false,
+            "zoomUserId": "m1VoIWg5R26CdI7smcBeng",
+            "lensEnabled": false,
+            "webinar": false,
+            "restartedSessions": [],
+            "zoomAdminAccountId": "63f8b2037eb779515cf43d21",
+            "poolName": "DEFAULT",
+            "zoomUserAccountId": "681db2a0d7bfefa6dad4cefe",
+            "autoRecord": true
+          },
+          "scheduledStartTime": "2026-04-20T11:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T13:00:00.000Z",
+          "title": "Live Session",
+          "type": "SCHEDULED",
+          "meetingStatus": "ENDED",
+          "participants": [
+            {
+              "wiseUserId": "696e2c4343579bbada234179",
+              "name": "Student_data_sessions_20_participants_0",
+              "user_email": "studentdata_sessions_20_participants_0_user_email@example.test",
+              "duration": 7411,
+              "inMeetingDuration": 7411,
+              "isTeacher": true,
+              "firstEntryTime": "2026-04-20T11:00:46.000Z",
+              "lastExitTime": "2026-04-20T13:04:17.000Z"
+            },
+            {
+              "wiseUserId": "696e29c543579bbada1f627a",
+              "name": "Student_data_sessions_20_participants_1",
+              "user_email": "",
+              "duration": 7397,
+              "inMeetingDuration": 7397,
+              "relativePercentAttendance": 100,
+              "absolutePercentAttendance": 100,
+              "isTeacher": false,
+              "firstEntryTime": "2026-04-20T11:00:57.000Z",
+              "lastExitTime": "2026-04-20T13:04:14.000Z"
+            }
+          ],
+          "createdAt": "2026-03-15T03:34:41.164Z",
+          "duration": 7411000,
+          "end_time": "2026-04-20T13:04:17.000Z",
+          "participant": 1,
+          "students": [
+            "696e29c543579bbada1f627a"
+          ],
+          "studentCount": 1,
+          "recordings": [
+            {
+              "type": "RECORDING",
+              "url": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F69b628d159d30f085c0738f3-1.1%2Fvideo.m3u8",
+              "duration": 7408,
+              "sessionIndex": 1,
+              "partIndex": 1,
+              "file": {
+                "path": "https://streaming.wiseapp.live/video-player/wise-video-player.html?url=https%3A%2F%2Fstreaming.wiseapp.live%2Fstreaming_videos%2F{{WISENET_USER_ID}}%2F69b628d159d30f085c0738f3-1.1%2Fvideo.m3u8",
+                "filename": "video.m3u8",
+                "s3Key": "streaming_videos/{{WISENET_USER_ID}}/69b628d159d30f085c0738f3-1.1/video.m3u8",
+                "s3FilePath": "https://wise-app-s3-bucket.s3-ap-south-1.amazonaws.com/streaming_videos/{{WISENET_USER_ID}}/69b628d159d30f085c0738f3-1.1/video.m3u8",
+                "subtype": "hls_video",
+                "type": "video",
+                "size": 320129896
+              },
+              "_id": "69e63196a2b5981fc4c64933"
+            }
+          ]
+        },
+        {
+          "_id": "69947765b50e50f4cc20c89b",
+          "attendanceRecorded": true,
+          "mettingEnded": true,
+          "classId": {
+            "_id": "698e296b7cf248f04e1fa016",
+            "name": "Student_data_sessions_21_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-9.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-3.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcba4d",
+            "name": "Student_data_sessions_21_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T11:00:00.000Z",
+          "end_time": null,
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}"
+          },
+          "location": "Never Ever (TV)",
+          "scheduledStartTime": "2026-04-20T11:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T12:00:00.000Z",
+          "title": "On-site Session - Science",
+          "type": "OFFLINE",
+          "meetingStatus": "ENDED",
+          "participants": [
+            {
+              "wiseUserId": "696e2a2043579bbada1ff73f",
+              "name": "Student_data_sessions_21_participants_0",
+              "duration": 3600,
+              "relativePercentAttendance": 100,
+              "absolutePercentAttendance": 100,
+              "offline": true
+            }
+          ],
+          "createdAt": "2026-02-17T14:12:55.052Z",
+          "duration": 3600000,
+          "participant": 1,
+          "students": [
+            "696e2a2043579bbada1ff73f"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69947765b50e50f4cc20ddb4",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "698e3faca79d68537221e5d2",
+            "name": "Student_data_sessions_22_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-65.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-18.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcbab5",
+            "name": "Student_data_sessions_22_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T11:00:00.000Z",
+          "end_time": null,
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}"
+          },
+          "location": "Go All In (TV)",
+          "scheduledStartTime": "2026-04-20T11:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T12:00:00.000Z",
+          "title": "On-site Session - Math (Cancelled)",
+          "type": "OFFLINE",
+          "meetingStatus": "CANCELLED",
+          "participants": [],
+          "createdAt": "2026-02-17T14:12:55.458Z",
+          "duration": 3600000,
+          "students": [
+            "696e2a7a43579bbada2091e4"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "699561fad641bdce69e9a131",
+          "attendanceRecorded": false,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "698ee6bd73d98e8b1194406d",
+            "name": "Student_data_sessions_23_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-5.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-8.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "698bdbddb0e4b23fd504d9d7",
+            "name": "Student_data_sessions_23_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T11:00:00.000Z",
+          "end_time": null,
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "699561fad641bdce69e9a125"
+          },
+          "scheduledStartTime": "2026-04-20T11:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T12:00:00.000Z",
+          "title": "Live Session-English (Cancelled)",
+          "type": "SCHEDULED",
+          "meetingStatus": "CANCELLED",
+          "participants": [],
+          "createdAt": "2026-02-18T06:53:46.693Z",
+          "students": [
+            "696e2a2043579bbada1ff70d"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69e6d00cfb018e2ab21c8cf6",
+          "attendanceRecorded": true,
+          "mettingEnded": true,
+          "classId": {
+            "_id": "698fb4a0648788255eea4e42",
+            "name": "Student_data_sessions_24_classId",
+            "subject": "SAT Master",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-4.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-17.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada234049",
+            "name": "Student_data_sessions_24_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T11:00:00.000Z",
+          "end_time": "2026-04-20T12:00:00.000Z",
+          "duration": 3600000,
+          "participant": 0,
+          "participants": [],
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69e6d00cfb018e2ab21c8cf1"
+          },
+          "location": "Remember (TV)",
+          "scheduledStartTime": "2026-04-20T11:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T12:00:00.000Z",
+          "title": "In-Person Session",
+          "type": "OFFLINE",
+          "meetingStatus": "ENDED",
+          "createdAt": "2026-04-21T01:17:00.800Z",
+          "students": [
+            "696e26ee43579bbada1c1e7f"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        }
+      ],
+      "page_number": 1,
+      "totalRecords": 5316,
+      "page_count": 213
+    }
+  }
+}

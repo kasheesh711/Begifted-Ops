@@ -1,0 +1,23 @@
+{
+  "_note": "Auth headers redacted. No body content captured beyond truncated 429 error snippet.",
+  "probed_at": "2026-04-21T03:51:05.712Z",
+  "probed_at_aest": "21/04/2026, 1:51:05 pm",
+  "aest_timing_note": "Ran during AEST teaching hours (~13:49) — accepted vendor-visibility risk per D-09",
+  "endpoint": "GET /institutes/v3/{{WISENET_CENTER_ID}}/students?page_number=1&page_size=1",
+  "burst_size": 200,
+  "concurrency": 1,
+  "first_429_index": null,
+  "first_429_elapsed_ms": null,
+  "first_429_headers": null,
+  "first_429_body": null,
+  "first_non200_idx": null,
+  "pre_burst_headers": {},
+  "pre_burst_remaining": null,
+  "pre_burst_header": null,
+  "post_burst_recovery": null,
+  "no_429_observed": true,
+  "status_summary": {
+    "200": 200
+  },
+  "notes": "200 requests completed without triggering 429. No rate-limit-remaining header observed from server — budget is unknown. Phase 2 WCLI-01 should assume headerless enforcement and rely on 429 detection + exponential backoff."
+}

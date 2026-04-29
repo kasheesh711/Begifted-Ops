@@ -1,0 +1,1154 @@
+{
+  "_note": "Auth headers redacted. Student PII synthetic-replaced per RESEARCH.md Pitfall 2. IDs preserved for cross-fixture joins.",
+  "_redaction": "names=synthetic, contact=synthetic, dates=dob-only, ids=preserved",
+  "probed_at": "2026-04-21T04:00:10.299Z",
+  "probed_at_aest": "21/04/2026, 2:00:10 pm",
+  "endpoint": "GET /institutes/{{WISENET_CENTER_ID}}/sessions?status=FUTURE&paginateBy=DATE&startDate=2026-04-21&endDate=2026-05-21&page_number=1&page_size=25",
+  "response_status": 200,
+  "response_headers": {
+    "access-control-allow-origin": "*",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-type": "application/json; charset=utf-8",
+    "date": "Tue, 21 Apr 2026 04:00:18 GMT",
+    "strict-transport-security": "max-age=15552000; includeSubDomains",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-content-type-options": "nosniff",
+    "x-dns-prefetch-control": "off",
+    "x-download-options": "noopen",
+    "x-frame-options": "SAMEORIGIN",
+    "x-xss-protection": "1; mode=block"
+  },
+  "_field_paths_candidates": {
+    "Sessions array → data.sessions": "FOUND at data.sessions",
+    "Scheduled date → data.sessions[*].startDate or scheduledDate": "NOT FOUND",
+    "Session duration → data.sessions[*].duration": "FOUND at data.sessions.[0].duration",
+    "Session status → data.sessions[*].status": "NOT FOUND",
+    "Class id → data.sessions[*].classId": "FOUND at data.sessions.[0].classId",
+    "Attendees → data.sessions[*].attendees": "NOT FOUND",
+    "Teacher → data.sessions[*].teacher": "NOT FOUND"
+  },
+  "body": {
+    "status": 200,
+    "message": "Success",
+    "data": {
+      "sessions": [
+        {
+          "_id": "69a8d319809628cd2cabb49a",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "6990277f34e62d001326a1f8",
+            "name": "Student_data_sessions_0_classId",
+            "subject": "Y9-11 / G8-10 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-11.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-7.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcba05",
+            "name": "Student_data_sessions_0_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T07:00:00.000Z",
+          "end_time": null,
+          "duration": 5400000,
+          "participant": 0,
+          "participants": [],
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69a8d319809628cd2cabb490"
+          },
+          "location": "Tesla",
+          "scheduledStartTime": "2026-04-20T07:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T08:30:00.000Z",
+          "title": "In-Person Session (Cancelled)",
+          "type": "OFFLINE",
+          "meetingStatus": "CANCELLED",
+          "createdAt": "2026-03-05T00:49:29.697Z",
+          "students": [
+            "696e26ee43579bbada1c20e5"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "699477ceb50e50f4cc219c72",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "698ed0ad73d98e8b1191691d",
+            "name": "Student_data_sessions_1_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-45.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-4.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcbab5",
+            "name": "Student_data_sessions_1_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T08:30:00.000Z",
+          "end_time": null,
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}"
+          },
+          "location": "Doubt (TV)",
+          "scheduledStartTime": "2026-04-20T08:30:00.000Z",
+          "scheduledEndTime": "2026-04-20T09:30:00.000Z",
+          "title": "On-site Session - Math (Cancelled)",
+          "type": "OFFLINE",
+          "meetingStatus": "CANCELLED",
+          "participants": [],
+          "createdAt": "2026-02-17T14:14:39.709Z",
+          "duration": 3600000,
+          "students": [
+            "696e2a7b43579bbada209437"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69947765b50e50f4cc20ddb4",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "698e3faca79d68537221e5d2",
+            "name": "Student_data_sessions_2_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-65.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-18.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcbab5",
+            "name": "Student_data_sessions_2_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T11:00:00.000Z",
+          "end_time": null,
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}"
+          },
+          "location": "Go All In (TV)",
+          "scheduledStartTime": "2026-04-20T11:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T12:00:00.000Z",
+          "title": "On-site Session - Math (Cancelled)",
+          "type": "OFFLINE",
+          "meetingStatus": "CANCELLED",
+          "participants": [],
+          "createdAt": "2026-02-17T14:12:55.458Z",
+          "duration": 3600000,
+          "students": [
+            "696e2a7a43579bbada2091e4"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "699561fad641bdce69e9a131",
+          "attendanceRecorded": false,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "698ee6bd73d98e8b1194406d",
+            "name": "Student_data_sessions_3_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-5.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-8.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "698bdbddb0e4b23fd504d9d7",
+            "name": "Student_data_sessions_3_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T11:00:00.000Z",
+          "end_time": null,
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "699561fad641bdce69e9a125"
+          },
+          "scheduledStartTime": "2026-04-20T11:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T12:00:00.000Z",
+          "title": "Live Session-English (Cancelled)",
+          "type": "SCHEDULED",
+          "meetingStatus": "CANCELLED",
+          "participants": [],
+          "createdAt": "2026-02-18T06:53:46.693Z",
+          "students": [
+            "696e2a2043579bbada1ff70d"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "699477ecb50e50f4cc21e8b6",
+          "attendanceRecorded": false,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "6990e98a16387f23c09c90bb",
+            "name": "Student_data_sessions_4_classId",
+            "subject": "Y12-13 / G11-12 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-9.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-8.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada2341d5",
+            "name": "Student_data_sessions_4_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T11:30:00.000Z",
+          "end_time": null,
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}"
+          },
+          "scheduledStartTime": "2026-04-20T11:30:00.000Z",
+          "scheduledEndTime": "2026-04-20T12:30:00.000Z",
+          "title": "Online Session - Economics (Cancelled)",
+          "type": "SCHEDULED",
+          "meetingStatus": "CANCELLED",
+          "participants": [],
+          "createdAt": "2026-02-17T14:15:11.211Z",
+          "students": [
+            "696e2a2043579bbada1ff806"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69d360b1f258a33fed757553",
+          "attendanceRecorded": false,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "698eba5b7cf248f04e2bb0f6",
+            "name": "Student_data_sessions_5_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-18.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-12.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada234162",
+            "name": "Student_data_sessions_5_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T11:30:00.000Z",
+          "end_time": null,
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69d360b1f258a33fed75754e"
+          },
+          "scheduledStartTime": "2026-04-20T11:30:00.000Z",
+          "scheduledEndTime": "2026-04-20T12:30:00.000Z",
+          "title": "Live Session - Math (Cancelled)",
+          "type": "SCHEDULED",
+          "meetingStatus": "CANCELLED",
+          "participants": [],
+          "createdAt": "2026-04-06T07:28:49.530Z",
+          "students": [
+            "696e29c343579bbada1f4ff0"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "699477ebb50e50f4cc21d977",
+          "attendanceRecorded": false,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "698fb7fa569e897dbc3a37be",
+            "name": "Student_data_sessions_6_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-82.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-17.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada2340dd",
+            "name": "Student_data_sessions_6_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T12:00:00.000Z",
+          "end_time": null,
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}"
+          },
+          "scheduledStartTime": "2026-04-20T12:00:00.000Z",
+          "scheduledEndTime": "2026-04-20T13:00:00.000Z",
+          "title": "Online Session - Math (Cancelled)",
+          "type": "SCHEDULED",
+          "meetingStatus": "CANCELLED",
+          "participants": [],
+          "createdAt": "2026-02-17T14:15:10.761Z",
+          "students": [
+            "696e2a7843579bbada20804b"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69d361aec53c1c7b0939a457",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "698fb5a019cf67738c027969",
+            "name": "Student_data_sessions_7_classId",
+            "subject": "Y12-13 / G11-12 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-20.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-9.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcba5a",
+            "name": "Student_data_sessions_7_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T12:30:00.000Z",
+          "end_time": null,
+          "duration": 3600000,
+          "participant": 0,
+          "participants": [],
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69d361aec53c1c7b0939a453"
+          },
+          "scheduledStartTime": "2026-04-20T12:30:00.000Z",
+          "scheduledEndTime": "2026-04-20T13:30:00.000Z",
+          "title": "In-Person Session - Math (Cancelled)",
+          "type": "OFFLINE",
+          "meetingStatus": "CANCELLED",
+          "createdAt": "2026-04-06T07:33:02.892Z",
+          "students": [
+            "696e2a1d43579bbada1fdca5"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69d366a5387944182cdd0646",
+          "attendanceRecorded": false,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "699040b1b21d029e8d3b161c",
+            "name": "Student_data_sessions_8_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-53.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-20.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada234162",
+            "name": "Student_data_sessions_8_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T13:30:00.000Z",
+          "end_time": null,
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69d366a5387944182cdd0642"
+          },
+          "scheduledStartTime": "2026-04-20T13:30:00.000Z",
+          "scheduledEndTime": "2026-04-20T14:30:00.000Z",
+          "title": "Live Session - Math (Cancelled)",
+          "type": "SCHEDULED",
+          "meetingStatus": "CANCELLED",
+          "participants": [],
+          "createdAt": "2026-04-06T07:54:13.341Z",
+          "students": [
+            "696e2a2043579bbada1ff55e"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "6994778ab50e50f4cc210b60",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "698fb48173d98e8b11aec14f",
+            "name": "Student_data_sessions_9_classId",
+            "subject": "SAT",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-75.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-14.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcba5a",
+            "name": "Student_data_sessions_9_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-20T15:30:00.000Z",
+          "end_time": null,
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}"
+          },
+          "location": "Focus",
+          "scheduledStartTime": "2026-04-20T15:30:00.000Z",
+          "scheduledEndTime": "2026-04-20T16:30:00.000Z",
+          "title": "On-site Session - SAT Math (Cancelled)",
+          "type": "OFFLINE",
+          "meetingStatus": "CANCELLED",
+          "participants": [],
+          "createdAt": "2026-02-17T14:13:32.895Z",
+          "duration": 3600000,
+          "students": [
+            "696e26ee43579bbada1c1e7f"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69d1ed34fdb0a42836599ac7",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "698d1cbba72b9f064b605433",
+            "name": "Student_data_sessions_10_classId",
+            "subject": "Y9-11 / G8-10 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-58.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-19.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcb9c9",
+            "name": "Student_data_sessions_10_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-21T03:00:00.000Z",
+          "end_time": null,
+          "duration": 3600000,
+          "participant": 0,
+          "participants": [],
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69d1ed34fdb0a42836599ac3"
+          },
+          "location": "Isaac Newton",
+          "scheduledStartTime": "2026-04-21T03:00:00.000Z",
+          "scheduledEndTime": "2026-04-21T04:00:00.000Z",
+          "title": "In-Person Session - Business (Cancelled)",
+          "type": "OFFLINE",
+          "meetingStatus": "CANCELLED",
+          "createdAt": "2026-04-05T05:03:48.678Z",
+          "students": [
+            "696e2a2043579bbada1ff181"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69e1bca6fd6cb9e7c13dfb5b",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "69903c17239190f41d1709f0",
+            "name": "Student_data_sessions_11_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-13.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-19.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcbb59",
+            "name": "Student_data_sessions_11_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-21T03:00:00.000Z",
+          "end_time": null,
+          "duration": 7200000,
+          "participant": 0,
+          "participants": [],
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69e1bca6fd6cb9e7c13dfb56"
+          },
+          "location": "Cool",
+          "scheduledStartTime": "2026-04-21T03:00:00.000Z",
+          "scheduledEndTime": "2026-04-21T05:00:00.000Z",
+          "title": "In-Person Session-Math (Cancelled)",
+          "type": "OFFLINE",
+          "meetingStatus": "CANCELLED",
+          "createdAt": "2026-04-17T04:52:54.610Z",
+          "students": [
+            "696e2a2043579bbada1ff9cf"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69d36a3c151618849f55b2a9",
+          "attendanceRecorded": false,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "69cba17eaf2b4794a2f3389b",
+            "name": "Student_data_sessions_12_classId",
+            "subject": "Y9-11 / G8-10 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-44.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-4.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada2340f8",
+            "name": "Student_data_sessions_12_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-21T03:57:11.823Z",
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69d36a3c151618849f55b2a4",
+            "paidUser": true,
+            "isOwnerZoom": false,
+            "zoomUserId": "jTtDQMaTTx-exlkBfd_SQw",
+            "lensEnabled": false,
+            "webinar": false,
+            "restartedSessions": [],
+            "zoomAdminAccountId": "63f8b2037eb779515cf43d21",
+            "poolName": "DEFAULT",
+            "zoomUserAccountId": "66fa77c2763295008ca2dd5f",
+            "hostMeetingSDKToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBLZXkiOiJTMHppbkJMMVJFQzNMOFkwcktab3ZRIiwiaWF0IjoxNzc2NzQzODAyLCJleHAiOjE3NzY5MTY2MDIsInRva2VuRXhwIjoxNzc2OTE2NjAyLCJyb2xlIjoxLCJtbiI6OTMxNDI5MTgxMDB9.3cVIY0iz-BSjn67hXi8NlAn3PQ2ffFYHVI5ZGEhpvnE",
+            "guestMeetingSDKToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBLZXkiOiJTMHppbkJMMVJFQzNMOFkwcktab3ZRIiwiaWF0IjoxNzc2NzQzODAyLCJleHAiOjE3NzY5MTY2MDIsInRva2VuRXhwIjoxNzc2OTE2NjAyLCJyb2xlIjowLCJtbiI6OTMxNDI5MTgxMDB9.kboVDgCKO5R4rV-bDNQgGwV8a9x5wbkceGZsKMVcWcI",
+            "autoRecord": true
+          },
+          "scheduledStartTime": "2026-04-21T04:00:00.000Z",
+          "scheduledEndTime": "2026-04-21T05:30:00.000Z",
+          "title": "Live Session - Chemistry",
+          "type": "SCHEDULED",
+          "meetingStatus": "IN_PROGRESS",
+          "participants": [],
+          "createdAt": "2026-04-06T08:09:32.373Z",
+          "join_url": "https://wise-live.zoom.us/j/93142918100?pwd=XwJGbhOtnPWQqDfEuKF4ia8yoosjmO.1",
+          "students": [
+            "69c298ce59c459d1a1e4fe69"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69e4ae3040885514e03def6c",
+          "attendanceRecorded": false,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "69d36053151618849f536ebb",
+            "name": "Student_data_sessions_13_classId",
+            "subject": "G1-9 (Th.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-73.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-9.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "6976680baf7fbc5ac88c3ea9",
+            "name": "Student_data_sessions_13_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-21T03:57:37.378Z",
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69e4ae3040885514e03def68",
+            "paidUser": true,
+            "isOwnerZoom": false,
+            "zoomUserId": "F_h9hvlKT9usnCjb8fWoiA",
+            "lensEnabled": false,
+            "webinar": false,
+            "restartedSessions": [],
+            "zoomAdminAccountId": "63f8b2037eb779515cf43d21",
+            "poolName": "DEFAULT",
+            "zoomUserAccountId": "66fa77e6763295008ca2ddfb",
+            "hostMeetingSDKToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBLZXkiOiJTMHppbkJMMVJFQzNMOFkwcktab3ZRIiwiaWF0IjoxNzc2NzQzODI3LCJleHAiOjE3NzY5MTY2MjcsInRva2VuRXhwIjoxNzc2OTE2NjI3LCJyb2xlIjoxLCJtbiI6OTgwNDYwNDA5MzN9.mrJAEQyBtkNAcRxl-n8R91IR6UFiNHsHau6s1JiLB7w",
+            "guestMeetingSDKToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBLZXkiOiJTMHppbkJMMVJFQzNMOFkwcktab3ZRIiwiaWF0IjoxNzc2NzQzODI3LCJleHAiOjE3NzY5MTY2MjcsInRva2VuRXhwIjoxNzc2OTE2NjI3LCJyb2xlIjowLCJtbiI6OTgwNDYwNDA5MzN9.fb0J37pMOIrq2hglC1muIEfy6_EGccc19dijEIvHPuA",
+            "autoRecord": true
+          },
+          "scheduledStartTime": "2026-04-21T04:00:00.000Z",
+          "scheduledEndTime": "2026-04-21T05:00:00.000Z",
+          "title": "Live Session - Physics",
+          "type": "SCHEDULED",
+          "meetingStatus": "IN_PROGRESS",
+          "participants": [],
+          "createdAt": "2026-04-19T10:28:00.856Z",
+          "join_url": "https://wise-live.zoom.us/j/98046040933?pwd=U6uWd4XBCc1XX3eaGGEb1q0iOR5qnm.1",
+          "students": [
+            "69d3605398ee51775faf4690"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69d1c9fd5e0c9f3ce1704a34",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "69d1c9b77db6c74e519d0634",
+            "name": "Student_data_sessions_14_classId",
+            "subject": "Biology",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-60.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-15.png",
+                "type": "image"
+              }
+            ],
+            "classType": "LIVE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcbcc6",
+            "name": "Student_data_sessions_14_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-21T04:00:00.000Z",
+          "end_time": null,
+          "duration": 7200000,
+          "participant": 0,
+          "participants": [],
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69d1c9fd5e0c9f3ce1704a2a"
+          },
+          "location": "Relax (TV)",
+          "scheduledStartTime": "2026-04-21T04:00:00.000Z",
+          "scheduledEndTime": "2026-04-21T06:00:00.000Z",
+          "title": "In-Person Session - Biology",
+          "type": "OFFLINE",
+          "meetingStatus": "UPCOMING",
+          "createdAt": "2026-04-05T02:33:33.076Z",
+          "students": [],
+          "studentCount": 0,
+          "recordings": []
+        },
+        {
+          "_id": "69d1ecf331a61c939f786cc7",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "698d1cbba72b9f064b605433",
+            "name": "Student_data_sessions_15_classId",
+            "subject": "Y9-11 / G8-10 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-58.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-19.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcbab5",
+            "name": "Student_data_sessions_15_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-21T04:00:00.000Z",
+          "end_time": null,
+          "duration": 3600000,
+          "participant": 0,
+          "participants": [],
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69d1ecf331a61c939f786cc2"
+          },
+          "location": "Do It",
+          "scheduledStartTime": "2026-04-21T04:00:00.000Z",
+          "scheduledEndTime": "2026-04-21T05:00:00.000Z",
+          "title": "In-Person Session - Math (Cancelled)",
+          "type": "OFFLINE",
+          "meetingStatus": "CANCELLED",
+          "createdAt": "2026-04-05T05:02:43.333Z",
+          "students": [
+            "696e2a2043579bbada1ff181"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69e5b432be918dab1054eb49",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "6997c3a32266df017e83e22b",
+            "name": "Student_data_sessions_16_classId",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-60.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-1.png",
+                "type": "image"
+              }
+            ],
+            "classType": "DEMO",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcb9cb",
+            "name": "Student_data_sessions_16_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-21T04:00:00.000Z",
+          "end_time": null,
+          "duration": 3600000,
+          "participant": 0,
+          "participants": [],
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69e5b432be918dab1054eb45"
+          },
+          "location": "Joy (TV)",
+          "scheduledStartTime": "2026-04-21T04:00:00.000Z",
+          "scheduledEndTime": "2026-04-21T05:00:00.000Z",
+          "title": "In-Person Session - Consult Bingo",
+          "type": "OFFLINE",
+          "meetingStatus": "UPCOMING",
+          "createdAt": "2026-04-20T05:05:54.080Z",
+          "students": [],
+          "studentCount": 0,
+          "recordings": []
+        },
+        {
+          "_id": "69b7d0ee82a7b1506997da4a",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "69b3b71c51da2003066e4447",
+            "name": "Student_data_sessions_17_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-39.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-6.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c128118f629edcbf9e",
+            "name": "Student_data_sessions_17_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-21T04:30:00.000Z",
+          "end_time": null,
+          "duration": 3600000,
+          "participant": 0,
+          "participants": [],
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69b7d0ee82a7b1506997da46"
+          },
+          "location": "Hakuna Matata",
+          "scheduledStartTime": "2026-04-21T04:30:00.000Z",
+          "scheduledEndTime": "2026-04-21T05:30:00.000Z",
+          "title": "In-Person Session - ESL",
+          "type": "OFFLINE",
+          "meetingStatus": "UPCOMING",
+          "createdAt": "2026-03-16T09:44:14.643Z",
+          "students": [
+            "69afc44413cc1073afb4ea1d"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69b64284aa5919020f7e0dff",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "69a111751b5eb549a4bf1b4c",
+            "name": "Student_data_sessions_18_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-48.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-1.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c128118f629edcbf9e",
+            "name": "Student_data_sessions_18_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-21T06:00:00.000Z",
+          "end_time": null,
+          "duration": 3600000,
+          "participant": 0,
+          "participants": [],
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69b64284aa5919020f7e0dfb"
+          },
+          "location": "Think Outside the Box",
+          "scheduledStartTime": "2026-04-21T06:00:00.000Z",
+          "scheduledEndTime": "2026-04-21T07:00:00.000Z",
+          "title": "In-Person Session - English",
+          "type": "OFFLINE",
+          "meetingStatus": "UPCOMING",
+          "createdAt": "2026-03-15T05:24:20.735Z",
+          "students": [
+            "699fe0f613cc1073afbbb98b"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69d36a12387944182cddc778",
+          "attendanceRecorded": false,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "69cba17eaf2b4794a2f3389b",
+            "name": "Student_data_sessions_19_classId",
+            "subject": "Y9-11 / G8-10 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-44.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-4.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "696e2c4343579bbada233e41",
+            "name": "Student_data_sessions_19_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-21T06:00:00.000Z",
+          "end_time": null,
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69d36a12387944182cddc772"
+          },
+          "scheduledStartTime": "2026-04-21T06:00:00.000Z",
+          "scheduledEndTime": "2026-04-21T07:30:00.000Z",
+          "title": "Live Session - Economic",
+          "type": "SCHEDULED",
+          "meetingStatus": "UPCOMING",
+          "participants": [],
+          "createdAt": "2026-04-06T08:08:50.178Z",
+          "students": [
+            "69c298ce59c459d1a1e4fe69"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69b642ae152fe7f6c8097c6c",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "69a111751b5eb549a4bf1b4c",
+            "name": "Student_data_sessions_20_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-48.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-1.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcbaf3",
+            "name": "Student_data_sessions_20_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-21T07:00:00.000Z",
+          "end_time": null,
+          "duration": 3600000,
+          "participant": 0,
+          "participants": [],
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69b642ad152fe7f6c8097c68"
+          },
+          "location": "Think Outside the Box",
+          "scheduledStartTime": "2026-04-21T07:00:00.000Z",
+          "scheduledEndTime": "2026-04-21T08:00:00.000Z",
+          "title": "In-Person Session - Science",
+          "type": "OFFLINE",
+          "meetingStatus": "UPCOMING",
+          "createdAt": "2026-03-15T05:25:02.005Z",
+          "students": [
+            "699fe0f613cc1073afbbb98b"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69d4de83b0134765065d75fc",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "69c5e589321f771eeb339ce9",
+            "name": "Student_data_sessions_21_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-34.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-6.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcba05",
+            "name": "Student_data_sessions_21_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-21T07:00:00.000Z",
+          "end_time": null,
+          "duration": 3600000,
+          "participant": 0,
+          "participants": [],
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69d4de83b0134765065d75f8"
+          },
+          "location": "OMG",
+          "scheduledStartTime": "2026-04-21T07:00:00.000Z",
+          "scheduledEndTime": "2026-04-21T08:00:00.000Z",
+          "title": "In-Person Session-Math",
+          "type": "OFFLINE",
+          "meetingStatus": "UPCOMING",
+          "createdAt": "2026-04-07T10:37:55.418Z",
+          "students": [
+            "69bbc21359c459d1a118e136"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69b54feb023f667fca999b65",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "69acf8ecc058e343ebc1f2db",
+            "name": "Student_data_sessions_22_classId",
+            "subject": "Y9-11 / G8-10 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-9.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-4.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c128118f629edcbf9e",
+            "name": "Student_data_sessions_22_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-21T07:30:00.000Z",
+          "end_time": null,
+          "duration": 5400000,
+          "participant": 0,
+          "participants": [],
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69b54feb023f667fca999b60"
+          },
+          "location": "Tesla",
+          "scheduledStartTime": "2026-04-21T07:30:00.000Z",
+          "scheduledEndTime": "2026-04-21T09:00:00.000Z",
+          "title": "In-Person Session - Writing (Cancelled)",
+          "type": "OFFLINE",
+          "meetingStatus": "CANCELLED",
+          "createdAt": "2026-03-14T12:09:15.847Z",
+          "students": [
+            "696e26ee43579bbada1c201d"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69d4dec631c780f8c9e28b0a",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "69c5e589321f771eeb339ce9",
+            "name": "Student_data_sessions_23_classId",
+            "subject": "Y2-8 / G1-7 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-34.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-6.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcbaf3",
+            "name": "Student_data_sessions_23_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-21T08:00:00.000Z",
+          "end_time": null,
+          "duration": 3600000,
+          "participant": 0,
+          "participants": [],
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69d4dec631c780f8c9e28b06"
+          },
+          "location": "Relax (TV)",
+          "scheduledStartTime": "2026-04-21T08:00:00.000Z",
+          "scheduledEndTime": "2026-04-21T09:00:00.000Z",
+          "title": "In-Person Session-Science LAB",
+          "type": "OFFLINE",
+          "meetingStatus": "UPCOMING",
+          "createdAt": "2026-04-07T10:39:02.076Z",
+          "students": [
+            "69bbc21359c459d1a118e136"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        },
+        {
+          "_id": "69e5dcd6cb6a39882be2e464",
+          "attendanceRecorded": true,
+          "mettingEnded": false,
+          "classId": {
+            "_id": "698e378139cd7ef0265b7938",
+            "name": "Student_data_sessions_24_classId",
+            "subject": "Y12-13 / G11-12 (Int.)",
+            "thumbnail": "https://cdn.wiseapp.live/images/classroom_thumbnails/generic-70.png",
+            "classCovers": [
+              {
+                "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-10.png",
+                "type": "image"
+              }
+            ],
+            "classType": "ONE_TO_ONE",
+            "hidden": false
+          },
+          "userId": {
+            "_id": "695369c028118f629edcb9cb",
+            "name": "Student_data_sessions_24_userId",
+            "profilePicture": ""
+          },
+          "start_time": "2026-04-21T08:00:00.000Z",
+          "end_time": null,
+          "duration": 3600000,
+          "participant": 0,
+          "participants": [],
+          "metadata": {
+            "ownerId": "{{WISENET_USER_ID}}",
+            "recurrenceId": "69e5dcd6cb6a39882be2e460"
+          },
+          "location": "Joy (TV)",
+          "scheduledStartTime": "2026-04-21T08:00:00.000Z",
+          "scheduledEndTime": "2026-04-21T09:00:00.000Z",
+          "title": "In-Person Session",
+          "type": "OFFLINE",
+          "meetingStatus": "UPCOMING",
+          "createdAt": "2026-04-20T07:59:18.269Z",
+          "students": [
+            "696e2a1c43579bbada1fd9ce"
+          ],
+          "studentCount": 1,
+          "recordings": []
+        }
+      ],
+      "page_number": 1,
+      "totalRecords": 2161,
+      "page_count": 87
+    }
+  }
+}

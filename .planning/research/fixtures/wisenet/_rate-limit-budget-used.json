@@ -1,0 +1,9 @@
+{
+  "_note": "Auth headers redacted. Student PII synthetic-replaced per RESEARCH.md Pitfall 2. IDs preserved for cross-fixture joins.",
+  "_redaction": "names=synthetic, contact=synthetic, dates=dob-only, ids=preserved",
+  "date_aest": "2026-04-21",
+  "endpoint": "students-list+students-detail+class-detail+sessions-past+sessions-upcoming+sessionCredits",
+  "requests_used": 236,
+  "remaining_at_start": 229,
+  "note": "Field-shape probe added 7 requests. Total today: 236."
+}

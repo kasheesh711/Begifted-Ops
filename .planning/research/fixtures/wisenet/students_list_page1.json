@@ -1,0 +1,1176 @@
+{
+  "_note": "Auth headers redacted. Student PII synthetic-replaced per RESEARCH.md Pitfall 2. IDs preserved for cross-fixture joins.",
+  "_redaction": "names=synthetic, contact=synthetic, dates=dob-only, ids=preserved",
+  "probed_at": "2026-04-21T04:00:10.299Z",
+  "probed_at_aest": "21/04/2026, 2:00:10 pm",
+  "endpoint": "GET /institutes/v3/{{WISENET_CENTER_ID}}/students?page_number=1&page_size=25",
+  "response_status": 200,
+  "response_headers": {
+    "access-control-allow-origin": "*",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-type": "application/json; charset=utf-8",
+    "date": "Tue, 21 Apr 2026 04:00:10 GMT",
+    "strict-transport-security": "max-age=15552000; includeSubDomains",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-content-type-options": "nosniff",
+    "x-dns-prefetch-control": "off",
+    "x-download-options": "noopen",
+    "x-frame-options": "SAMEORIGIN",
+    "x-xss-protection": "1; mode=block"
+  },
+  "_field_paths_candidates": {
+    "Student Name → data.students[*].name": "FOUND at data.students.[0].name",
+    "Student _id → data.students[*]._id": "FOUND at data.students.[0]._id",
+    "Student uuid → data.students[*].uuid": "FOUND at data.students.[0].uuid",
+    "Student email → data.students[*].email": "FOUND at data.students.[0].email",
+    "Parents → data.students[*].parents": "FOUND at data.students.[0].parents",
+    "Classrooms → data.students[*].classrooms": "FOUND at data.students.[0].classrooms",
+    "Total count → data.count": "FOUND at data.count",
+    "Credit balance (direct) → data.students[*].creditBalance": "NOT FOUND",
+    "Credit balance (direct) → data.students[*].balance": "NOT FOUND",
+    "JoinedOn → data.students[*].joinedOn": "FOUND at data.students.[0].joinedOn",
+    "Activated status → data.students[*].activated": "FOUND at data.students.[0].activated",
+    "Tags → data.students[*].tags": "FOUND at data.students.[0].tags"
+  },
+  "body": {
+    "status": 200,
+    "message": "Success",
+    "data": {
+      "students": [
+        {
+          "joinedOn": "2026-04-20T11:12:23.512Z",
+          "classrooms": [],
+          "_id": "69e60a1798ee51775fc60a31",
+          "name": "Student_data_students_0",
+          "profilePicture": "",
+          "email": "studentdata_students_0@example.test",
+          "uuid": "0abab44a-d27c-4d0d-89df-a5408c8c1415",
+          "activated": false,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-19T03:07:58.495Z",
+          "classrooms": [],
+          "_id": "69e4470e98ee51775f56207c",
+          "name": "Student_data_students_1",
+          "profilePicture": "",
+          "email": "studentdata_students_1@example.test",
+          "uuid": "f3ff3b9d-90d7-4509-aac1-3e99bfdc0398",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-13T02:08:17.986Z",
+          "classrooms": [],
+          "_id": "69dc501198ee51775fe22cd0",
+          "name": "Student_data_students_2",
+          "profilePicture": "",
+          "email": "studentdata_students_2@example.test",
+          "uuid": "0800e97b-d01d-4948-bbc3-5c9640ee329c",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-12T06:32:19.614Z",
+          "classrooms": [
+            {
+              "_id": "69db7debfa8079e94424f84c",
+              "name": "Student_data_students_3_classrooms_0",
+              "subject": "Y12-13 / G11-12 (Int.) Master",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-8.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 978484007,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-12T11:11:39.317Z",
+              "feeSummary": {
+                "totalPaidAllTime": {
+                  "value": 500000,
+                  "currency": "THB"
+                },
+                "totalPaid": {
+                  "value": 500000,
+                  "currency": "THB"
+                },
+                "totalDiscounted": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "earliestDueDate": "2036-04-21T00:00:00.000Z",
+                "currency": "THB",
+                "paymentOptionId": "",
+                "totalOverDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalRemaining": {
+                  "value": 0,
+                  "currency": "THB"
+                }
+              }
+            }
+          ],
+          "_id": "69db3c7398ee51775f1ee86f",
+          "name": "Student_data_students_3",
+          "profilePicture": "",
+          "email": "studentdata_students_3@example.test",
+          "phoneNumber": "0000000000",
+          "uuid": "5a3dedbe-e1eb-4021-ba3f-3e8db2552d35",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-11T09:23:54.329Z",
+          "classrooms": [],
+          "_id": "69da132a98ee51775f1b6bc9",
+          "name": "Student_data_students_4",
+          "profilePicture": "",
+          "email": "studentdata_students_4@example.test",
+          "uuid": "4168bb6d-0105-45c1-950c-3877e7438116",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-11T07:41:45.373Z",
+          "classrooms": [
+            {
+              "_id": "69d9fb397d6d0b8d81eeb82d",
+              "name": "Student_data_students_5_classrooms_0",
+              "subject": "Y2-8 / G1-7 (Int.)",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-3.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 337851722,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-11T07:41:45.679Z",
+              "feeSummary": {
+                "totalPaidAllTime": {
+                  "value": 60000,
+                  "currency": "THB"
+                },
+                "totalPaid": {
+                  "value": 60000,
+                  "currency": "THB"
+                },
+                "totalDiscounted": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "earliestDueDate": "2036-04-21T00:00:00.000Z",
+                "currency": "THB",
+                "paymentOptionId": "",
+                "totalOverDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalRemaining": {
+                  "value": 0,
+                  "currency": "THB"
+                }
+              }
+            },
+            {
+              "_id": "69db536f281529d305663907",
+              "name": "Student_data_students_5_classrooms_1",
+              "subject": "Math",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-4.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 589547746,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-12T08:11:40.496Z"
+            }
+          ],
+          "_id": "69d9fb3998ee51775f094f87",
+          "name": "Student_data_students_5",
+          "profilePicture": "",
+          "email": "studentdata_students_5@example.test",
+          "uuid": "71fbb080-89ac-4557-b309-0b99a06d7da5",
+          "activated": false,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-11T07:35:55.741Z",
+          "classrooms": [
+            {
+              "_id": "69da029816cde555bb5f672a",
+              "name": "Student_data_students_6_classrooms_0",
+              "subject": "Y2-8 / G1-7 (Int.)",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-3.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 492073260,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-11T08:13:12.603Z",
+              "feeSummary": {
+                "totalPaidAllTime": {
+                  "value": 60000,
+                  "currency": "THB"
+                },
+                "totalPaid": {
+                  "value": 60000,
+                  "currency": "THB"
+                },
+                "totalDiscounted": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "earliestDueDate": "2036-04-21T00:00:00.000Z",
+                "currency": "THB",
+                "paymentOptionId": "",
+                "totalOverDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalRemaining": {
+                  "value": 0,
+                  "currency": "THB"
+                }
+              }
+            },
+            {
+              "_id": "69db53085f6342084c31c28c",
+              "name": "Student_data_students_6_classrooms_1",
+              "subject": "Math",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-8.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 872031112,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-12T08:11:49.009Z"
+            }
+          ],
+          "_id": "69d9f9db98ee51775f082ca6",
+          "name": "Student_data_students_6",
+          "profilePicture": "",
+          "email": "studentdata_students_6@example.test",
+          "uuid": "1293b2cd-f902-4cf5-b8d2-46f63d4cbdbc",
+          "activated": false,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-09T10:48:37.803Z",
+          "classrooms": [
+            {
+              "_id": "69d79738a61b06bb411b8bbf",
+              "name": "Student_data_students_7_classrooms_0",
+              "subject": "Y9-11 / G8-10 (Int.)",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-4.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 525384830,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-09T12:10:32.556Z",
+              "feeSummary": {
+                "totalPaidAllTime": {
+                  "value": 70000,
+                  "currency": "THB"
+                },
+                "totalPaid": {
+                  "value": 70000,
+                  "currency": "THB"
+                },
+                "totalDiscounted": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "earliestDueDate": "2036-04-21T00:00:00.000Z",
+                "currency": "THB",
+                "paymentOptionId": "",
+                "totalOverDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalRemaining": {
+                  "value": 0,
+                  "currency": "THB"
+                }
+              }
+            }
+          ],
+          "_id": "69d7840598ee51775fc294fb",
+          "name": "Student_data_students_7",
+          "profilePicture": "",
+          "email": "studentdata_students_7@example.test",
+          "phoneNumber": "0000000000",
+          "uuid": "ae7c1974-31c4-4660-933c-9ba8014a4c18",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-09T09:41:02.511Z",
+          "classrooms": [],
+          "_id": "69d7742e98ee51775fb347e2",
+          "name": "Student_data_students_8",
+          "profilePicture": "",
+          "email": "studentdata_students_8@example.test",
+          "phoneNumber": "0000000000",
+          "uuid": "5448d61d-1d56-4bef-9a61-975d1cdb1030",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-09T09:38:29.764Z",
+          "classrooms": [],
+          "_id": "69d7739598ee51775fb2c118",
+          "name": "Student_data_students_9",
+          "profilePicture": "",
+          "email": "studentdata_students_9@example.test",
+          "phoneNumber": "0000000000",
+          "uuid": "56036cdf-6287-4bf6-a331-c894b933672d",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-08T03:40:26.583Z",
+          "classrooms": [],
+          "_id": "69d5ce2a98ee51775f19d552",
+          "name": "Student_data_students_10",
+          "profilePicture": "",
+          "email": "studentdata_students_10@example.test",
+          "phoneNumber": "0000000000",
+          "uuid": "1f294c7d-1db9-4084-b946-1ebccbdb0d86",
+          "activated": false,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-08T03:22:26.166Z",
+          "classrooms": [
+            {
+              "_id": "69d5eafd018e00f76382f82f",
+              "name": "Student_data_students_11_classrooms_0",
+              "subject": "English",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-17.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 964166754,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-08T05:46:57.501Z"
+            }
+          ],
+          "_id": "69d5c9f298ee51775f1752a3",
+          "name": "Student_data_students_11",
+          "profilePicture": "",
+          "email": "studentdata_students_11@example.test",
+          "uuid": "84ba13e8-b57a-4482-8153-d3e77886bf2c",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-07T06:02:34.692Z",
+          "classrooms": [
+            {
+              "_id": "69d771a2e1634cdfa6b36e20",
+              "name": "Student_data_students_12_classrooms_0",
+              "subject": "Math / Science",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-4.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 499741315,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-09T09:31:50.143Z"
+            }
+          ],
+          "_id": "69d49dfa98ee51775fe9feb3",
+          "name": "Student_data_students_12",
+          "profilePicture": "",
+          "email": "studentdata_students_12@example.test",
+          "phoneNumber": "0000000000",
+          "uuid": "d6c195ba-a087-42db-89ba-fd368feb2162",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-06T08:30:42.252Z",
+          "classrooms": [],
+          "_id": "69d36f3298ee51775fbcf5bb",
+          "name": "Student_data_students_13",
+          "profilePicture": "",
+          "email": "studentdata_students_13@example.test",
+          "uuid": "22dc05e1-cc40-4049-9da0-a7c4cff8e436",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-06T07:27:15.418Z",
+          "classrooms": [
+            {
+              "_id": "69d36053151618849f536ebb",
+              "name": "Student_data_students_14_classrooms_0",
+              "subject": "G1-9 (Th.)",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-9.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 116262071,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-06T07:27:15.733Z",
+              "feeSummary": {
+                "totalPaidAllTime": {
+                  "value": 3020000,
+                  "currency": "THB"
+                },
+                "totalPaid": {
+                  "value": 3020000,
+                  "currency": "THB"
+                },
+                "totalDiscounted": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "earliestDueDate": "2036-04-21T00:00:00.000Z",
+                "currency": "THB",
+                "paymentOptionId": "",
+                "totalOverDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalRemaining": {
+                  "value": 0,
+                  "currency": "THB"
+                }
+              }
+            }
+          ],
+          "_id": "69d3605398ee51775faf4690",
+          "name": "Student_data_students_14",
+          "profilePicture": "",
+          "email": "studentdata_students_14@example.test",
+          "uuid": "8290c41a-921b-4d4e-8998-c63f31081d03",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [
+            "Grade 9"
+          ],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-06T03:36:50.862Z",
+          "classrooms": [
+            {
+              "_id": "69d4845613d59a48132e8636",
+              "name": "Student_data_students_15_classrooms_0",
+              "subject": "Y2-8 / G1-7 (Int.)",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-3.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 433273917,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-07T04:13:10.553Z",
+              "feeSummary": {
+                "totalPaidAllTime": {
+                  "value": 2460000,
+                  "currency": "THB"
+                },
+                "totalPaid": {
+                  "value": 2460000,
+                  "currency": "THB"
+                },
+                "totalDiscounted": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "earliestDueDate": "2036-04-21T00:00:00.000Z",
+                "currency": "THB",
+                "paymentOptionId": "",
+                "totalOverDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalRemaining": {
+                  "value": 0,
+                  "currency": "THB"
+                }
+              }
+            },
+            {
+              "_id": "69d4ed330491b4f218d210cc",
+              "name": "Student_data_students_15_classrooms_1",
+              "subject": "Math",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-13.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 913010445,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-07T11:42:22.314Z"
+            }
+          ],
+          "_id": "69d32a5298ee51775f801d45",
+          "name": "Student_data_students_15",
+          "profilePicture": "",
+          "email": "studentdata_students_15@example.test",
+          "uuid": "0c1fd275-e4eb-4331-a9fb-624b60ed28ae",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-06T03:21:24.124Z",
+          "classrooms": [
+            {
+              "_id": "69d3409f387944182cd44f44",
+              "name": "Student_data_students_16_classrooms_0",
+              "subject": "Physics/Bio/Chem",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-9.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 338885695,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-06T05:35:57.658Z"
+            }
+          ],
+          "_id": "69d326b498ee51775f7df7d3",
+          "name": "Student_data_students_16",
+          "profilePicture": "",
+          "email": "studentdata_students_16@example.test",
+          "uuid": "b4d75402-1042-4021-a54a-9b602915af46",
+          "activated": false,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-05T07:47:39.905Z",
+          "classrooms": [
+            {
+              "_id": "69d35c9cc53c1c7b0938ae00",
+              "name": "Student_data_students_17_classrooms_0",
+              "subject": "Science",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-14.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 370500489,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-06T07:13:31.519Z"
+            },
+            {
+              "_id": "69d3986db76600a4c9f423e2",
+              "name": "Student_data_students_17_classrooms_1",
+              "subject": "Y2-8 / G1-7 (Int.)",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-3.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 168415321,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-06T11:26:37.575Z",
+              "feeSummary": {
+                "totalPaidAllTime": {
+                  "value": 60000,
+                  "currency": "THB"
+                },
+                "totalPaid": {
+                  "value": 60000,
+                  "currency": "THB"
+                },
+                "totalDiscounted": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "earliestDueDate": "2036-04-21T00:00:00.000Z",
+                "currency": "THB",
+                "paymentOptionId": "",
+                "totalOverDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalRemaining": {
+                  "value": 0,
+                  "currency": "THB"
+                }
+              }
+            }
+          ],
+          "_id": "69d2139b98ee51775fc8a30c",
+          "name": "Student_data_students_17",
+          "profilePicture": "",
+          "email": "studentdata_students_17@example.test",
+          "uuid": "1dae7bfa-34d2-480b-b86e-053503a39518",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-04T10:38:31.921Z",
+          "classrooms": [
+            {
+              "_id": "69d0ec9c987de9e325efed0f",
+              "name": "Student_data_students_18_classrooms_0",
+              "subject": "Chem / Phy",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-14.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 943190634,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-04T10:53:47.341Z"
+            },
+            {
+              "_id": "69d4db1a06338f38d9a9101d",
+              "name": "Student_data_students_18_classrooms_1",
+              "subject": "Y9-11 / G8-10 (Int.)",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-6.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 748324867,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-07T10:23:22.603Z",
+              "feeSummary": {
+                "totalPaidAllTime": {
+                  "value": 2870000,
+                  "currency": "THB"
+                },
+                "totalPaid": {
+                  "value": 2870000,
+                  "currency": "THB"
+                },
+                "totalDiscounted": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "earliestDueDate": "2036-04-21T00:00:00.000Z",
+                "currency": "THB",
+                "paymentOptionId": "",
+                "totalOverDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalRemaining": {
+                  "value": 0,
+                  "currency": "THB"
+                }
+              }
+            }
+          ],
+          "_id": "69d0ea2798ee51775fd14ea4",
+          "name": "Student_data_students_18",
+          "profilePicture": "",
+          "email": "studentdata_students_18@example.test",
+          "phoneNumber": "0000000000",
+          "uuid": "e136fd86-284d-46ca-b2bb-4ac535d6b258",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-04T08:58:58.122Z",
+          "classrooms": [],
+          "_id": "69d0d2d298ee51775fbcf717",
+          "name": "Student_data_students_19",
+          "profilePicture": "",
+          "email": "studentdata_students_19@example.test",
+          "uuid": "de239745-a2fb-4bb4-bfd6-99c7137a31ed",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-04T08:45:16.932Z",
+          "classrooms": [
+            {
+              "_id": "69d0cf9d7715d231e50a4765",
+              "name": "Student_data_students_20_classrooms_0",
+              "subject": "Y 2-8 / G1-7 (Int.)",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-6.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 846442233,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-04T08:45:17.394Z",
+              "feeSummary": {
+                "totalPaidAllTime": {
+                  "value": 60000,
+                  "currency": "THB"
+                },
+                "totalPaid": {
+                  "value": 60000,
+                  "currency": "THB"
+                },
+                "totalDiscounted": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "earliestDueDate": "2036-04-21T00:00:00.000Z",
+                "currency": "THB",
+                "paymentOptionId": "",
+                "totalOverDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalRemaining": {
+                  "value": 0,
+                  "currency": "THB"
+                }
+              }
+            },
+            {
+              "_id": "69e5e68bbe918dab105e5298",
+              "name": "Student_data_students_20_classrooms_1",
+              "subject": "Y9-11 / G8-10 (Int.)",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-9.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 378553142,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-20T08:40:43.505Z",
+              "feeSummary": {
+                "totalPaidAllTime": {
+                  "value": 2800000,
+                  "currency": "THB"
+                },
+                "totalPaid": {
+                  "value": 2800000,
+                  "currency": "THB"
+                },
+                "totalDiscounted": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "earliestDueDate": "2036-04-21T00:00:00.000Z",
+                "currency": "THB",
+                "paymentOptionId": "",
+                "totalOverDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalRemaining": {
+                  "value": 0,
+                  "currency": "THB"
+                }
+              }
+            }
+          ],
+          "_id": "69d0cf9c98ee51775fba7866",
+          "name": "Student_data_students_20",
+          "profilePicture": "",
+          "email": "studentdata_students_20@example.test",
+          "uuid": "76c549fd-12c3-4acd-a5ce-4a37f4d085c5",
+          "activated": false,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [
+            "Year8"
+          ],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-04T04:34:36.865Z",
+          "classrooms": [
+            {
+              "_id": "69d097ca5d1caf006056ebfa",
+              "name": "Student_data_students_21_classrooms_0",
+              "subject": "Math/Eng",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-19.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 184374035,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-04T04:52:41.199Z"
+            },
+            {
+              "_id": "69d1c0076d2befd0edf758eb",
+              "name": "Student_data_students_21_classrooms_1",
+              "subject": "11+/13+",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-12.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 580656299,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-05T01:51:04.004Z",
+              "feeSummary": {
+                "totalPaidAllTime": {
+                  "value": 2870000,
+                  "currency": "THB"
+                },
+                "totalPaid": {
+                  "value": 2870000,
+                  "currency": "THB"
+                },
+                "totalDiscounted": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "earliestDueDate": "2036-04-21T00:00:00.000Z",
+                "currency": "THB",
+                "paymentOptionId": "",
+                "totalOverDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalRemaining": {
+                  "value": 0,
+                  "currency": "THB"
+                }
+              }
+            }
+          ],
+          "_id": "69d094dc98ee51775f815540",
+          "name": "Student_data_students_21",
+          "profilePicture": "",
+          "email": "studentdata_students_21@example.test",
+          "phoneNumber": "0000000000",
+          "uuid": "ff8a7d4d-f041-48ce-9004-0a2c1d1556f0",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-04T04:31:05.359Z",
+          "classrooms": [
+            {
+              "_id": "69d099434784f707cc9d6a59",
+              "name": "Student_data_students_22_classrooms_0",
+              "subject": "Math/Eng",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-11.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 457690839,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-04T04:54:31.182Z"
+            },
+            {
+              "_id": "69d1bf872f193057dfd1e94c",
+              "name": "Student_data_students_22_classrooms_1",
+              "subject": "11+/13+",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-12.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 562149560,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-05T01:48:55.480Z",
+              "feeSummary": {
+                "totalPaidAllTime": {
+                  "value": 2870000,
+                  "currency": "THB"
+                },
+                "totalPaid": {
+                  "value": 2870000,
+                  "currency": "THB"
+                },
+                "totalDiscounted": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "earliestDueDate": "2036-04-21T00:00:00.000Z",
+                "currency": "THB",
+                "paymentOptionId": "",
+                "totalOverDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalRemaining": {
+                  "value": 0,
+                  "currency": "THB"
+                }
+              }
+            }
+          ],
+          "_id": "69d0940998ee51775f809240",
+          "name": "Student_data_students_22",
+          "profilePicture": "",
+          "email": "studentdata_students_22@example.test",
+          "phoneNumber": "0000000000",
+          "uuid": "9d7632e0-bbbd-4c5a-ad2a-9ae9f5efb54f",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-04T02:03:22.120Z",
+          "classrooms": [
+            {
+              "_id": "69d074d17db6c74e516add39",
+              "name": "Student_data_students_23_classrooms_0",
+              "subject": "Math",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-8.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 556568781,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-04T02:18:41.274Z"
+            }
+          ],
+          "_id": "69d0716a98ee51775f6be446",
+          "name": "Student_data_students_23",
+          "profilePicture": "",
+          "email": "studentdata_students_23@example.test",
+          "phoneNumber": "0000000000",
+          "uuid": "7e69b92e-2711-4e86-be1c-475aff7a2e8b",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        },
+        {
+          "joinedOn": "2026-04-02T13:06:45.973Z",
+          "classrooms": [
+            {
+              "_id": "69cf17f07479ddbc4cb9a6d7",
+              "name": "Student_data_students_24_classrooms_0",
+              "subject": "Science",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-11.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 894723770,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-04T11:05:16.692Z"
+            },
+            {
+              "_id": "69d34101ee3f2643ffc2724f",
+              "name": "Student_data_students_24_classrooms_1",
+              "subject": "Y2-8 / G1-7 (Int.)",
+              "classCovers": [
+                {
+                  "link": "https://cdn.wiseapp.live/images/classroom_covers/generic-3.png",
+                  "type": "image"
+                }
+              ],
+              "classNumber": 890650461,
+              "hidden": false,
+              "isSuspended": false,
+              "joinedOn": "2026-04-06T05:13:37.606Z",
+              "feeSummary": {
+                "totalPaidAllTime": {
+                  "value": 60000,
+                  "currency": "THB"
+                },
+                "totalPaid": {
+                  "value": 60000,
+                  "currency": "THB"
+                },
+                "totalDiscounted": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "earliestDueDate": "2036-04-21T00:00:00.000Z",
+                "currency": "THB",
+                "paymentOptionId": "",
+                "totalOverDue": {
+                  "value": 0,
+                  "currency": "THB"
+                },
+                "totalRemaining": {
+                  "value": 0,
+                  "currency": "THB"
+                }
+              }
+            }
+          ],
+          "_id": "69ce69e559c459d1a1d0afd3",
+          "name": "Student_data_students_24",
+          "profilePicture": "",
+          "email": "studentdata_students_24@example.test",
+          "uuid": "26e769ef-f3c5-45f9-8621-281479ce71bb",
+          "activated": true,
+          "loginPin": "<REDACTED>",
+          "linkedDeviceCount": 0,
+          "tags": [],
+          "parents": []
+        }
+      ],
+      "count": 945
+    }
+  }
+}
