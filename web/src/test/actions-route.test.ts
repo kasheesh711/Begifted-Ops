@@ -1,11 +1,17 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+// Module-scope mock handles for the new actions.ts facade (SVC-03/04 swap).
+// The Sheets-era mocks (setStudentActionInSheets, clearStudentActionInSheets,
+// invalidateDashboardPayloadCache) are gone — route handlers now call
+// setStudentAction / clearStudentAction / bulkSetAction from the facade,
+// which owns the revalidateTag call internally (D-28). Tests therefore mock
+// only the facade methods; cache invalidation is verified at the facade
+// unit-test level, not here.
 const requireSessionUser = vi.fn();
 const getDashboardPayload = vi.fn();
-const setStudentActionInSheets = vi.fn();
-const clearStudentActionInSheets = vi.fn();
-const revalidateTag = vi.fn();
-const recordCacheInvalidation = vi.fn();
+const setStudentAction = vi.fn();
+const clearStudentAction = vi.fn();
+const bulkSetAction = vi.fn();
 
 vi.mock("@/lib/auth/session", () => ({
   requireSessionUser,
@@ -15,18 +21,18 @@ vi.mock("@/lib/dashboard/service", () => ({
   getDashboardPayload,
 }));
 
-vi.mock("@/lib/sheets/actions", () => ({
-  setStudentActionInSheets,
-  clearStudentActionInSheets,
-}));
-
-vi.mock("next/cache", () => ({
-  revalidateTag,
-}));
-
-vi.mock("@/lib/dashboard/health-state", () => ({
-  recordCacheInvalidation,
-}));
+// Spread vi.importActual so the real normalizeStudentActionStatus stays
+// available to the route handlers (which import it from the same module).
+// The 5 mutation methods get replaced by the mocks above.
+vi.mock("@/lib/dashboard/actions", async () => {
+  const actual = (await vi.importActual("@/lib/dashboard/actions")) as Record<string, unknown>;
+  return {
+    ...actual,
+    setStudentAction,
+    clearStudentAction,
+    bulkSetAction,
+  };
+});
 
 describe("action routes", () => {
   beforeEach(() => {
@@ -61,16 +67,8 @@ describe("action routes", () => {
     expect(response.status).toBe(400);
   });
 
-  it("writes a student action and invalidates the cache", async () => {
-    setStudentActionInSheets.mockResolvedValue({
-      studentKey: "jade lim::ivy lim",
-      actionState: {
-        status: "contacted",
-        updatedAt: "2026-03-31T10:00:00+07:00",
-        updatedByName: "Palm",
-        isToday: true,
-      },
-    });
+  it("writes a student action via the facade and returns ok", async () => {
+    setStudentAction.mockResolvedValue(undefined);
 
     const { POST } = await import("@/app/api/actions/route");
     const response = await POST(
@@ -83,28 +81,49 @@ describe("action routes", () => {
     const body = await response.json();
 
     expect(response.status).toBe(200);
-    expect(setStudentActionInSheets).toHaveBeenCalledWith(
+    expect(setStudentAction).toHaveBeenCalledWith(
       expect.objectContaining({
         studentKey: "jade lim::ivy lim",
         studentName: "Jade Lim",
         parentName: "Ivy Lim",
+        status: "contacted",
+        updatedByEmail: "palm@example.com",
+        updatedByName: "Palm",
       }),
     );
-    expect(revalidateTag).toHaveBeenCalledWith("dashboard-payload", "max");
-    expect(recordCacheInvalidation).toHaveBeenCalledTimes(1);
-    expect(body.actionState.status).toBe("contacted");
+    expect(clearStudentAction).not.toHaveBeenCalled();
+    expect(body).toEqual({ ok: true });
   });
 
-  it("deduplicates bulk student keys before writing", async () => {
-    setStudentActionInSheets.mockResolvedValue({
-      studentKey: "jade lim::ivy lim",
-      actionState: {
-        status: "resolved",
-        updatedAt: "2026-03-31T10:00:00+07:00",
-        updatedByName: "Palm",
-        isToday: true,
-      },
-    });
+  it("clears a student action via the facade when status is null", async () => {
+    clearStudentAction.mockResolvedValue(undefined);
+
+    const { POST } = await import("@/app/api/actions/route");
+    const response = await POST(
+      new Request("http://localhost/api/actions", {
+        method: "POST",
+        body: JSON.stringify({ studentKey: "jade lim::ivy lim", status: null }),
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(clearStudentAction).toHaveBeenCalledWith(
+      expect.objectContaining({
+        studentKey: "jade lim::ivy lim",
+        studentName: "Jade Lim",
+        parentName: "Ivy Lim",
+        actorEmail: "palm@example.com",
+        actorName: "Palm",
+      }),
+    );
+    expect(setStudentAction).not.toHaveBeenCalled();
+    expect(body).toEqual({ ok: true });
+  });
+
+  it("deduplicates bulk student keys before invoking the facade", async () => {
+    bulkSetAction.mockResolvedValue(undefined);
 
     const { POST } = await import("@/app/api/actions/bulk/route");
     const response = await POST(
@@ -120,7 +139,19 @@ describe("action routes", () => {
     const body = await response.json();
 
     expect(response.status).toBe(200);
-    expect(setStudentActionInSheets).toHaveBeenCalledTimes(2);
-    expect(body.updated).toHaveLength(2);
+    // Single facade call (single transaction) — not per-student loop like the Sheets-era version.
+    expect(bulkSetAction).toHaveBeenCalledTimes(1);
+    const call = bulkSetAction.mock.calls[0]?.[0] as {
+      updates: Array<{ studentKey: string }>;
+      actorEmail: string;
+      actorName: string;
+    };
+    expect(call.updates.map((u) => u.studentKey)).toEqual([
+      "jade lim::ivy lim",
+      "gina ho::mira ho",
+    ]);
+    expect(call.actorEmail).toBe("palm@example.com");
+    expect(call.actorName).toBe("Palm");
+    expect(body.updated).toEqual(["jade lim::ivy lim", "gina ho::mira ho"]);
   });
 });

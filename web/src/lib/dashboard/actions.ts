@@ -43,16 +43,21 @@ import { DASHBOARD_CACHE_TAG } from "@/lib/dashboard/config";
 import { recordCacheInvalidation } from "@/lib/dashboard/health-state";
 import type { StudentActionStatus } from "@/types/dashboard";
 
-// Re-export sync helpers from the co-located action-helpers module so
-// existing callers keep their import path stable. See action-helpers.ts
-// header for the full rationale.
-export {
-  normalizeStudentActionStatus,
-  sanitizeStudentActionState,
-  attachActionStatesToStudents,
-  isActionStateToday,
-} from "@/lib/dashboard/action-helpers";
-
+// NOTE — sync helpers (normalizeStudentActionStatus, sanitizeStudentActionState,
+// attachActionStatesToStudents, isActionStateToday) live in
+// @/lib/dashboard/action-helpers and MUST be imported from there, not
+// re-exported here. A `export { ... } from "@/lib/dashboard/action-helpers"`
+// statement was attempted in Plan 03-04 to keep a stable public API, but
+// Next.js 16's SWC compiler strips non-async re-exports from 'use server'
+// files. With nothing else importing actions.ts at the time, that strip
+// looked harmless. As soon as Plan 03-05 wired route handlers to import the
+// 5 async mutations from this file, SWC began emitting "The module has no
+// exports at all" — apparently the stripped re-export invalidates analysis
+// of the whole file. Removing the re-export entirely resolved the build:
+// the 5 async mutations defined below are the ONLY exports of this module.
+// All callers of the sync helpers were already migrated to action-helpers
+// by Plan 03-04 (see that summary's "Rule 3 cascade — 9 caller updates").
+//
 // ---------- Mutation facade (5 sites per D-28) ----------
 
 /**
