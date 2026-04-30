@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 
+import { ARCHIVE_ACTION_SHEET_URL } from "@/lib/dashboard/config";
 import { formatShortTimestamp } from "@/lib/dashboard/helpers";
 import type { PackageRecord, StudentActionStatus, StudentRecord, StudentQueueRow } from "@/types/dashboard";
 import type { LinePreview } from "@/lib/dashboard/ui-helpers";
@@ -85,6 +86,17 @@ export const StudentDetail = React.memo(function StudentDetail({
             <div className="muted" style={{ fontSize: "0.75rem" }}>
               {student.parent || "No parent"} · {student.adminOwnerName || "Unassigned"}
             </div>
+            {/* TODO: remove in Phase 5 RETI-01 when Apps Script retires (D-30). */}
+            <a
+              href={ARCHIVE_ACTION_SHEET_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open pre-cutover follow-up history in new tab"
+              className="muted"
+              style={{ fontSize: "0.72rem", textDecoration: "underline", marginTop: 2, display: "inline-block" }}
+            >
+              View pre-cutover history &rarr;
+            </a>
           </div>
           <div className="mini-pills" style={{ gap: 4, flexShrink: 0 }}>
             <span className={`status-pill tone-${worstStatus(student.packages)}`} style={{ padding: "2px 8px", fontSize: "0.72rem" }}>
