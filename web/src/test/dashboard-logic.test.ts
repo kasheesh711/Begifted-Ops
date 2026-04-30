@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { buildDashboardModel } from "@/lib/dashboard/analytics";
-import { attachActionStatesToStudents, sanitizeStudentActionState } from "@/lib/dashboard/actions";
+import { attachActionStatesToStudents, sanitizeStudentActionState } from "@/lib/dashboard/action-helpers";
 import type { SheetSnapshot } from "@/lib/dashboard/domain";
 import {
   buildActiveStudentSet,

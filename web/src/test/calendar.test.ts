@@ -35,7 +35,7 @@ import {
   buildUpcomingSessionMap,
 } from "@/lib/dashboard/packages";
 import { buildDashboardModel, buildSummaryDeltas } from "@/lib/dashboard/analytics";
-import { attachActionStatesToStudents } from "@/lib/dashboard/actions";
+import { attachActionStatesToStudents } from "@/lib/dashboard/action-helpers";
 
 // ============================================================
 // Fixture helpers (mirror Validation.gs buildFixture* pattern)

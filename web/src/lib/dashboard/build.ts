@@ -1,4 +1,4 @@
-import { attachActionStatesToStudents } from "@/lib/dashboard/actions";
+import { attachActionStatesToStudents } from "@/lib/dashboard/action-helpers";
 import { buildDashboardModel } from "@/lib/dashboard/analytics";
 import { recordPayloadBuild, recordSheetsCheck } from "@/lib/dashboard/health-state";
 import {

@@ -47,7 +47,7 @@ import { describe, expect, it } from "vitest";
 
 import type { SheetSnapshot } from "@/lib/dashboard/domain";
 import { buildPendingDeductionContext } from "@/lib/dashboard/packages";
-import { sanitizeStudentActionState } from "@/lib/dashboard/actions";
+import { sanitizeStudentActionState } from "@/lib/dashboard/action-helpers";
 import { buildStudentPackageKey } from "@/lib/dashboard/helpers";
 
 function snapshot(

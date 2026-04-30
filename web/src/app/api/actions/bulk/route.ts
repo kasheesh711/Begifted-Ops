@@ -1,5 +1,5 @@
 import { requireSessionUser } from "@/lib/auth/session";
-import { normalizeStudentActionStatus } from "@/lib/dashboard/actions";
+import { normalizeStudentActionStatus } from "@/lib/dashboard/action-helpers";
 import { DASHBOARD_CACHE_TAG } from "@/lib/dashboard/config";
 import { recordCacheInvalidation } from "@/lib/dashboard/health-state";
 import { getDashboardPayload } from "@/lib/dashboard/service";

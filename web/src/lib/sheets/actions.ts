@@ -7,7 +7,7 @@ import {
   DASHBOARD_ACTION_STATE_SHEET,
   SHEETS_IN_MEMORY_TTL_MS,
 } from "@/lib/dashboard/config";
-import { sanitizeStudentActionState } from "@/lib/dashboard/actions";
+import { sanitizeStudentActionState } from "@/lib/dashboard/action-helpers";
 import { formatDateTime } from "@/lib/dashboard/helpers";
 import type { ActionState, ActionLogRow, ActionStateRow, StudentActionStatus } from "@/types/dashboard";
 import { clearMemoryCache, getOrSetMemoryCache } from "@/lib/cache/memory-cache";
