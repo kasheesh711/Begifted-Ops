@@ -2,9 +2,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const requireSessionUser = vi.fn();
 const getDashboardPayload = vi.fn();
-const invalidateDashboardPayloadCache = vi.fn();
 const setStudentActionInSheets = vi.fn();
 const clearStudentActionInSheets = vi.fn();
+const revalidateTag = vi.fn();
+const recordCacheInvalidation = vi.fn();
 
 vi.mock("@/lib/auth/session", () => ({
   requireSessionUser,
@@ -12,12 +13,19 @@ vi.mock("@/lib/auth/session", () => ({
 
 vi.mock("@/lib/dashboard/service", () => ({
   getDashboardPayload,
-  invalidateDashboardPayloadCache,
 }));
 
 vi.mock("@/lib/sheets/actions", () => ({
   setStudentActionInSheets,
   clearStudentActionInSheets,
+}));
+
+vi.mock("next/cache", () => ({
+  revalidateTag,
+}));
+
+vi.mock("@/lib/dashboard/health-state", () => ({
+  recordCacheInvalidation,
 }));
 
 describe("action routes", () => {
@@ -82,7 +90,8 @@ describe("action routes", () => {
         parentName: "Ivy Lim",
       }),
     );
-    expect(invalidateDashboardPayloadCache).toHaveBeenCalledTimes(1);
+    expect(revalidateTag).toHaveBeenCalledWith("dashboard-payload", "max");
+    expect(recordCacheInvalidation).toHaveBeenCalledTimes(1);
     expect(body.actionState.status).toBe("contacted");
   });
 

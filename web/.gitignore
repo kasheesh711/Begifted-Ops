@@ -5,3 +5,6 @@
 .env.local
 node_modules/
 .next/
+
+# TypeScript incremental build cache (incremental: true in tsconfig.json)
+*.tsbuildinfo

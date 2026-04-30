@@ -1,31 +1,33 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# TEST-03 deferral carve-out per D-23 / 02-RESEARCH.md §TEST-03 placement.
+# Phase 3 SVC-02 / 03-RESEARCH.md §Pitfall 5 — flipped semantics.
 #
-# Phase 2 does NOT test cache-invalidation at runtime (the `use cache: remote`
-# infrastructure doesn't exist yet — it lands in Phase 3 SVC-02). This static
-# lint closes the gap by preventing new code paths from introducing the
-# revalidateTag(..., "max") anti-pattern flagged in CONCERNS.md (MEDIUM).
+# In Phase 2 this script forbade the revalidateTag(tag, "max") two-arg form
+# (treated as anti-pattern) and allowlisted lib/dashboard/service.ts as the
+# one tolerated occurrence pending the Phase 3 cutover.
 #
-# Allowlist: the known existing occurrence in lib/dashboard/service.ts is
-# tolerated through Phase 2. Phase 3 SVC-02 removes both the occurrence and
-# this allowlist entry in the same PR. All OTHER occurrences FAIL the lint.
+# Phase 3 inverts the intent: revalidateTag(tag, "max") is the CORRECT Next.js
+# 16 invocation from Route Handlers (Server-Actions-only updateTag() must NOT
+# be used in route handlers per Next.js docs). The deprecated single-arg form
+# revalidateTag(tag) silently inherits a default profile and is what we now
+# guard against.
+#
+# Allowlist is empty: there are no legitimate uses of the single-arg deprecated
+# form in this codebase after the Phase 3 cutover. Any new occurrence fails.
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SRC_DIR="$REPO_ROOT/src"
 
-# Files where existing occurrences are tolerated until Phase 3 rewrites them.
-# Paths are relative to web/ (the repo_root this script computes).
-ALLOWLIST=(
-  "src/lib/dashboard/service.ts"
-)
+# Allowlist: empty — no legitimate uses of the single-arg deprecated form remain.
+ALLOWLIST=()
 
-# Pattern matches: revalidateTag(<anything>, "max")  OR  revalidateTag(<anything>, 'max')
-# The whitespace around the comma is optional.
-PATTERN='revalidateTag\([^)]*,[[:space:]]*["'"'"']max["'"'"']\)'
+# Pattern matches: revalidateTag(<single-arg>) — the Next.js 16 deprecated form.
+# Two-arg form revalidateTag(tag, "max") is the recommended Next.js 16 invocation
+# and is NOT matched by this regex (the [^,)]+ excludes commas).
+PATTERN='revalidateTag\([^,)]+\)'
 
-echo "Scanning $SRC_DIR for revalidateTag(..., 'max') anti-pattern..."
+echo "Scanning $SRC_DIR for deprecated single-arg revalidateTag() form..."
 
 cd "$REPO_ROOT"
 MATCHES=$(grep -rEn "$PATTERN" src/ 2>/dev/null || true)
@@ -36,12 +38,15 @@ if [ -z "$MATCHES" ]; then
 fi
 
 # Partition matches into allowlisted vs non-allowlisted.
+# Note: bash's `set -u` errors on `${ALLOWLIST[@]}` when the array is empty,
+# so we guard the expansion via `${ALLOWLIST[@]+"${ALLOWLIST[@]}"}` which
+# expands to nothing when ALLOWLIST is empty (POSIX-style "alternate value").
 NON_ALLOWLISTED=""
 while IFS= read -r line; do
   [ -z "$line" ] && continue
   FILE_PATH=$(echo "$line" | cut -d: -f1)
   ALLOWED=0
-  for a in "${ALLOWLIST[@]}"; do
+  for a in ${ALLOWLIST[@]+"${ALLOWLIST[@]}"}; do
     if [ "$FILE_PATH" = "$a" ]; then
       ALLOWED=1
       break
@@ -55,7 +60,7 @@ done <<< "$MATCHES"
 if [ -z "$NON_ALLOWLISTED" ]; then
   echo "lint-no-revalidate-max: OK (all matches are allowlisted)"
   echo ""
-  echo "Allowlisted occurrences (Phase 3 SVC-02 must remove these):"
+  echo "Allowlisted occurrences:"
   echo "$MATCHES"
   exit 0
 fi
@@ -63,15 +68,14 @@ fi
 echo ""
 echo "lint-no-revalidate-max: FAIL"
 echo ""
-echo "The revalidateTag(..., 'max') anti-pattern was found in non-allowlisted files:"
+echo "The deprecated single-arg revalidateTag() form was found:"
 echo ""
 echo "$NON_ALLOWLISTED"
 echo ""
-echo "CONCERNS.md flags this as a MEDIUM-severity bug. Fix by dropping the 2nd arg:"
-echo "  revalidateTag(DASHBOARD_CACHE_TAG)              # correct"
-echo "  revalidateTag(DASHBOARD_CACHE_TAG, \"max\")       # WRONG — bogus 2nd arg"
+echo "Next.js 16 deprecates revalidateTag(tag) without a profile."
+echo "Use the two-arg form instead:"
+echo "  revalidateTag(DASHBOARD_CACHE_TAG, \"max\")   # correct (Next.js 16)"
+echo "  revalidateTag(DASHBOARD_CACHE_TAG)           # WRONG — deprecated single-arg form"
 echo ""
-echo "Phase 3 SVC-02 will remove the one allowlisted occurrence in service.ts."
-echo "New code paths MUST NOT reintroduce this pattern."
-echo "See .planning/phases/02-data-layer/02-09-SUMMARY.md for the deferral rationale."
+echo "See .planning/phases/03-service-cutover/03-RESEARCH.md §Pitfall 5."
 exit 1

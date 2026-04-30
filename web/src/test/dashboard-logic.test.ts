@@ -138,7 +138,7 @@ describe("dashboard logic port", () => {
       {
         student: "Jade Lim",
         parent: "Ivy Lim",
-        adminOwnerKey: "palm",
+        adminOwnerKey: "palm" as const,
         adminOwnerName: "Palm",
         adminOwnershipSource: "resolved",
         dataQualityFlags: [],

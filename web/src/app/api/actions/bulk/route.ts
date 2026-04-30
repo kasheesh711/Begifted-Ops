@@ -1,7 +1,10 @@
 import { requireSessionUser } from "@/lib/auth/session";
 import { normalizeStudentActionStatus } from "@/lib/dashboard/actions";
-import { getDashboardPayload, invalidateDashboardPayloadCache } from "@/lib/dashboard/service";
+import { DASHBOARD_CACHE_TAG } from "@/lib/dashboard/config";
+import { recordCacheInvalidation } from "@/lib/dashboard/health-state";
+import { getDashboardPayload } from "@/lib/dashboard/service";
 import { clearStudentActionInSheets, setStudentActionInSheets } from "@/lib/sheets/actions";
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -44,7 +47,8 @@ export async function POST(request: Request) {
       updated.push(result);
     }
 
-    invalidateDashboardPayloadCache();
+    revalidateTag(DASHBOARD_CACHE_TAG, "max");
+    recordCacheInvalidation(new Date().toISOString());
     return NextResponse.json({ updated });
   } catch (error) {
     if (error instanceof Error && error.message === "Unauthorized") {

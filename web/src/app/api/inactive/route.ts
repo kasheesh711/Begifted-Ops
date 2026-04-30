@@ -1,6 +1,9 @@
 import { requireSessionUser } from "@/lib/auth/session";
-import { getDashboardPayload, invalidateDashboardPayloadCache } from "@/lib/dashboard/service";
+import { DASHBOARD_CACHE_TAG } from "@/lib/dashboard/config";
+import { recordCacheInvalidation } from "@/lib/dashboard/health-state";
+import { getDashboardPayload } from "@/lib/dashboard/service";
 import { markStudentInactive, clearStudentInactive } from "@/lib/sheets/inactive-students";
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 /** Mark a student as inactive (no longer taking classes). */
@@ -27,7 +30,8 @@ export async function POST(request: Request) {
       actor: sessionUser,
     });
 
-    invalidateDashboardPayloadCache();
+    revalidateTag(DASHBOARD_CACHE_TAG, "max");
+    recordCacheInvalidation(new Date().toISOString());
     return NextResponse.json({ studentKey, inactive: true });
   } catch (error) {
     if (error instanceof Error && error.message === "Unauthorized") {
@@ -53,7 +57,8 @@ export async function DELETE(request: Request) {
 
     await clearStudentInactive(studentKey);
 
-    invalidateDashboardPayloadCache();
+    revalidateTag(DASHBOARD_CACHE_TAG, "max");
+    recordCacheInvalidation(new Date().toISOString());
     return NextResponse.json({ studentKey, inactive: false });
   } catch (error) {
     if (error instanceof Error && error.message === "Unauthorized") {

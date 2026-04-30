@@ -33,9 +33,8 @@ function emptyData(): WisenetMapperData {
 }
 
 function mkStudent(overrides: Partial<WisenetStudent> & { _id: string; name: string }): WisenetStudent {
+  // Defaults computed from overrides._id/.name; spread last so explicit overrides win.
   return {
-    _id: overrides._id,
-    name: overrides.name,
     uuid: overrides.uuid ?? `${overrides._id}-uuid`,
     activated: overrides.activated ?? true,
     tags: overrides.tags ?? [],
