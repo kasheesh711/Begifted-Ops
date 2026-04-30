@@ -89,7 +89,7 @@ Five-phase migration from the Google Sheets + Apps Script hybrid stack to a sing
 - [x] 03-02-PLAN.md — Wave 1: Student Detail archive-link affordance + ARCHIVE_ACTION_SHEET_URL constant (SVC-08, D-30, D-36) (complete 2026-04-30; commit 1fbd42a; 2 files — config + student-detail; TODO placeholder URL queued for Plan 03-10 Pre-Merge Gate; build green, 164/164 tests)
 - [x] 03-03-PLAN.md — Wave 2: Rewrite service.ts to compose Wisenet + Postgres with use-cache-remote + cacheTag + cacheLife; create logger.ts; flip lint (SVC-02, D-37) (complete 2026-04-30; commit 0ef5f73; 13 files — service.ts rewrite + logger.ts + lint flip + 3 route-handler revalidateTag(_, "max") cascade + actions-route test mocks + 4 D-35 baseline tsc fixes + db/client.ts lazy Proxy + p-limit serverExternalPackages + .gitignore tsbuildinfo; build green, 164/164 tests, lint green with empty allowlist, tsc clean)
 - [x] 03-04-PLAN.md — Wave 3: 'use server' actions.ts facade with 5 mutation methods + revalidateTag(tag, \max\) (SVC-03, Critical Finding #1) (complete 2026-04-30; commit ff33a11; 11 files — actions.ts use-server rewrite + new action-helpers.ts split + 9 caller import updates [Rule 3 cascade — Next.js 16 SWC enforces async-only exports for 'use server' files at BUILD time]; build green, 164/164 tests, lint green with empty allowlist, tsc clean)
-- [ ] 03-05-PLAN.md — Wave 3: Swap 5 route handlers to new service methods + update actions-route.test.ts mock surface (SVC-04)
+- [x] 03-05-PLAN.md — Wave 3: Swap 5 route handlers to new service methods + update actions-route.test.ts mock surface (SVC-04) (complete 2026-04-30; commit 73698c5; 7 files — 5 route handlers + 1 test + 1 actions.ts re-export removal [Rule 3 architectural cascade]; build green, 170/170 tests, lint green with empty allowlist, tsc clean)
 - [x] 03-06-PLAN.md — Wave 3: Structured /api/health per-subsystem probe + new health-route.test.ts (SVC-07, D-32) (complete 2026-04-30; commit 18a7728; 2 files — health/route.ts rewrite + health-route.test.ts new; 5 vitest cases over D-32 rollup matrix; build green, 169/169 tests, lint green, tsc clean)
 - [ ] 03-07-PLAN.md — Wave 4: cache-invalidation.test.ts (TEST-03, gated) + chunked-transfer-regression.test.ts (TEST-06 reframed per D-34)
 - [ ] 03-08-PLAN.md — Wave 5: Delete lib/sheets, memory-cache, snapshot-store, build.ts, compare-live, ensure-* (SVC-05)
@@ -126,7 +126,7 @@ Five-phase migration from the Google Sheets + Apps Script hybrid stack to a sing
 |-------|----------------|--------|-----------|
 | 1. Wisenet Discovery | 5/5 | Complete | 2026-04-21 |
 | 2. Data Layer | 10/10 | Complete | 2026-04-21 |
-| 3. Service Cutover | 6/11 | Executing (Plans 03-00, 03-01, 03-02, 03-03, 03-04, 03-06 complete 2026-04-30) | - |
+| 3. Service Cutover | 7/11 | Executing (Plans 03-00, 03-01, 03-02, 03-03, 03-04, 03-05, 03-06 complete 2026-04-30) | - |
 | 4. Deploy Hardening | 0/? | Not started | - |
 | 5. Apps Script Retirement | 0/? | Not started | - |
 
@@ -134,4 +134,4 @@ Plan counts will be populated when `/gsd-plan-phase` decomposes each phase.
 
 ---
 *Roadmap created: 2026-04-20*
-*Last updated: 2026-04-30 — Plan 03-06 (SVC-07 /api/health structured probe per D-32) complete; 6/11 Phase 3 plans complete*
+*Last updated: 2026-04-30 — Plan 03-05 (SVC-04 route handler cutover for 5 routes via service.ts + actions.ts facade) complete; 7/11 Phase 3 plans complete*

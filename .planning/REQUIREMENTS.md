@@ -40,7 +40,7 @@
 - [x] **SVC-01**: `cacheComponents: true` enabled in `next.config.ts` (Plan 03-01, commit cdc2ebe, 2026-04-29)
 - [x] **SVC-02**: `lib/dashboard/service.ts::getDashboardPayload` rewritten to compose Wisenet read + Postgres read; cached via `'use cache: remote'` + `cacheTag('dashboard-payload')` + `cacheLife({ stale: 60, revalidate: 60, expire: 300 })` (Plan 03-03, commit 0ef5f73, 2026-04-30)
 - [x] **SVC-03**: Every mutating facade method (`setStudentAction`, `clearStudentAction`, `bulkSetAction`, `markInactiveStudent`, `clearInactiveStudent`) writes to Postgres FIRST then calls `revalidateTag(DASHBOARD_CACHE_TAG, "max")` SECOND per D-28 (Plan 03-04, commit ff33a11, 2026-04-30) — note: revalidateTag two-arg form replaces the originally-specified updateTag because route handlers in 03-05 will call these methods, and updateTag does not work from route handlers per RESEARCH §Critical Finding #1
-- [ ] **SVC-04**: Route handlers `/api/dashboard`, `/api/actions`, `/api/actions/bulk`, `/api/actions/history`, `/api/inactive`, `/api/health` updated to new service methods; public JSON response shapes unchanged for existing clients
+- [x] **SVC-04**: Route handlers `/api/dashboard`, `/api/actions`, `/api/actions/bulk`, `/api/actions/history`, `/api/inactive` updated to new service methods (Plan 03-05, commit 73698c5, 2026-04-30); `/api/health` already covered by Plan 03-06 SVC-07; public JSON response shapes preserved for existing clients (one consumer-aligning rename: `/api/actions/history` returns `{ history }` to match what student-detail.tsx already expects)
 - [ ] **SVC-05**: `lib/sheets/`, `lib/cache/memory-cache.ts`, `lib/dashboard/snapshot-store.ts`, `lib/dashboard/actions.ts` deleted after cutover verified
 - [ ] **SVC-06**: `googleapis` dependency removed from `web/package.json`
 - [x] **SVC-07**: `/api/health` probes both Wisenet (HEAD or cheap read) and Postgres (`SELECT 1`) and returns structured status (Plan 03-06, commit 18a7728, 2026-04-30)
@@ -140,7 +140,7 @@ Which phases cover which requirements. Populated during roadmap creation.
 | SVC-01 | Phase 3 | Complete (Plan 03-01, 2026-04-29) |
 | SVC-02 | Phase 3 | Complete (Plan 03-03, 2026-04-30) |
 | SVC-03 | Phase 3 | Complete (Plan 03-04, 2026-04-30) |
-| SVC-04 | Phase 3 | Pending |
+| SVC-04 | Phase 3 | Complete (Plan 03-05, 2026-04-30) |
 | SVC-05 | Phase 3 | Pending |
 | SVC-06 | Phase 3 | Pending |
 | SVC-07 | Phase 3 | Complete (Plan 03-06, 2026-04-30) |
