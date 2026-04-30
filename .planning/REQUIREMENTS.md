@@ -44,7 +44,7 @@
 - [ ] **SVC-05**: `lib/sheets/`, `lib/cache/memory-cache.ts`, `lib/dashboard/snapshot-store.ts`, `lib/dashboard/actions.ts` deleted after cutover verified
 - [ ] **SVC-06**: `googleapis` dependency removed from `web/package.json`
 - [ ] **SVC-07**: `/api/health` probes both Wisenet (HEAD or cheap read) and Postgres (`SELECT 1`) and returns structured status
-- [ ] **SVC-08**: Dashboard Student Detail renders a Day-1 archive-link affordance pointing operators at the legacy action sheets (until retirement is complete)
+- [x] **SVC-08**: Dashboard Student Detail renders a Day-1 archive-link affordance pointing operators at the legacy action sheets (until retirement is complete) (Plan 03-02, commit 1fbd42a, 2026-04-30)
 
 ### Testing
 
@@ -144,7 +144,7 @@ Which phases cover which requirements. Populated during roadmap creation.
 | SVC-05 | Phase 3 | Pending |
 | SVC-06 | Phase 3 | Pending |
 | SVC-07 | Phase 3 | Pending |
-| SVC-08 | Phase 3 | Pending |
+| SVC-08 | Phase 3 | Complete (Plan 03-02, 2026-04-30) |
 | TEST-01 | Phase 2 | Complete |
 | TEST-02 | Phase 2 | Complete |
 | TEST-03 | Phase 2 | Complete |
@@ -178,4 +178,4 @@ Which phases cover which requirements. Populated during roadmap creation.
 
 ---
 *Requirements defined: 2026-04-20*
-*Last updated: 2026-04-21 — Phase 1 closed; WISE-01, WISE-02, WISE-03 flipped to Complete (WISE-04, WISE-05, WISE-06 closed earlier during Phase 1 execution)*
+*Last updated: 2026-04-30 — Phase 3 Plan 03-02 closed; SVC-08 flipped to Complete (Phase 1 closed 2026-04-21 with WISE-01..06; Phase 2 closed 2026-04-21 with WCLI-01..07 + DB-01..08 + TEST-01/02/03/05; Phase 3 SVC-01 closed 2026-04-29)*

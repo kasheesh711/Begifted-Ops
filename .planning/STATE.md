@@ -3,20 +3,20 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Plan 03-01 SVC-01 cacheComponents enabled 2026-04-29: cdc2ebe — flag added in next.config.ts; forced compat fixes (drop runtime=nodejs from 6 routes, Suspense-wrap 3 auth pages); build green, 164/164 tests; next 03-02 SVC-08 archive-link affordance"
-last_updated: "2026-04-29T15:56:45Z"
-last_activity: 2026-04-29
+stopped_at: "Plan 03-02 SVC-08 archive-link affordance complete 2026-04-30: 1fbd42a — ARCHIVE_ACTION_SHEET_URL constant + 'View pre-cutover history →' link in student-detail.tsx sticky header (target=_blank + rel=noopener noreferrer + aria-label); TODO placeholder URL queued for Plan 03-10 Pre-Merge Gate; build green, 164/164 tests; next 03-03 SVC-02 service.ts rewrite"
+last_updated: "2026-04-30T02:46:00Z"
+last_activity: 2026-04-30
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 26
-  completed_plans: 18
-  percent: 69
+  completed_plans: 19
+  percent: 73
 ---
 
 # STATE: BeGifted Ops — Wisenet Migration
 
-**Last updated:** 2026-04-21
+**Last updated:** 2026-04-30
 
 ## Project Reference
 
@@ -27,11 +27,11 @@ progress:
 ## Current Position
 
 Phase: 03 (service-cutover) — EXECUTING
-Plan: 3 of 11 (03-00 + 03-01 complete; next: 03-02 SVC-08 archive-link affordance)
+Plan: 4 of 11 (03-00 + 03-01 + 03-02 complete; next: 03-03 SVC-02 service.ts rewrite)
 **Phase:** 3 — Service Cutover (EXECUTING)
-**Status:** Executing Phase 03 (cacheComponents enabled; build/tests green)
-**Last Activity:** 2026-04-29
-**Progress:** [██▱▱▱▱▱▱▱▱▱] 18% (2 of 11 plans complete — 03-00 baseline + 03-01 cacheComponents)
+**Status:** Executing Phase 03 (archive-link affordance shipped; build/tests green)
+**Last Activity:** 2026-04-30
+**Progress:** [███▱▱▱▱▱▱▱▱] 27% (3 of 11 plans complete — 03-00 baseline + 03-01 cacheComponents + 03-02 archive-link)
 
 ### Phase Overview
 
@@ -39,7 +39,7 @@ Plan: 3 of 11 (03-00 + 03-01 complete; next: 03-02 SVC-08 archive-link affordanc
 |---|-------|--------------|--------|
 | 1 | Wisenet Discovery | 6 (WISE-01..06) | Complete (5/5 plans, all 6 WISE-* requirements closed, 01-PHASE-SUMMARY.md shipped) |
 | 2 | Data Layer | 19 (WCLI + DB + TEST subset) | Complete — all 10 plans shipped (Waves 0-4): Wave 0 scaffolding + Wave 1 Wisenet client core + Drizzle schema/driver lifecycle + Wave 2 Drizzle query layer + Wave 3 Wisenet→DashboardSources mappers + TEST-01 batch A/B + Wave 4 TEST-05 parametric coercion + TEST-03 deferral lint + 02-10 ops scripts (DB-08 + D-21 + D-22); 19/19 requirements closed: DB-01..DB-08 + WCLI-01..WCLI-07 + TEST-01 + TEST-02 + TEST-03 (deferral carve-out) + TEST-05 (WCLI-05 covered by TEST-05) |
-| 3 | Service Cutover | 10 (SVC + TEST-04, TEST-06) | Executing — 2/11 plans complete (03-00 baseline reconciliation 2026-04-29: 7 routes restored + 97 Phase 1+2 source files + 72 .planning artifacts; 03-01 cacheComponents 2026-04-29: cdc2ebe one-line flag + forced compat — 6 route runtime drops + 3 auth-page Suspense wraps; build green, 164/164 tests); TEST-04 deferred to Phase 4 per D-34; next 03-02 SVC-08 |
+| 3 | Service Cutover | 10 (SVC + TEST-04, TEST-06) | Executing — 3/11 plans complete (03-00 baseline reconciliation 2026-04-29: 7 routes restored + 97 Phase 1+2 source files + 72 .planning artifacts; 03-01 cacheComponents 2026-04-29: cdc2ebe one-line flag + forced compat — 6 route runtime drops + 3 auth-page Suspense wraps; 03-02 SVC-08 archive-link affordance 2026-04-30: 1fbd42a — ARCHIVE_ACTION_SHEET_URL constant + Student Detail header link; build green, 164/164 tests); TEST-04 deferred to Phase 4 per D-34; next 03-03 SVC-02 service.ts rewrite |
 | 4 | Deploy Hardening | 6 (DEPL-01..06) | Not started |
 | 5 | Apps Script Retirement | 6 (RETI-01..06) | Not started |
 
@@ -113,6 +113,7 @@ Plan: 3 of 11 (03-00 + 03-01 complete; next: 03-02 SVC-08 archive-link affordanc
 | D-41 invariant verified post-copy in Plan 03-00 | After cp batch from prod-snapshot, re-grepped `web/src/lib/runtime/env.ts` for `getWisenetEnv|getDbEnv` — present, confirming env.ts (Phase 2-aware) was NOT clobbered by prod-snapshot's older Sheets-era version. Same applies to analytics.ts and dashboard-logic.test.ts (those paths were never in the cp scope). |
 | `cacheComponents: true` forces drop of `export const runtime = "nodejs"` from all 6 route handlers (03-01) | Next.js 16 errors with "Route segment config 'runtime' is not compatible with `nextConfig.cacheComponents`" because Node.js becomes the default route runtime under the flag. Removing the redundant segment is the documented migration step (`docs/01-app/02-guides/migrating-to-cache-components.mdx`). Routes still execute on Node.js — confirmed by build output classifying them as `ƒ (Dynamic)`. Drizzle HTTP + WebSocket Pool unaffected. |
 | `cacheComponents: true` requires `<Suspense>` around `await auth()` page bodies (03-01) | The plan's threat-register T-03-01-1 assumed auth-gated pages "are dynamic anyway" but Next.js 16 rejects uncached I/O at the page-component top with "Uncached data was accessed outside of <Suspense>". Pattern fix: lift the auth-dependent body into an async sub-component and wrap it in `<Suspense fallback={null}>`. Build now classifies `/`, `/signin`, `/dashboard` as `◐ (Partial Prerender)` — static shell prerenders, auth streams in per request. Behavior unchanged. `HomeRedirect()` needed an explicit `return null` after `redirect()` because tsc cannot prove control-flow termination through the `redirect()` throw. |
+| ARCHIVE_ACTION_SHEET_URL TODO placeholder branch taken; D-30 archive link wired with `&rarr;` HTML entity, no icon (03-02) | Plan branched on whether the operator provided the real URL. Auto-mode active + no operator prompt path → TODO placeholder branch chosen (`https://docs.google.com/spreadsheets/d/TODO_REPLACE_WITH_REAL_SHEET_ID/edit#gid=TODO_REPLACE_WITH_TAB_GID`). Plan 03-10 Pre-Merge Gate now carries 2 operator actions: D-31 admin-ownership seed + replace this placeholder URL with the real DashboardActionsState tab URL. Archive link uses `&rarr;` HTML entity (byte-stable in source diffs vs literal Unicode arrow). No external-link icon added — repo has no icon library dep and Claude's Discretion in plan permits omission. No React component test added — repo has no component-test precedent. T-03-02-2 mitigated via `rel="noopener noreferrer"`. |
 
 **Performance metrics:**
 
@@ -134,6 +135,7 @@ Plan: 3 of 11 (03-00 + 03-01 complete; next: 03-02 SVC-08 archive-link affordanc
 | Phase 02 P10 | 13min | 3 tasks | 4 files |
 | Phase 03 P00 | 3min | 3 sub-tasks | 176 files (7 + 97 + 72) |
 | Phase 03 P01 | 5min | 1 task (+2 Rule-3 cascades) | 10 files (1 config + 6 routes + 3 pages) |
+| Phase 03 P02 | 2min | 2 tasks (combined commit) | 2 files (config + student-detail) |
 
 ### Active Todos
 
@@ -203,12 +205,12 @@ None yet — will populate when `/gsd-plan-phase 1` decomposes Phase 1 into exec
 2. Run `/gsd-plan-phase 3` to decompose Phase 3 (Service Cutover) — 10 requirements: SVC-01..10 + TEST-04 + TEST-06. Waves 1-3 of Phase 2 landed the Wisenet client + Drizzle queries + mappers; Phase 3 rewires `service.ts` + API routes to the new data layer and lands the runtime cache-invalidation test (TEST-03 PR must remove `service.ts:20` `revalidateTag(_, "max")` AND the `lint-no-revalidate-max.sh` allowlist entry in one PR).
 3. Kevin reviews manual-only verifications checklist in `.planning/phases/01-wisenet-discovery/01-PHASE-SUMMARY.md` (5 items): RED-block soundness, fixture PII eyeball, AEST probe window, rate-limit budget acceptance, secret-warn eyeball.
 
-**Last session:** 2026-04-29T15:56:45Z
-**Stopped at:** Plan 03-01 SVC-01 cacheComponents enabled (cdc2ebe). Single-line `cacheComponents: true` in next.config.ts cascaded into 2 Rule-3 forced compatibility fixes per Next.js 16 migration contract: dropped redundant `runtime="nodejs"` from 6 route handlers (Node.js is default under cacheComponents; explicit segment now errors), and Suspense-wrapped 3 auth-gated pages (`/`, `/signin`, `/dashboard`) so partial prerender succeeds without blocking on uncached `auth()` I/O. `npm run build` green ("Cache Components enabled"); 164/164 tests pass. Ready for Plan 03-02 (SVC-08 archive-link affordance).
+**Last session:** 2026-04-30T02:46:00Z
+**Stopped at:** Plan 03-02 SVC-08 archive-link affordance complete (1fbd42a). Added `ARCHIVE_ACTION_SHEET_URL` constant to `web/src/lib/dashboard/config.ts` per D-36 with the prescribed TODO placeholder URL (operator must replace with the real DashboardActionsState tab URL before merge — second item now queued in Plan 03-10 Pre-Merge Gate after D-31 admin-ownership seed). Wired the "View pre-cutover history →" link into `web/src/components/dashboard/student-detail.tsx` sticky header per D-30 (target=_blank, rel=noopener noreferrer, aria-label, muted styling, `&rarr;` HTML entity, no icon — no icon library dep in repo, plan permits omission). Phase 5 RETI-01 TODO comment marks the affordance for cleanup. No deviations — auto-mode triggered TODO-placeholder branch since operator was not prompted. Build green ("Cache Components enabled"); 164/164 tests. tsc has 4 pre-existing errors in `dashboard-logic.test.ts` + `wisenet-mappers.test.ts` (verified pre-dating plan via stash diff); deferred to D-35 Pre-Merge Gate / SVC-02 cleanup. Ready for Plan 03-03 (SVC-02 service.ts rewrite).
 
 ---
 *State initialized: 2026-04-20 after roadmap creation*
 
 **Planned Phase:** 03 (service-cutover) — 11 plans — 2026-04-29T15:23:42.222Z
 
-**Executing Phase:** 03 (service-cutover) — Plan 03-00 complete 2026-04-29T15:46:25Z (3min, 3 sub-tasks, 176 files); Plan 03-01 complete 2026-04-29T15:56:45Z (5min, 1 task + 2 forced cascades, 10 files, commit cdc2ebe)
+**Executing Phase:** 03 (service-cutover) — Plan 03-00 complete 2026-04-29T15:46:25Z (3min, 3 sub-tasks, 176 files); Plan 03-01 complete 2026-04-29T15:56:45Z (5min, 1 task + 2 forced cascades, 10 files, commit cdc2ebe); Plan 03-02 complete 2026-04-30T02:46:00Z (2min, 2 tasks combined, 2 files, commit 1fbd42a)
