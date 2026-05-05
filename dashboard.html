@@ -8,12 +8,15 @@
 <style>
   :root {
     --bg: #f4f0e8;
-    --bg-strong: #ece4d8;
-    --surface: #fffdf9;
-    --surface-muted: #f7f2ea;
-    --surface-alt: #f1ebdf;
+    --surface: rgba(255, 253, 249, 0.94);
+    --surface-strong: #fffdf9;
+    --surface-muted: #f6f1e8;
+    --border: rgba(16, 24, 40, 0.08);
+    --border-strong: rgba(16, 24, 40, 0.16);
+    --ink: #1d2230;
+    --ink-soft: #5d6473;
+    --ink-faint: #8e95a3;
     --navy: #0d3b73;
-    --navy-deep: #082847;
     --navy-soft: #e7eef9;
     --orange: #f36a1d;
     --orange-soft: #fff1e7;
@@ -23,44 +26,50 @@
     --yellow-soft: #fff6df;
     --green: #1d7a4f;
     --green-soft: #e8f6ef;
-    --ink: #1d2230;
-    --ink-soft: #5d6473;
-    --ink-faint: #8e95a3;
-    --border: rgba(16, 24, 40, 0.08);
-    --border-strong: rgba(16, 24, 40, 0.14);
-    --shadow: 0 10px 24px rgba(14, 22, 36, 0.06);
-    --shadow-soft: 0 2px 10px rgba(14, 22, 36, 0.04);
-    --radius-lg: 22px;
+    --shadow: 0 14px 28px rgba(14, 22, 36, 0.08);
+    --shadow-soft: 0 6px 16px rgba(14, 22, 36, 0.05);
+    --radius-xl: 24px;
+    --radius-lg: 20px;
     --radius-md: 16px;
     --radius-sm: 12px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
+
   body {
     font-family: "Plus Jakarta Sans", sans-serif;
     background:
-      radial-gradient(circle at top left, rgba(243,106,29,0.08), transparent 24%),
-      radial-gradient(circle at top right, rgba(13,59,115,0.08), transparent 28%),
+      radial-gradient(circle at top left, rgba(243, 106, 29, 0.1), transparent 22%),
+      radial-gradient(circle at top right, rgba(13, 59, 115, 0.1), transparent 30%),
       var(--bg);
     color: var(--ink);
     min-height: 100vh;
-    line-height: 1.5;
+    line-height: 1.45;
   }
 
-  button, input { font: inherit; }
+  button, input, select, textarea {
+    font: inherit;
+  }
+
+  button {
+    border: none;
+    cursor: pointer;
+    background: none;
+    color: inherit;
+  }
 
   .topbar {
     position: sticky;
     top: 0;
-    z-index: 40;
-    display: flex;
+    z-index: 30;
+    display: grid;
+    grid-template-columns: auto minmax(320px, 1fr) auto;
+    gap: 18px;
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
     padding: 18px 24px;
     background: rgba(244, 240, 232, 0.9);
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(16, 24, 40, 0.08);
+    border-bottom: 1px solid var(--border);
   }
 
   .brand {
@@ -94,6 +103,13 @@
     color: var(--ink-soft);
   }
 
+  .topbar-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
   .view-switch {
     display: inline-flex;
     align-items: center;
@@ -101,18 +117,16 @@
     padding: 6px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(16, 24, 40, 0.08);
+    border: 1px solid var(--border);
     box-shadow: var(--shadow-soft);
+    flex-shrink: 0;
   }
 
   .view-btn {
-    border: none;
-    background: transparent;
-    color: var(--ink-soft);
     padding: 10px 16px;
     border-radius: 999px;
     font-weight: 700;
-    cursor: pointer;
+    color: var(--ink-soft);
     transition: 0.16s ease;
   }
 
@@ -122,334 +136,435 @@
     box-shadow: 0 8px 18px rgba(13, 59, 115, 0.2);
   }
 
-  .topbar-meta {
+  .view-btn.hidden {
+    display: none;
+  }
+
+  .search-shell {
+    position: relative;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .search-stack {
+    min-width: min(560px, 100%);
+    flex: 1 1 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .top-search {
+    width: 100%;
+    padding: 13px 44px 13px 44px;
+    border-radius: 16px;
+    border: 1px solid var(--border-strong);
+    background: rgba(255, 255, 255, 0.82);
+    outline: none;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .top-search:focus {
+    border-color: var(--navy);
+    background: white;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-faint);
+    pointer-events: none;
+  }
+
+  .search-clear-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    background: rgba(16, 24, 40, 0.06);
+    color: var(--ink-soft);
+    font-size: 16px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .search-clear-btn.hidden {
+    display: none;
+  }
+
+  .search-meta-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .filter-chip-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-chip {
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.76);
+    color: var(--ink-soft);
+    font-size: 12px;
+    font-weight: 700;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .filter-chip.active {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: white;
+  }
+
+  .search-result-count {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-soft);
+  }
+
+  .topbar-meta {
+    display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
+    gap: 10px;
+  }
+
+  .scopebar {
+    padding: 0 24px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .scopebar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .scope-label {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .admin-switch {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .admin-btn {
+    padding: 9px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.72);
+    color: var(--ink-soft);
+    font-weight: 700;
+    box-shadow: var(--shadow-soft);
+    transition: 0.16s ease;
+  }
+
+  .admin-btn.active {
+    background: var(--orange);
+    border-color: rgba(243, 106, 29, 0.35);
+    color: white;
+  }
+
+  .admin-btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .scope-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .summary-pill {
+    padding: 10px 14px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.76);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-soft);
+    min-width: 112px;
+  }
+
+  .summary-pill-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .summary-pill-value {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    margin-top: 2px;
   }
 
   .meta-pill {
     padding: 8px 12px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(16, 24, 40, 0.08);
+    background: rgba(255, 255, 255, 0.76);
+    border: 1px solid var(--border);
     font-size: 12px;
     color: var(--ink-soft);
   }
 
-  .workspace {
-    display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: 22px;
+  .app-shell {
     padding: 22px;
   }
 
-  .rail {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    min-height: calc(100vh - 108px);
-  }
-
+  .state-card,
   .panel {
-    background: rgba(255, 253, 249, 0.92);
-    border: 1px solid rgba(16, 24, 40, 0.08);
-    border-radius: var(--radius-lg);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
     box-shadow: var(--shadow);
   }
 
-  .rail-panel {
-    padding: 18px;
+  .state-card {
+    padding: 28px;
   }
 
-  .panel-heading {
+  .state-title {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .state-detail {
+    color: var(--ink-soft);
+  }
+
+  .state-actions {
+    margin-top: 18px;
     display: flex;
-    align-items: center;
+    gap: 10px;
+  }
+
+  .command-shell {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .restore-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .restore-btn,
+  .ghost-btn,
+  .action-btn,
+  .icon-btn {
+    border-radius: 14px;
+    border: 1px solid var(--border-strong);
+    background: rgba(255, 255, 255, 0.8);
+    padding: 10px 14px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .action-btn {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: white;
+  }
+
+  .icon-btn {
+    padding: 10px 12px;
+  }
+
+  .ghost-btn:disabled,
+  .icon-btn:disabled,
+  .action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .command-layout {
+    display: flex;
+    gap: 0;
+    min-height: calc(100vh - 156px);
+  }
+
+  .pane {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .queue-pane {
+    margin-right: 10px;
+  }
+
+  .calendar-pane {
+    margin-left: 10px;
+  }
+
+  .splitter {
+    width: 10px;
+    flex: 0 0 10px;
+    position: relative;
+    cursor: col-resize;
+  }
+
+  .splitter::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 4px;
+    margin: auto;
+    border-radius: 999px;
+    background: rgba(13, 59, 115, 0.14);
+  }
+
+  .pane-header {
+    display: flex;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 14px;
+    padding: 22px 22px 16px;
+    border-bottom: 1px solid var(--border);
   }
 
   .panel-title {
-    font-size: 12px;
+    font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     font-weight: 800;
     color: var(--ink-faint);
   }
 
+  .panel-heading-lg {
+    margin-top: 6px;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+
   .panel-caption {
-    font-size: 12px;
-    color: var(--ink-soft);
-  }
-
-  .search-input {
-    width: 100%;
-    padding: 12px 14px;
-    border-radius: 14px;
-    border: 1px solid var(--border-strong);
-    background: var(--surface-muted);
-    color: var(--ink);
-    outline: none;
-  }
-
-  .search-input:focus {
-    border-color: var(--navy);
-    background: white;
-  }
-
-  .filter-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
-
-  .filter-chip {
-    border: 1px solid rgba(16, 24, 40, 0.08);
-    border-radius: 16px;
-    background: white;
-    padding: 12px;
-    cursor: pointer;
-    transition: 0.16s ease;
-    text-align: left;
-  }
-
-  .filter-chip.active {
-    border-color: rgba(13, 59, 115, 0.28);
-    background: var(--navy-soft);
-    box-shadow: inset 0 0 0 1px rgba(13, 59, 115, 0.08);
-  }
-
-  .chip-label {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--ink);
-  }
-
-  .chip-count {
     margin-top: 4px;
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-  }
-
-  .student-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-height: 56vh;
-    overflow: auto;
-  }
-
-  .student-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px;
-    border-radius: 16px;
-    border: 1px solid transparent;
-    background: rgba(241, 235, 223, 0.36);
-    cursor: pointer;
-    transition: 0.16s ease;
-  }
-
-  .student-row:hover,
-  .student-row.active {
-    background: white;
-    border-color: rgba(13, 59, 115, 0.16);
-    transform: translateY(-1px);
-  }
-
-  .avatar {
-    width: 42px;
-    height: 42px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
     font-size: 13px;
-    letter-spacing: -0.04em;
-    flex-shrink: 0;
-  }
-
-  .student-copy {
-    min-width: 0;
-    flex: 1;
-  }
-
-  .student-name {
-    font-size: 13px;
-    font-weight: 700;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .student-sub {
-    font-size: 11px;
     color: var(--ink-soft);
-    margin-top: 2px;
   }
 
-  .student-meta {
-    text-align: right;
+  .mini-pills {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
+    gap: 8px;
+    flex-wrap: wrap;
   }
 
+  .mini-pill,
   .status-pill,
   .flag-pill,
   .delta-pill {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 4px 10px;
     border-radius: 999px;
-    font-size: 11px;
+    padding: 7px 11px;
+    font-size: 12px;
     font-weight: 700;
-    white-space: nowrap;
   }
 
-  .status-pill.notify,
-  .tone-critical {
+  .mini-pill {
+    background: var(--surface-muted);
+    color: var(--ink-soft);
+  }
+
+  .status-pill.notify {
     background: var(--red-soft);
     color: var(--red);
   }
 
-  .status-pill.watch,
-  .tone-warning {
+  .status-pill.watch {
     background: var(--yellow-soft);
     color: var(--yellow);
   }
 
-  .status-pill.ok,
-  .tone-positive {
+  .status-pill.ok {
     background: var(--green-soft);
     color: var(--green);
   }
 
-  .status-pill.nodata,
-  .tone-info {
+  .status-pill.nodata {
     background: var(--navy-soft);
     color: var(--navy);
   }
 
+  .flag-pill,
   .delta-pill {
-    background: rgba(255, 255, 255, 0.72);
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid var(--border);
     color: var(--ink-soft);
   }
 
-  .flag-pill {
-    background: var(--surface-alt);
-    color: var(--ink-soft);
-    padding: 5px 10px;
+  .queue-table-wrap {
+    overflow: auto;
+    padding: 0 10px 14px 10px;
   }
 
-  .mini-stack {
+  .queue-bulk-bar {
+    margin: 0 22px 16px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px solid rgba(13, 59, 115, 0.14);
+    background: rgba(13, 59, 115, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .queue-bulk-summary {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .queue-bulk-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
   }
 
-  .main-area {
-    min-width: 0;
+  .select-cell {
+    width: 42px;
   }
 
-  .metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 14px;
-    margin-bottom: 18px;
-  }
-
-  .metric-card {
-    padding: 18px;
-    border-radius: var(--radius-lg);
-    background: rgba(255, 253, 249, 0.92);
-    border: 1px solid rgba(16, 24, 40, 0.08);
-    box-shadow: var(--shadow);
-  }
-
-  .metric-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-weight: 800;
-    color: var(--ink-faint);
-  }
-
-  .metric-value {
-    margin-top: 10px;
-    font-size: 34px;
-    font-weight: 800;
-    letter-spacing: -0.05em;
-    line-height: 1;
-  }
-
-  .metric-sub {
-    margin-top: 10px;
-    font-size: 12px;
-    color: var(--ink-soft);
-  }
-
-  .command-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.4fr) 360px;
-    gap: 18px;
-  }
-
-  .queue-panel,
-  .context-column,
-  .analytics-grid,
-  .detail-layout {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
-
-  .queue-card {
-    padding: 18px;
-  }
-
-  .queue-toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 14px;
-  }
-
-  .queue-title {
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-  }
-
-  .queue-subtitle {
-    font-size: 13px;
-    color: var(--ink-soft);
-    margin-top: 4px;
-  }
-
-  .queue-count {
-    padding: 9px 12px;
-    border-radius: 999px;
-    background: var(--surface-muted);
-    color: var(--ink-soft);
-    font-size: 12px;
-    font-weight: 700;
-  }
-
-  .queue-table-wrap {
-    overflow: auto;
-    border-radius: 18px;
-    border: 1px solid rgba(16, 24, 40, 0.06);
-    background: white;
+  .select-checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--navy);
+    cursor: pointer;
   }
 
   table {
@@ -457,38 +572,45 @@
     border-collapse: collapse;
   }
 
-  th {
-    padding: 14px 16px;
+  th, td {
+    padding: 14px 12px;
+    border-bottom: 1px solid rgba(16, 24, 40, 0.06);
+    vertical-align: top;
     text-align: left;
-    font-size: 11px;
-    font-weight: 800;
+  }
+
+  th {
+    position: sticky;
+    top: 0;
+    background: rgba(255, 253, 249, 0.98);
+    z-index: 1;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--ink-faint);
-    background: var(--surface-muted);
-    position: sticky;
-    top: 0;
-    z-index: 2;
+  }
+
+  th.sortable {
     cursor: pointer;
   }
 
-  th.no-sort { cursor: default; }
-
-  td {
-    padding: 14px 16px;
-    border-top: 1px solid rgba(16, 24, 40, 0.06);
-    vertical-align: top;
-    font-size: 13px;
+  .sort-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   }
 
   .queue-row {
     cursor: pointer;
-    transition: 0.14s ease;
+    transition: background 0.16s ease;
   }
 
-  .queue-row:hover,
-  .queue-row.active {
-    background: rgba(231, 238, 249, 0.78);
+  .queue-row:hover {
+    background: rgba(241, 235, 223, 0.48);
+  }
+
+  .queue-row.is-selected {
+    background: rgba(13, 59, 115, 0.06);
   }
 
   .queue-primary {
@@ -501,337 +623,699 @@
     color: var(--ink-soft);
   }
 
-  .mono {
-    font-family: "DM Mono", monospace;
-  }
-
-  .context-card {
-    padding: 18px;
-  }
-
-  .context-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  .context-title {
-    font-size: 19px;
+  .priority-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 12px;
     font-weight: 800;
-    letter-spacing: -0.04em;
   }
 
-  .context-subtitle {
-    margin-top: 4px;
+  .priority-chip.pinned {
+    background: var(--red-soft);
+    color: var(--red);
+  }
+
+  .priority-chip.standard {
+    background: var(--navy-soft);
+    color: var(--navy);
+  }
+
+  .action-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .action-status-pill.contacted {
+    background: rgba(0, 164, 120, 0.14);
+    color: #0f7a61;
+  }
+
+  .action-status-pill.pending-callback {
+    background: rgba(243, 106, 29, 0.14);
+    color: var(--orange);
+  }
+
+  .action-status-pill.resolved {
+    background: rgba(13, 59, 115, 0.1);
+    color: var(--navy);
+  }
+
+  .action-control-row {
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .action-control-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .action-control-summary {
+    min-width: 220px;
+  }
+
+  .action-control-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .action-control-value {
+    margin-top: 6px;
     font-size: 13px;
     color: var(--ink-soft);
   }
 
-  .context-grid {
-    display: grid;
+  .toast-root {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 30;
+    pointer-events: none;
+  }
+
+  .toast {
+    min-width: 220px;
+    max-width: 320px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: var(--shadow);
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 700;
+    transform: translateY(0);
+    opacity: 1;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+  }
+
+  .toast.success {
+    border-color: rgba(0, 164, 120, 0.22);
+  }
+
+  .toast.error {
+    border-color: rgba(181, 51, 53, 0.22);
+  }
+
+  .toast.fade-out {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  .skeleton-block,
+  .skeleton-line,
+  .skeleton-pill {
+    position: relative;
+    overflow: hidden;
+    background: rgba(16, 24, 40, 0.08);
+  }
+
+  .skeleton-block::after,
+  .skeleton-line::after,
+  .skeleton-pill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    animation: skeleton-shimmer 1.2s infinite;
+  }
+
+  .skeleton-pill {
+    height: 58px;
+    min-width: 112px;
+    border-radius: 16px;
+    border: 1px solid rgba(16, 24, 40, 0.06);
+  }
+
+  .skeleton-block {
+    border-radius: 22px;
+    border: 1px solid rgba(16, 24, 40, 0.06);
+  }
+
+  .skeleton-line {
+    height: 12px;
+    border-radius: 999px;
+  }
+
+  .loading-shell {
+    display: flex;
+    flex-direction: column;
     gap: 14px;
   }
 
-  .context-block {
-    padding: 14px;
-    border-radius: 16px;
+  .loading-summary-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .loading-command-layout {
+    display: grid;
+    grid-template-columns: minmax(320px, 48%) minmax(320px, 1fr);
+    gap: 20px;
+  }
+
+  .loading-panel {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 440px;
+  }
+
+  .loading-table-row {
+    display: grid;
+    grid-template-columns: 90px 1.3fr 1fr 1fr 1fr 0.9fr 1.1fr;
+    gap: 12px;
+  }
+
+  .loading-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .loading-calendar-cell {
+    height: 92px;
+    border-radius: 18px;
+  }
+
+  @keyframes skeleton-shimmer {
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  .balance-critical { color: var(--red); }
+  .balance-warning { color: var(--yellow); }
+  .balance-positive { color: var(--green); }
+
+  .calendar-toolbar {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 0 22px 18px;
+  }
+
+  .toolbar-left,
+  .toolbar-right {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .toolbar-center {
+    display: flex;
+    justify-content: center;
+  }
+
+  .segmented-control {
+    display: inline-flex;
+    padding: 6px;
+    border-radius: 999px;
     background: var(--surface-muted);
   }
 
-  .context-block h4,
-  .analytics-card h3,
-  .detail-card h3 {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-weight: 800;
-    color: var(--ink-faint);
-    margin-bottom: 10px;
-  }
-
-  .context-hero {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
-  }
-
-  .context-stat {
-    padding: 12px;
-    border-radius: 14px;
-    background: white;
-    border: 1px solid rgba(16, 24, 40, 0.06);
-  }
-
-  .context-stat-label {
-    font-size: 11px;
-    color: var(--ink-faint);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-weight: 800;
-  }
-
-  .context-stat-value {
-    margin-top: 8px;
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-  }
-
-  .btn-row {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .action-btn,
-  .ghost-btn {
-    border: none;
-    border-radius: 14px;
-    padding: 12px 14px;
+  .segmented-control button {
+    padding: 9px 14px;
+    border-radius: 999px;
     font-weight: 700;
-    cursor: pointer;
-    transition: 0.14s ease;
+    color: var(--ink-soft);
   }
 
-  .action-btn {
-    background: var(--orange);
-    color: white;
-    box-shadow: 0 12px 24px rgba(243, 106, 29, 0.18);
-  }
-
-  .ghost-btn {
+  .segmented-control button.active {
     background: white;
     color: var(--navy);
-    border: 1px solid rgba(13, 59, 115, 0.12);
+    box-shadow: var(--shadow-soft);
   }
 
-  .insight-list,
-  .driver-list,
-  .segment-list,
-  .upcoming-list {
+  .calendar-period-nav {
+    min-width: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .calendar-period-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .calendar-period-heading {
+    min-width: 0;
+    text-align: center;
+    padding: 0 8px;
+  }
+
+  .calendar-period-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+  }
+
+  .calendar-period-value {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+  }
+
+  .calendar-body {
+    padding: 0 22px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  .calendar-content-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.9fr);
+    gap: 18px;
+    min-height: 0;
+  }
+
+  .calendar-content-grid.day-focus {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .calendar-main,
+  .calendar-rail {
+    min-width: 0;
+  }
+
+  .calendar-main {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .calendar-rail {
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.7);
+    padding: 12px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .calendar-action-strip {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding: 14px;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.72);
   }
 
-  .insight-row,
-  .driver-row,
-  .segment-row,
-  .upcoming-row {
+  .calendar-action-strip-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 12px 14px;
-    border-radius: 16px;
-    background: white;
-    border: 1px solid rgba(16, 24, 40, 0.06);
-  }
-
-  .insight-copy,
-  .segment-copy {
-    min-width: 0;
-    flex: 1;
-  }
-
-  .insight-name,
-  .segment-name {
-    font-size: 13px;
-    font-weight: 700;
-  }
-
-  .insight-detail,
-  .segment-detail {
-    font-size: 12px;
-    color: var(--ink-soft);
-    margin-top: 3px;
-  }
-
-  .insight-value,
-  .segment-value {
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    text-align: right;
-  }
-
-  .analytics-grid {
-    display: grid;
-    gap: 18px;
-  }
-
-  .analytics-row {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
-  }
-
-  .analytics-card,
-  .detail-card {
-    padding: 20px;
-  }
-
-  .chart-shell {
-    padding: 14px;
-    border-radius: 18px;
-    background: var(--surface-muted);
-    border: 1px solid rgba(16, 24, 40, 0.05);
-  }
-
-  .chart-labels,
-  .bar-list {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
     flex-wrap: wrap;
   }
 
-  .legend-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+  .calendar-action-strip-title {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .calendar-action-strip-caption {
     font-size: 12px;
     color: var(--ink-soft);
   }
 
-  .legend-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
+  .calendar-action-list {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 2px;
   }
 
-  .segment-bars {
+  .calendar-action-pill {
+    min-width: 116px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 4px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.92);
+    text-align: left;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.16s ease, border-color 0.16s ease;
   }
 
-  .segment-bar-track,
-  .hist-bar-track,
-  .week-bar-track {
-    height: 10px;
-    border-radius: 999px;
-    background: var(--surface-alt);
+  .calendar-action-pill:hover {
+    transform: translateY(-1px);
+  }
+
+  .calendar-action-pill.selected {
+    border-color: rgba(13, 59, 115, 0.25);
+    box-shadow: inset 0 0 0 1px rgba(13, 59, 115, 0.08), var(--shadow-soft);
+  }
+
+  .calendar-action-pill.urgent {
+    background: linear-gradient(180deg, rgba(251, 233, 231, 0.96), rgba(255, 255, 255, 0.96));
+  }
+
+  .calendar-action-pill.watch {
+    background: linear-gradient(180deg, rgba(255, 246, 223, 0.96), rgba(255, 255, 255, 0.96));
+  }
+
+  .calendar-action-pill-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+  }
+
+  .calendar-action-pill-date {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .calendar-action-pill-meta {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .calendar-grid {
+    display: grid;
+    gap: 10px;
+  }
+
+  .calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .calendar-grid.month {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .calendar-grid.week {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .calendar-weekday {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    padding: 0 4px;
+  }
+
+  .calendar-cell {
+    min-height: 96px;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.85);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 14px;
+    box-shadow: var(--shadow-soft);
+    text-align: left;
+    position: relative;
     overflow: hidden;
   }
 
-  .segment-bar-fill,
-  .hist-bar-fill,
-  .week-bar-fill {
-    height: 100%;
-    border-radius: 999px;
+  .calendar-cell::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 5px;
+    background: transparent;
   }
 
-  .hist-grid,
-  .week-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-    gap: 12px;
+  .calendar-cell.muted {
+    opacity: 0.34;
   }
 
-  .hist-cell,
-  .week-cell {
-    padding: 12px;
-    border-radius: 16px;
-    background: white;
-    border: 1px solid rgba(16, 24, 40, 0.06);
+  .calendar-cell.selected {
+    border-color: rgba(13, 59, 115, 0.35);
+    box-shadow: inset 0 0 0 1px rgba(13, 59, 115, 0.08), var(--shadow-soft);
   }
 
-  .hist-value,
-  .week-value {
-    margin-top: 10px;
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -0.04em;
+  .calendar-cell.has-urgent {
+    background: linear-gradient(180deg, rgba(251, 233, 231, 0.92), rgba(255, 255, 255, 0.92));
   }
 
-  .heatmap-grid {
-    display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    gap: 8px;
-    margin-top: 12px;
+  .calendar-cell.has-urgent::before {
+    background: var(--red);
   }
 
-  .heatmap-cell {
-    aspect-ratio: 1;
-    border-radius: 12px;
+  .calendar-cell.has-watch {
+    background: linear-gradient(180deg, rgba(255, 246, 223, 0.92), rgba(255, 255, 255, 0.92));
+  }
+
+  .calendar-cell.has-watch::before {
+    background: var(--yellow);
+  }
+
+  .calendar-cell.has-scheduled::before {
+    background: var(--green);
+  }
+
+  .calendar-day-top {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 11px;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .calendar-day-number {
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .calendar-count-badge,
+  .calendar-severity-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 12px;
     font-weight: 700;
+  }
+
+  .calendar-count-badge {
+    background: rgba(13, 59, 115, 0.08);
+    color: var(--navy);
+  }
+
+  .calendar-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .calendar-severity-pill {
+    background: var(--surface-muted);
     color: var(--ink-soft);
-    background: rgba(255,255,255,0.5);
   }
 
-  .detail-header {
-    padding: 20px;
+  .calendar-severity-pill.urgent {
+    background: var(--red-soft);
+    color: var(--red);
   }
 
-  .detail-top {
+  .calendar-severity-pill.watch {
+    background: var(--yellow-soft);
+    color: var(--yellow);
+  }
+
+  .calendar-severity-pill.scheduled {
+    background: var(--green-soft);
+    color: var(--green);
+  }
+
+  .calendar-severity-pill.empty {
+    background: rgba(16, 24, 40, 0.06);
+    color: var(--ink-faint);
+  }
+
+  .calendar-empty {
+    border: 1px dashed var(--border-strong);
+    border-radius: 18px;
+    padding: 24px;
+    text-align: center;
+    color: var(--ink-soft);
+    background: rgba(255, 255, 255, 0.66);
+  }
+
+  .day-detail {
+    height: 100%;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.78);
+    padding: 18px;
+  }
+
+  .day-detail-head {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 16px;
+    gap: 12px;
+    margin-bottom: 14px;
   }
 
-  .back-btn {
-    border: none;
-    background: var(--navy-soft);
-    color: var(--navy);
-    font-weight: 700;
-    padding: 10px 14px;
-    border-radius: 999px;
-    cursor: pointer;
+  .day-detail-title {
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .day-detail-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+
+  .day-student-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .day-student-card {
+    border-radius: 18px;
+    background: white;
+    border: 1px solid var(--border);
+    padding: 16px;
+  }
+
+  .day-student-top,
+  .detail-top,
+  .package-head,
+  .upcoming-row,
+  .btn-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .session-chip-row,
+  .detail-summary-grid,
+  .package-grid,
+  .stat-grid {
+    display: grid;
+    gap: 12px;
+  }
+
+  .session-chip-row {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    margin-top: 14px;
+  }
+
+  .session-chip {
+    border-radius: 16px;
+    background: var(--surface-muted);
+    border: 1px solid var(--border);
+    padding: 12px;
+  }
+
+  .detail-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .detail-header,
+  .detail-card,
+  .package-card {
+    padding: 22px;
   }
 
   .detail-name {
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 800;
-    letter-spacing: -0.05em;
+    letter-spacing: -0.04em;
   }
 
   .detail-sub {
     margin-top: 6px;
     color: var(--ink-soft);
-    font-size: 14px;
   }
 
   .detail-summary-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     margin-top: 18px;
   }
 
-  .detail-summary-card {
-    padding: 14px;
-    border-radius: 16px;
+  .detail-summary-card,
+  .stat-card {
+    border-radius: 18px;
     background: var(--surface-muted);
+    padding: 16px;
+    border: 1px solid var(--border);
   }
 
-  .detail-summary-card .metric-label {
-    margin-bottom: 8px;
+  .metric-label,
+  .stat-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+  }
+
+  .metric-value,
+  .stat-value {
+    margin-top: 8px;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
   }
 
   .package-stack {
     display: flex;
     flex-direction: column;
     gap: 18px;
-  }
-
-  .package-card {
-    padding: 20px;
-  }
-
-  .package-head {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 14px;
-    margin-bottom: 16px;
   }
 
   .package-title {
@@ -841,46 +1325,17 @@
   }
 
   .package-subtitle {
-    margin-top: 4px;
-    font-size: 13px;
+    margin-top: 6px;
     color: var(--ink-soft);
   }
 
   .package-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    margin-top: 18px;
   }
 
-  .stat-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .stat-card {
-    padding: 12px;
-    border-radius: 14px;
-    background: white;
-    border: 1px solid rgba(16, 24, 40, 0.06);
-  }
-
-  .stat-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--ink-faint);
-    font-weight: 800;
-  }
-
-  .stat-value {
-    margin-top: 8px;
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-  }
-
-  .waterfall {
+  .waterfall,
+  .upcoming-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -888,57 +1343,34 @@
 
   .waterfall-row {
     display: grid;
-    grid-template-columns: 120px 1fr 64px;
+    grid-template-columns: 130px 1fr auto;
     gap: 12px;
     align-items: center;
   }
 
-  .waterfall-label {
-    font-size: 12px;
-    color: var(--ink-soft);
-    font-weight: 700;
-  }
-
-  .waterfall-track {
+  .waterfall-track,
+  .projection-track {
     height: 12px;
     border-radius: 999px;
-    background: var(--surface-alt);
+    background: rgba(13, 59, 115, 0.08);
     overflow: hidden;
   }
 
   .waterfall-fill {
     height: 100%;
-    border-radius: 999px;
-  }
-
-  .waterfall-value {
-    text-align: right;
-    font-weight: 800;
-    font-size: 12px;
-  }
-
-  .projection-table {
-    margin-top: 12px;
-    border-radius: 14px;
-    overflow: hidden;
-    border: 1px solid rgba(16, 24, 40, 0.06);
-  }
-
-  .projection-table table td,
-  .projection-table table th {
-    padding: 10px 12px;
-    font-size: 12px;
+    border-radius: inherit;
   }
 
   .projection-bars {
-    display: flex;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+    gap: 12px;
     align-items: end;
-    min-height: 120px;
+    min-height: 150px;
+    margin-top: 16px;
   }
 
   .projection-bar-wrap {
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -947,140 +1379,190 @@
 
   .projection-bar {
     width: 100%;
-    max-width: 34px;
-    border-radius: 12px 12px 8px 8px;
+    max-width: 52px;
+    border-radius: 14px 14px 10px 10px;
   }
 
   .projection-label {
-    font-size: 11px;
-    color: var(--ink-faint);
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .projection-table {
+    margin-top: 18px;
+    overflow: auto;
+  }
+
+  .mono {
+    font-family: "DM Mono", monospace;
   }
 
   .empty-state {
-    padding: 28px;
+    border: 1px dashed var(--border-strong);
+    border-radius: 18px;
+    padding: 18px;
+    color: var(--ink-soft);
     text-align: center;
-    color: var(--ink-soft);
+    background: rgba(255, 255, 255, 0.68);
   }
 
-  .state-card {
-    padding: 28px;
-  }
-
-  .state-title {
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-  }
-
-  .state-detail {
-    margin-top: 10px;
-    color: var(--ink-soft);
-    line-height: 1.6;
-  }
-
-  .state-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 18px;
-    flex-wrap: wrap;
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border-strong);
+    background: white;
+    padding: 10px 14px;
+    font-weight: 700;
   }
 
   .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(8, 15, 24, 0.45);
+    background: rgba(8, 16, 32, 0.48);
     display: none;
     align-items: center;
     justify-content: center;
-    z-index: 70;
     padding: 20px;
+    z-index: 50;
   }
 
-  .modal-overlay.open { display: flex; }
+  .modal-overlay.open {
+    display: flex;
+  }
 
-  .modal {
-    width: min(560px, 100%);
-    padding: 24px;
-    border-radius: 24px;
+  .modal-card {
+    width: min(720px, 100%);
     background: white;
-    box-shadow: 0 20px 40px rgba(8, 15, 24, 0.2);
+    border-radius: 24px;
+    box-shadow: 0 28px 60px rgba(8, 16, 32, 0.22);
+    overflow: hidden;
   }
 
-  .modal h3 {
-    font-size: 18px;
+  .modal-head,
+  .modal-body,
+  .modal-foot {
+    padding: 20px 22px;
+  }
+
+  .modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .modal-title {
+    font-size: 20px;
     font-weight: 800;
-    letter-spacing: -0.04em;
-    margin-bottom: 14px;
   }
 
-  .modal-msg {
-    padding: 16px;
-    border-radius: 16px;
-    background: var(--surface-muted);
-    border: 1px solid rgba(16, 24, 40, 0.06);
+  .modal-body pre {
     white-space: pre-wrap;
-    line-height: 1.7;
+    word-break: break-word;
+    font-family: "Plus Jakarta Sans", sans-serif;
     color: var(--ink);
+    background: var(--surface-muted);
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    padding: 18px;
   }
 
-  .modal-actions {
+  .modal-foot {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
-    margin-top: 16px;
+    border-top: 1px solid var(--border);
   }
 
-  .modal-btn {
-    border: none;
-    padding: 11px 16px;
-    border-radius: 14px;
-    font-weight: 700;
-    cursor: pointer;
-  }
-
-  .modal-btn.secondary {
-    background: var(--surface-muted);
-    color: var(--ink-soft);
-  }
-
-  .modal-btn.primary {
-    background: var(--orange);
-    color: white;
-  }
-
-  @media (max-width: 1380px) {
-    .metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .command-grid,
-    .analytics-row,
-    .package-grid { grid-template-columns: 1fr; }
-  }
-
-  @media (max-width: 1120px) {
-    .workspace { grid-template-columns: 1fr; }
-    .rail { min-height: auto; }
-    .student-list { max-height: none; }
-  }
-
-  @media (max-width: 760px) {
+  @media (max-width: 1100px) {
     .topbar {
+      grid-template-columns: 1fr;
+    }
+
+    .search-stack {
+      min-width: 0;
+    }
+
+    .topbar-meta {
+      justify-content: flex-start;
+    }
+
+    .loading-command-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 960px) {
+    .app-shell {
+      padding: 16px;
+    }
+
+    .command-layout {
       flex-direction: column;
-      align-items: stretch;
+      min-height: auto;
     }
 
-    .view-switch {
+    .queue-pane,
+    .calendar-pane {
+      margin: 0;
+      width: 100% !important;
+    }
+
+    .splitter {
+      display: none;
+    }
+
+    .calendar-toolbar {
+      grid-template-columns: 1fr;
+      justify-items: flex-start;
+    }
+
+    .toolbar-center {
       width: 100%;
-      justify-content: space-between;
+      justify-content: flex-start;
     }
 
-    .metrics-grid,
-    .detail-summary-grid,
-    .context-hero,
-    .stat-grid {
+    .calendar-period-heading {
+      text-align: left;
+    }
+
+    .calendar-content-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .calendar-grid.month,
+    .calendar-grid.week {
+      grid-template-columns: 1fr;
+    }
+
+    .search-meta-row,
+    .action-control-row,
+    .queue-bulk-bar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .loading-table-row {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .filter-grid { grid-template-columns: 1fr; }
-    .waterfall-row { grid-template-columns: 1fr; }
+    .loading-calendar-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .toast-root {
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+    }
+
+    .toast {
+      max-width: none;
+      min-width: 0;
+    }
   }
 </style>
 </head>
@@ -1090,41 +1572,110 @@
       <div class="brand-badge">BG</div>
       <div>
         <div class="brand-title">BeGifted Credit Control</div>
-        <div class="brand-subtitle">Action-first package monitoring and analytics</div>
+        <div class="brand-subtitle">Student action queue and schedule command center</div>
       </div>
     </div>
 
-    <div class="view-switch">
-      <button class="view-btn active" id="view-command" onclick="setView('command')">Command Center</button>
-      <button class="view-btn" id="view-analytics" onclick="setView('analytics')">Analytics</button>
-      <button class="view-btn" id="view-student" onclick="currentView==='student' ? setView('student') : null">Student Detail</button>
+    <div class="topbar-controls">
+      <div class="view-switch">
+        <button class="view-btn active" id="view-command" onclick="setView('command')">Command Center</button>
+        <button class="view-btn hidden" id="view-student" onclick="setView('student')">Student Detail</button>
+      </div>
+      <div class="search-stack">
+        <div class="search-shell">
+          <span class="search-icon">⌕</span>
+          <input
+            id="global-search"
+            class="top-search"
+            type="text"
+            placeholder="Search student, parent, or package"
+            oninput="setSearch(this.value)"
+          />
+          <button class="search-clear-btn hidden" id="search-clear-btn" onclick="clearSearch()" aria-label="Clear search">×</button>
+        </div>
+        <div class="search-meta-row">
+          <div class="filter-chip-group" id="risk-filter-chips"></div>
+          <div class="search-result-count" id="search-result-count"></div>
+        </div>
+      </div>
     </div>
 
     <div class="topbar-meta">
-      <span class="meta-pill" id="freshness-label"></span>
-      <span class="meta-pill" id="comparison-label"></span>
+      <div class="meta-pill" id="freshness-label">Loading dashboard data</div>
+      <div class="meta-pill" id="comparison-label">Preparing latest command center</div>
     </div>
   </div>
 
-  <div class="workspace">
-    <aside class="rail" id="rail"></aside>
-    <main class="main-area" id="main-area"></main>
+  <div class="scopebar">
+    <div class="scopebar-row">
+      <div class="scope-label">Admin View</div>
+      <div class="admin-switch" id="admin-switch"></div>
+    </div>
+    <div class="scope-summary" id="scope-summary"></div>
   </div>
 
-  <div class="modal-overlay" id="modal-overlay">
-    <div class="modal">
-      <h3>LINE message preview</h3>
-      <div class="modal-msg" id="modal-msg"></div>
-      <div class="modal-actions">
-        <button class="modal-btn secondary" onclick="closeModal()">Close</button>
-        <button class="modal-btn primary" id="modal-copy-btn" onclick="copyMsg()">Copy message</button>
+  <div class="app-shell">
+    <div id="main-area"></div>
+  </div>
+
+  <div class="modal-overlay" id="modal-overlay" onclick="if (event.target === this) closeModal()">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div class="modal-title">LINE Message Preview</div>
+        <button class="icon-btn" onclick="closeModal()">Close</button>
+      </div>
+      <div class="modal-body">
+        <pre id="modal-msg"></pre>
+      </div>
+      <div class="modal-foot">
+        <button class="ghost-btn" onclick="closeModal()">Close</button>
+        <button class="action-btn" id="modal-copy-btn" onclick="copyMsg()">Copy message</button>
       </div>
     </div>
   </div>
 
+  <div class="toast-root" id="toast-root" aria-live="polite" aria-atomic="true"></div>
+
 <script>
+let DATA = createEmptyDashboardData();
+let isLoading = true;
+let loadError = null;
+let currentView = "command";
+let currentAdminView = "all";
+let selectedStudentIndex = null;
+let currentSearch = "";
+let currentRiskFilter = "all";
+let currentSort = { field: "priorityScore", dir: "desc" };
+let queuePanelWidth = 48;
+let isQueueHidden = false;
+let isCalendarHidden = false;
+let isResizing = false;
+let calendarView = "month";
+let calendarCursor = startOfMonth(new Date());
+let selectedCalendarDate = null;
+let activeLoadToken = 0;
+let loadInFlight = false;
+let selectedQueueStudentKeys = {};
+
+const CLIENT_STATUS_ORDER = { notify: 0, watch: 1, ok: 2, nodata: 3 };
+const ACTION_STATUS_META = {
+  contacted: { label: "Contacted", tone: "contacted" },
+  "pending-callback": { label: "Pending Callback", tone: "pending-callback" },
+  resolved: { label: "Resolved", tone: "resolved" },
+};
+const RISK_FILTER_OPTIONS = [
+  { key: "all", label: "All" },
+  { key: "notify", label: "Notify" },
+  { key: "watch", label: "Watch" },
+  { key: "ok", label: "Healthy" },
+];
+const DASHBOARD_TRANSFER_BATCH_SIZE = 5;
+const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const WEEKDAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
 function createEmptyDashboardData() {
   return {
+    adminViews: getDefaultAdminViews(),
     lastUpdatedAt: null,
     previousUpdatedAt: null,
     summary: {
@@ -1141,177 +1692,213 @@ function createEmptyDashboardData() {
         lowBalanceNoSchedule: 0,
         multiRiskStudents: 0,
       },
-      deltas: {
-        packagesNotify: null,
-        packagesWatch: null,
-        risk7: null,
-        risk30: null,
-        pendingDeductionBacklog: null,
-        noSchedule: null,
-      },
+      queue: { students: 0, pinnedStudents: 0 },
+      deltas: {},
     },
-    insights: [],
-    segments: {
-      packageNames: [],
-      parents: [],
-      cadence: [],
-      drivers: [],
-      distribution: [],
-      outreachByWeek: [],
-      exhaustionByWeek: [],
-      exhaustionHeatmap: [],
+    studentQueue: [],
+    calendar: {
+      availableStart: null,
+      availableEnd: null,
+      days: [],
     },
-    timeline: [],
-    actionQueue: [],
     students: [],
   };
 }
 
-let DATA = createEmptyDashboardData();
-let isLoading = true;
-let loadError = null;
-
-let currentView = "command";
-let currentFilter = "all";
-let currentSearch = "";
-let currentSort = { field: "priorityScore", dir: "desc" };
-let selectedQueueKey = null;
-let selectedStudentIndex = null;
-
-function escapeHtml(value) {
-  return String(value ?? "").replace(/[&<>"']/g, function(character) {
-    return {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;",
-    }[character];
-  });
-}
-
-function formatNumber(value) {
-  if (value === null || value === undefined || Number.isNaN(Number(value))) return "-";
-  const numeric = Number(value);
-  return Number.isInteger(numeric) ? String(numeric) : numeric.toFixed(1);
-}
-
-function formatSigned(value, suffix) {
-  if (value === null || value === undefined) return "Baseline";
-  const numeric = Number(value);
-  const sign = numeric > 0 ? "+" : "";
-  return sign + formatNumber(numeric) + (suffix || "");
-}
-
-function formatDate(dateString) {
-  if (!dateString) return "No date";
-  return new Date(dateString).toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
-
-function formatShortDate(dateString) {
-  if (!dateString) return "No date";
-  return new Date(dateString).toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-  });
-}
-
-function formatDateTime(dateString) {
-  if (!dateString) return "No baseline";
-  return new Date(dateString).toLocaleString("en-GB", {
-    day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
-function statusLabel(status) {
-  return {
-    notify: "Act now",
-    watch: "Watch",
-    ok: "Healthy",
-    nodata: "No data",
-  }[status] || status;
-}
-
-function flagLabel(flag) {
-  return {
-    "no-upcoming-sessions": "No future schedule",
-    "pending-deduction": "Pending deduction",
-    "duplicate-source-rows": "Duplicate source rows",
-    "low-balance-no-schedule": "Low balance + no schedule",
-    "missing-parent": "Missing parent",
-    "exhausted-now": "Exhausted now",
-  }[flag] || flag;
-}
-
-function toneClass(tone) {
-  return {
-    critical: "tone-critical",
-    warning: "tone-warning",
-    attention: "tone-warning",
-    positive: "tone-positive",
-    info: "tone-info",
-  }[tone] || "tone-info";
-}
-
-function avatarPalette(index) {
-  const palettes = [
-    { bg: "#e7eef9", fg: "#0d3b73" },
-    { bg: "#fff1e7", fg: "#f36a1d" },
-    { bg: "#e8f6ef", fg: "#1d7a4f" },
-    { bg: "#fff6df", fg: "#d28b15" },
-    { bg: "#ede8fa", fg: "#5d43c4" },
+function getDefaultAdminViews() {
+  return [
+    { key: "all", label: "All" },
+    { key: "palm", label: "Palm" },
+    { key: "kem", label: "Kem" },
+    { key: "care", label: "Care" },
+    { key: "aya", label: "Aya" },
+    { key: "petchy", label: "Petchy" },
+    { key: "muk", label: "Muk" },
+    { key: "unassigned", label: "Unassigned" },
   ];
-  return palettes[index % palettes.length];
-}
-
-function getInitials(name) {
-  return String(name || "")
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map(function(part) { return part[0]; })
-    .join("")
-    .toUpperCase();
 }
 
 function hasLoadedData() {
   return !isLoading && !loadError;
 }
 
-function renderStateCard(title, detail, actionsMarkup) {
-  return `
-    <section class="panel state-card">
-      <div class="state-title">${escapeHtml(title)}</div>
-      <div class="state-detail">${escapeHtml(detail)}</div>
-      ${actionsMarkup ? `<div class="state-actions">${actionsMarkup}</div>` : ""}
-    </section>
-  `;
+function getAdminViews() {
+  return Array.isArray(DATA.adminViews) && DATA.adminViews.length
+    ? DATA.adminViews
+    : getDefaultAdminViews();
 }
 
-function applyLoadedData(payload) {
-  DATA = payload || createEmptyDashboardData();
-  isLoading = false;
-  loadError = null;
-  selectedQueueKey = DATA.actionQueue.length ? DATA.actionQueue[0].key : null;
+function getAdminViewLabel(viewKey) {
+  const match = getAdminViews().find(function(view) {
+    return view.key === viewKey;
+  });
 
-  if (selectedStudentIndex !== null && !DATA.students[selectedStudentIndex]) {
-    selectedStudentIndex = null;
+  return match ? match.label : "All";
+}
+
+function matchesCurrentAdminView(adminOwnerKey) {
+  if (currentAdminView === "all") return true;
+  return String(adminOwnerKey || "unassigned") === currentAdminView;
+}
+
+function isStudentVisibleForCurrentAdmin(student) {
+  if (!student) return false;
+  return matchesCurrentAdminView(student.adminOwnerKey);
+}
+
+function getAdminScopedStudents() {
+  return DATA.students.filter(function(student) {
+    return isStudentVisibleForCurrentAdmin(student);
+  });
+}
+
+function getAdminScopedQueueRows() {
+  return DATA.studentQueue.filter(function(row) {
+    return matchesCurrentAdminView(row.adminOwnerKey);
+  });
+}
+
+function matchesCurrentRiskFilter(row) {
+  if (currentRiskFilter === "all") return true;
+  return row && row.worstStatus === currentRiskFilter;
+}
+
+function getFilteredQueueRows() {
+  return getAdminScopedQueueRows().filter(function(row) {
+    return matchesCurrentRiskFilter(row)
+      && (!currentSearch || row.searchText.indexOf(currentSearch) !== -1);
+  });
+}
+
+function getVisibleSelectedQueueRows(queue) {
+  return (queue || getSortedFilteredQueue()).filter(function(row) {
+    return !!selectedQueueStudentKeys[row.studentKey];
+  });
+}
+
+function getVisibleSelectedQueueCount(queue) {
+  return getVisibleSelectedQueueRows(queue).length;
+}
+
+function pruneQueueSelection() {
+  const visibleKeys = {};
+
+  getSortedFilteredQueue().forEach(function(row) {
+    visibleKeys[row.studentKey] = true;
+  });
+
+  selectedQueueStudentKeys = Object.keys(selectedQueueStudentKeys).reduce(function(next, studentKey) {
+    if (visibleKeys[studentKey]) {
+      next[studentKey] = true;
+    }
+    return next;
+  }, {});
+}
+
+function getAdminScopedCalendarDays() {
+  return DATA.calendar.days.map(function(day) {
+    const students = day.students.filter(function(student) {
+      return matchesCurrentAdminView(student.adminOwnerKey);
+    });
+
+    return {
+      date: day.date,
+      totalStudents: students.length,
+      urgentStudents: students.filter(function(student) {
+        return student.pinned || student.worstStatus === "notify";
+      }).length,
+      watchStudents: students.filter(function(student) {
+        return student.worstStatus === "watch";
+      }).length,
+      students: students,
+    };
+  });
+}
+
+function getAdminScopedSummary() {
+  const students = getAdminScopedStudents();
+  const queueRows = getAdminScopedQueueRows();
+  const calendarDays = getAdminScopedCalendarDays();
+  const summary = {
+    students: { total: students.length, notify: 0, watch: 0, ok: 0, nodata: 0 },
+    packages: { total: 0, notify: 0, watch: 0, ok: 0, nodata: 0 },
+    queue: {
+      students: queueRows.length,
+      pinnedStudents: queueRows.filter(function(row) { return row.pinned; }).length,
+    },
+    scheduledDays: calendarDays.filter(function(day) {
+      return day.totalStudents > 0;
+    }).length,
+  };
+
+  students.forEach(function(student) {
+    summary.students[worstStatus(student.packages)]++;
+
+    student.packages.forEach(function(pkg) {
+      summary.packages.total++;
+      summary.packages[pkg.status]++;
+    });
+  });
+
+  return summary;
+}
+
+function renderAdminSwitch() {
+  return getAdminViews().map(function(view) {
+    return `
+      <button class="admin-btn ${currentAdminView === view.key ? "active" : ""}" onclick="setAdminView('${view.key}')">
+        ${escapeHtml(view.label)}
+      </button>
+    `;
+  }).join("");
+}
+
+function renderRiskFilterChips() {
+  return RISK_FILTER_OPTIONS.map(function(option) {
+    return `
+      <button class="filter-chip ${currentRiskFilter === option.key ? "active" : ""}" onclick="setRiskFilter('${option.key}')">
+        ${escapeHtml(option.label)}
+      </button>
+    `;
+  }).join("");
+}
+
+function renderScopeSummary() {
+  if (isLoading) {
+    return new Array(6).fill('<div class="summary-pill skeleton-pill"></div>').join("");
   }
 
-  renderAll();
+  if (loadError) {
+    return '<div class="summary-pill"><div class="summary-pill-label">Scope</div><div class="summary-pill-value">Unavailable</div></div>';
+  }
+
+  const summary = getAdminScopedSummary();
+  const selectedLabel = getAdminViewLabel(currentAdminView);
+  const cards = [
+    { label: "View", value: selectedLabel },
+    { label: "Students", value: String(summary.students.total) },
+    { label: "Queue", value: String(summary.queue.students) },
+    { label: "Notify Packages", value: String(summary.packages.notify) },
+    { label: "Pinned", value: String(summary.queue.pinnedStudents) },
+    { label: "Scheduled Days", value: String(summary.scheduledDays) },
+  ];
+
+  return cards.map(function(card) {
+    return `
+      <div class="summary-pill">
+        <div class="summary-pill-label">${escapeHtml(card.label)}</div>
+        <div class="summary-pill-value">${escapeHtml(card.value)}</div>
+      </div>
+    `;
+  }).join("");
 }
 
-function handleLoadFailure(error) {
-  isLoading = false;
-  loadError = error && error.message ? error.message : String(error || "Unknown error");
-  renderAll();
+function renderSearchResultCount() {
+  if (isLoading) return "Loading queue";
+  if (loadError) return "Queue unavailable";
+
+  const queueCount = getSortedFilteredQueue().length;
+  return queueCount + " student" + (queueCount === 1 ? "" : "s");
 }
 
 function requestServer(functionName) {
@@ -1326,13 +1913,31 @@ function requestServer(functionName) {
   });
 }
 
-async function resolveDashboardTransfer(transfer) {
+function isRecoverableTransferError(error) {
+  const message = error && error.message ? error.message : String(error || "");
+  return message.indexOf("Dashboard payload chunk") !== -1
+    || message.indexOf("Dashboard transfer metadata is incomplete") !== -1
+    || message.indexOf("Unexpected end of JSON input") !== -1;
+}
+
+async function restartDashboardTransfer(loadToken) {
+  if (loadToken !== activeLoadToken) {
+    return;
+  }
+
+  const refreshedTransfer = await requestServer("beginDashboardDataTransfer");
+  return resolveDashboardTransfer(refreshedTransfer, loadToken, false);
+}
+
+async function resolveDashboardTransfer(transfer, loadToken, allowRetry) {
   if (!transfer) {
     throw new Error("Dashboard transfer did not return any data.");
   }
 
+  const canRetry = allowRetry !== false;
+
   if (transfer.mode === "inline") {
-    applyLoadedData(transfer.payload);
+    applyLoadedData(transfer.payload, loadToken);
     return;
   }
 
@@ -1340,139 +1945,159 @@ async function resolveDashboardTransfer(transfer) {
     throw new Error("Dashboard transfer metadata is incomplete.");
   }
 
-  const chunkRequests = [];
-  for (let index = 0; index < transfer.parts; index++) {
-    chunkRequests.push(requestServer("fetchDashboardDataChunk", index));
+  const chunks = [];
+
+  for (let startIndex = 0; startIndex < transfer.parts; startIndex += DASHBOARD_TRANSFER_BATCH_SIZE) {
+    if (loadToken !== activeLoadToken) {
+      return;
+    }
+
+    let batch;
+
+    try {
+      batch = await requestServer(
+        "fetchDashboardDataChunkBatch",
+        startIndex,
+        DASHBOARD_TRANSFER_BATCH_SIZE
+      );
+    } catch (error) {
+      if (canRetry && isRecoverableTransferError(error)) {
+        return restartDashboardTransfer(loadToken);
+      }
+      throw error;
+    }
+
+    if (!Array.isArray(batch) || !batch.length) {
+      if (canRetry) {
+        return restartDashboardTransfer(loadToken);
+      }
+      throw new Error("Dashboard payload chunk batch is incomplete.");
+    }
+
+    Array.prototype.push.apply(chunks, batch);
   }
 
-  const chunks = await Promise.all(chunkRequests);
-  applyLoadedData(JSON.parse(chunks.join("")));
+  if (loadToken !== activeLoadToken) {
+    return;
+  }
+
+  try {
+    applyLoadedData(JSON.parse(chunks.join("")), loadToken);
+  } catch (error) {
+    if (canRetry && isRecoverableTransferError(error)) {
+      return restartDashboardTransfer(loadToken);
+    }
+    throw error;
+  }
+}
+
+function applyLoadedData(payload, loadToken) {
+  if (typeof loadToken === "number" && loadToken !== activeLoadToken) {
+    return;
+  }
+
+  DATA = payload || createEmptyDashboardData();
+  loadInFlight = false;
+  isLoading = false;
+  loadError = null;
+
+  if (!getAdminViews().some(function(view) { return view.key === currentAdminView; })) {
+    currentAdminView = "all";
+  }
+
+  if (selectedStudentIndex !== null && !DATA.students[selectedStudentIndex]) {
+    selectedStudentIndex = null;
+    currentView = "command";
+  }
+
+  if (selectedStudentIndex !== null && !isStudentVisibleForCurrentAdmin(DATA.students[selectedStudentIndex])) {
+    selectedStudentIndex = null;
+    currentView = "command";
+  }
+
+  if (!selectedCalendarDate) {
+    selectedCalendarDate = getDefaultCalendarDate();
+  }
+
+  if (selectedCalendarDate && !getCalendarDayMap()[selectedCalendarDate]) {
+    selectedCalendarDate = getDefaultCalendarDate();
+  }
+
+  pruneQueueSelection();
+  renderAll();
+}
+
+function handleLoadFailure(error, loadToken) {
+  if (typeof loadToken === "number" && loadToken !== activeLoadToken) {
+    return;
+  }
+
+  loadInFlight = false;
+  isLoading = false;
+  loadError = error && error.message ? error.message : String(error || "Unknown error");
+  renderAll();
 }
 
 function loadDashboardData() {
+  if (loadInFlight) {
+    return;
+  }
+
+  const loadToken = ++activeLoadToken;
+  loadInFlight = true;
   isLoading = true;
   loadError = null;
   renderAll();
 
   if (typeof google === "undefined" || !google.script || !google.script.run) {
-    handleLoadFailure("Apps Script runtime is unavailable in this view.");
+    handleLoadFailure("Apps Script runtime is unavailable in this view.", loadToken);
     return;
   }
 
   requestServer("beginDashboardDataTransfer")
-    .then(resolveDashboardTransfer)
-    .catch(handleLoadFailure);
+    .then(function(transfer) {
+      return resolveDashboardTransfer(transfer, loadToken);
+    })
+    .catch(function(error) {
+      handleLoadFailure(error, loadToken);
+    });
 }
 
 function retryLoadData() {
   loadDashboardData();
 }
 
-function worstStatus(packages) {
-  if (packages.some(function(pkg) { return pkg.status === "notify"; })) return "notify";
-  if (packages.some(function(pkg) { return pkg.status === "watch"; })) return "watch";
-  if (packages.some(function(pkg) { return pkg.status === "ok"; })) return "ok";
-  return "nodata";
-}
-
-function matchesSmartFilter(row, filterName) {
-  if (filterName === "all") return true;
-  if (filterName === "act-now") return row.status === "notify" || row.adjustedRemaining <= 0;
-  if (filterName === "this-week") {
-    return row.daysUntilAlert !== null && row.daysUntilAlert > 0 && row.daysUntilAlert <= 7;
-  }
-  if (filterName === "next-30") {
-    return row.daysUntilAlert !== null && row.daysUntilAlert > 7 && row.daysUntilAlert <= 30;
-  }
-  if (filterName === "missing-data") {
-    return row.dataQualityFlags.indexOf("no-upcoming-sessions") !== -1;
-  }
-  if (filterName === "recently-worsened") return row.statusChange === "worsened";
-  return true;
-}
-
-function matchesSearch(row) {
-  if (!currentSearch) return true;
-  const haystack = [
-    row.student,
-    row.parent,
-    row.packageName,
-    row.recommendedAction,
-  ].join(" ").toLowerCase();
-  return haystack.indexOf(currentSearch) !== -1;
-}
-
-function getSortedFilteredQueue() {
-  const filtered = DATA.actionQueue.filter(function(row) {
-    return matchesSmartFilter(row, currentFilter) && matchesSearch(row);
-  });
-
-  const direction = currentSort.dir === "asc" ? 1 : -1;
-  const field = currentSort.field;
-
-  return filtered.slice().sort(function(a, b) {
-    if (field === "student") return direction * a.student.localeCompare(b.student);
-    if (field === "adjustedRemaining") return direction * (a.adjustedRemaining - b.adjustedRemaining);
-    if (field === "pendingDeduction") return direction * (a.pendingDeduction - b.pendingDeduction);
-    if (field === "daysUntilAlert") return direction * normalizeDayValue(a.daysUntilAlert, b.daysUntilAlert);
-    if (field === "daysUntilExhaust") return direction * normalizeDayValue(a.daysUntilExhaust, b.daysUntilExhaust);
-    if (field === "nextSessionDate") {
-      return direction * normalizeDateValue(a.nextSessionDate, b.nextSessionDate);
-    }
-    return direction * (a.priorityScore - b.priorityScore);
-  });
-}
-
-function normalizeDayValue(dayA, dayB) {
-  const normalizedA = dayA === null ? Number.POSITIVE_INFINITY : dayA;
-  const normalizedB = dayB === null ? Number.POSITIVE_INFINITY : dayB;
-  return normalizedA - normalizedB;
-}
-
-function normalizeDateValue(dateA, dateB) {
-  const normalizedA = dateA ? new Date(dateA).getTime() : Number.POSITIVE_INFINITY;
-  const normalizedB = dateB ? new Date(dateB).getTime() : Number.POSITIVE_INFINITY;
-  return normalizedA - normalizedB;
-}
-
-function getSelectedQueueRow() {
-  const queue = getSortedFilteredQueue();
-  if (!queue.length) return null;
-  const selected = queue.find(function(row) { return row.key === selectedQueueKey; });
-  return selected || queue[0];
-}
-
-function getStudentByIndex(index) {
-  return index === null ? null : DATA.students[index];
-}
-
-function getSidebarStudents() {
-  const matchingKeys = {};
-  getSortedFilteredQueue().forEach(function(row) {
-    matchingKeys[row.student] = true;
-  });
-
-  return DATA.students.filter(function(student) {
-    const searchPass = !currentSearch || [student.student, student.parent].join(" ").toLowerCase().indexOf(currentSearch) !== -1;
-    const filterPass = currentFilter === "all" || matchingKeys[student.student];
-    return searchPass && filterPass;
-  });
-}
-
-function getFilterCount(filterName) {
-  return DATA.actionQueue.filter(function(row) {
-    return matchesSmartFilter(row, filterName);
-  }).length;
+function renderAll() {
+  renderHeaderState();
+  renderContent();
 }
 
 function renderHeaderState() {
-  document.getElementById("view-command").classList.toggle("active", currentView === "command");
-  document.getElementById("view-analytics").classList.toggle("active", currentView === "analytics");
-  document.getElementById("view-student").classList.toggle("active", currentView === "student");
+  const commandBtn = document.getElementById("view-command");
+  const studentBtn = document.getElementById("view-student");
+  const searchInput = document.getElementById("global-search");
+  const searchClearBtn = document.getElementById("search-clear-btn");
+  const riskFilterChips = document.getElementById("risk-filter-chips");
+  const searchResultCount = document.getElementById("search-result-count");
+  const adminSwitch = document.getElementById("admin-switch");
+  const scopeSummary = document.getElementById("scope-summary");
+
+  commandBtn.classList.toggle("active", currentView === "command");
+  studentBtn.classList.toggle("active", currentView === "student");
+  studentBtn.classList.toggle("hidden", selectedStudentIndex === null);
+  adminSwitch.innerHTML = renderAdminSwitch();
+  scopeSummary.innerHTML = renderScopeSummary();
+  riskFilterChips.innerHTML = renderRiskFilterChips();
+  searchResultCount.textContent = renderSearchResultCount();
+  searchClearBtn.classList.toggle("hidden", !currentSearch);
+
+  if (document.activeElement !== searchInput && searchInput.value !== currentSearch) {
+    searchInput.value = currentSearch;
+  }
 
   if (isLoading) {
     document.getElementById("freshness-label").textContent = "Loading dashboard data";
-    document.getElementById("comparison-label").textContent = "Preparing latest package view";
+    document.getElementById("comparison-label").textContent = "Preparing latest command center";
     return;
   }
 
@@ -1482,686 +2107,518 @@ function renderHeaderState() {
     return;
   }
 
-  document.getElementById("freshness-label").textContent = "Last updated " + formatDateTime(DATA.lastUpdatedAt);
+  document.getElementById("freshness-label").textContent = DATA.lastUpdatedAt
+    ? "Last updated " + formatDateTime(DATA.lastUpdatedAt)
+    : "Last updated unavailable";
   document.getElementById("comparison-label").textContent = DATA.previousUpdatedAt
     ? "Compared with " + formatDateTime(DATA.previousUpdatedAt)
     : "First stored snapshot";
 }
 
-function renderRail() {
+function renderContent() {
+  const mainArea = document.getElementById("main-area");
+
   if (isLoading) {
-    document.getElementById("rail").innerHTML = renderStateCard(
-      "Loading dashboard",
-      "The page shell is ready. Live spreadsheet data, analytics, and student detail are loading now."
-    );
+    mainArea.innerHTML = renderLoadingSkeleton();
     return;
   }
 
   if (loadError) {
-    document.getElementById("rail").innerHTML = renderStateCard(
-      "Could not load dashboard",
+    mainArea.innerHTML = renderStateCard(
+      "Dashboard data unavailable",
       loadError,
-      `<button class="ghost-btn" onclick="retryLoadData()">Retry load</button>`
+      '<button class="action-btn" onclick="retryLoadData()">Retry</button>'
     );
     return;
   }
 
-  const students = getSidebarStudents();
-  const selectedStudent = getStudentByIndex(selectedStudentIndex);
+  if (currentView === "student" && selectedStudentIndex !== null && !isStudentVisibleForCurrentAdmin(DATA.students[selectedStudentIndex])) {
+    selectedStudentIndex = null;
+    currentView = "command";
+  }
 
-  document.getElementById("rail").innerHTML = `
-    <section class="panel rail-panel">
-      <div class="panel-heading">
+  if (currentView === "student" && selectedStudentIndex !== null) {
+    mainArea.innerHTML = renderStudentDetailView();
+    return;
+  }
+
+  currentView = "command";
+  mainArea.innerHTML = renderCommandCenterView();
+}
+
+function renderStateCard(title, detail, actionsMarkup) {
+  return `
+    <section class="state-card">
+      <div class="state-title">${escapeHtml(title)}</div>
+      <div class="state-detail">${escapeHtml(detail)}</div>
+      ${actionsMarkup ? `<div class="state-actions">${actionsMarkup}</div>` : ""}
+    </section>
+  `;
+}
+
+function renderLoadingSkeleton() {
+  return `
+    <div class="loading-shell">
+      <div class="loading-summary-row">
+        ${new Array(6).fill('<div class="skeleton-pill"></div>').join("")}
+      </div>
+      <div class="loading-command-layout">
+        <section class="panel loading-panel">
+          <div class="skeleton-line" style="width:110px"></div>
+          <div class="skeleton-line" style="width:220px;height:20px"></div>
+          <div class="skeleton-line" style="width:75%"></div>
+          ${new Array(5).fill(`
+            <div class="loading-table-row">
+              <div class="skeleton-block" style="height:72px"></div>
+              <div class="skeleton-block" style="height:72px"></div>
+              <div class="skeleton-block" style="height:72px"></div>
+              <div class="skeleton-block" style="height:72px"></div>
+              <div class="skeleton-block" style="height:72px"></div>
+              <div class="skeleton-block" style="height:72px"></div>
+              <div class="skeleton-block" style="height:72px"></div>
+            </div>
+          `).join("")}
+        </section>
+        <section class="panel loading-panel">
+          <div class="skeleton-line" style="width:120px"></div>
+          <div class="skeleton-line" style="width:180px;height:20px"></div>
+          <div class="skeleton-line" style="width:70%"></div>
+          <div class="loading-calendar-grid">
+            ${new Array(14).fill('<div class="skeleton-block loading-calendar-cell"></div>').join("")}
+          </div>
+        </section>
+      </div>
+    </div>
+  `;
+}
+
+function renderCommandCenterView() {
+  const scopedSummary = getAdminScopedSummary();
+  const queue = getSortedFilteredQueue();
+  const filteredDayMap = getFilteredCalendarDayMap();
+  const scopedCalendarDays = getAdminScopedCalendarDays();
+  const selectedDay = getSelectedCalendarDay(filteredDayMap);
+  const bothVisible = !isQueueHidden && !isCalendarHidden;
+  const queueWidth = Math.max(26, Math.min(74, queuePanelWidth));
+
+  return `
+    <div class="command-shell">
+      ${renderRestoreBar()}
+      <div class="command-layout" id="command-layout">
+        ${isQueueHidden ? "" : renderQueuePane(queue, queueWidth, scopedSummary)}
+        ${bothVisible ? '<div class="splitter" onmousedown="startResize(event)" aria-hidden="true"></div>' : ""}
+        ${isCalendarHidden ? "" : renderCalendarPane(selectedDay, scopedCalendarDays)}
+      </div>
+    </div>
+  `;
+}
+
+function renderRestoreBar() {
+  const buttons = [];
+
+  if (isQueueHidden) {
+    buttons.push('<button class="restore-btn" onclick="showQueuePane()">Show queue</button>');
+  }
+  if (isCalendarHidden) {
+    buttons.push('<button class="restore-btn" onclick="showCalendarPane()">Show calendar</button>');
+  }
+
+  return buttons.length ? `<div class="restore-bar">${buttons.join("")}</div>` : "";
+}
+
+function renderQueuePane(queue, widthPct, scopedSummary) {
+  const selectedCount = getVisibleSelectedQueueCount(queue);
+
+  return `
+    <section class="panel pane queue-pane" style="flex: 0 0 ${widthPct}%;">
+      <div class="pane-header">
         <div>
-          <div class="panel-title">Work queue</div>
-          <div class="panel-caption">Filter the queue, then drill into the right package or student.</div>
+          <div class="panel-title">Prioritized Action Queue</div>
+          <div class="panel-heading-lg">${queue.length} students need action</div>
+          <div class="panel-caption">
+            Student-level queue with rolled-up balances, nearest next session, and direct drill-in to Student Detail.
+          </div>
+        </div>
+        <div class="mini-pills">
+          <span class="mini-pill">${scopedSummary.queue.pinnedStudents} pinned</span>
+          <span class="mini-pill">${scopedSummary.packages.notify} notify packages</span>
+          <button class="icon-btn" onclick="hideQueuePane()">Hide</button>
         </div>
       </div>
-      <input
-        class="search-input"
-        type="text"
-        placeholder="Search student, parent, or package"
-        value="${escapeHtml(currentSearch)}"
-        oninput="setSearch(this.value)"
-      />
-      <div style="height:14px"></div>
-      <div class="filter-grid">
-        ${renderFilterChip("all", "All queue", getFilterCount("all"))}
-        ${renderFilterChip("act-now", "Act now", getFilterCount("act-now"))}
-        ${renderFilterChip("this-week", "This week", getFilterCount("this-week"))}
-        ${renderFilterChip("next-30", "Next 30 days", getFilterCount("next-30"))}
-        ${renderFilterChip("missing-data", "Missing data", getFilterCount("missing-data"))}
-        ${renderFilterChip("recently-worsened", "Worsened", getFilterCount("recently-worsened"))}
-      </div>
-    </section>
-
-    <section class="panel rail-panel">
-      <div class="panel-heading">
-        <div class="panel-title">Students</div>
-        <div class="panel-caption">${students.length} visible</div>
-      </div>
-      <div class="student-list">
-        ${students.length ? students.map(function(student) {
-          const index = DATA.students.indexOf(student);
-          const worst = worstStatus(student.packages);
-          const riskyCount = student.packages.filter(function(pkg) {
-            return pkg.status === "notify" || pkg.status === "watch";
-          }).length;
-          const palette = avatarPalette(index);
-          return `
-            <div class="student-row ${selectedStudent && selectedStudent.student === student.student ? "active" : ""}" onclick="openStudent(${index})">
-              <div class="avatar" style="background:${palette.bg};color:${palette.fg}">${escapeHtml(getInitials(student.student))}</div>
-              <div class="student-copy">
-                <div class="student-name">${escapeHtml(student.student)}</div>
-                <div class="student-sub">${escapeHtml(student.parent || "Missing parent")} - ${student.packages.length} packages</div>
-              </div>
-              <div class="student-meta">
-                <span class="status-pill ${worst}">${statusLabel(worst)}</span>
-                <span class="student-sub">${riskyCount} risky</span>
-              </div>
-            </div>
-          `;
-        }).join("") : `<div class="empty-state">No students match this filter.</div>`}
-      </div>
-    </section>
-
-    <section class="panel rail-panel">
-      <div class="panel-heading">
-        <div class="panel-title">Top package clusters</div>
-        <div class="panel-caption">Where risk is concentrated now</div>
-      </div>
-      <div class="segment-list">
-        ${DATA.segments.packageNames.slice(0, 4).map(function(segment) {
-          return `
-            <div class="segment-row">
-              <div class="segment-copy">
-                <div class="segment-name">${escapeHtml(segment.name)}</div>
-                <div class="segment-detail">${segment.riskyPackages} risky of ${segment.totalPackages} packages</div>
-              </div>
-              <div class="segment-value">${segment.notifyPackages}</div>
-            </div>
-          `;
-        }).join("")}
+      ${selectedCount ? renderQueueBulkBar(queue, selectedCount) : ""}
+      <div class="queue-table-wrap">
+        ${queue.length ? renderQueueTable(queue) : '<div class="empty-state">No students match the current search.</div>'}
       </div>
     </section>
   `;
 }
 
-function renderFilterChip(filterName, label, count) {
+function renderQueueBulkBar(queue, selectedCount) {
+  const selectedRows = getVisibleSelectedQueueRows(queue);
+  const selectedLabel = selectedCount + " selected";
+  const summaryLabel = selectedRows.length === queue.length
+    ? selectedLabel + " on this view"
+    : selectedLabel + " on the current filter";
+
   return `
-    <button class="filter-chip ${currentFilter === filterName ? "active" : ""}" onclick="setFilter('${filterName}')">
-      <div class="chip-label">${label}</div>
-      <div class="chip-count">${count}</div>
+    <div class="queue-bulk-bar">
+      <div class="queue-bulk-summary">${summaryLabel}</div>
+      <div class="queue-bulk-actions">
+        <button class="ghost-btn" onclick="applyBulkStudentAction('contacted')">Contacted</button>
+        <button class="ghost-btn" onclick="applyBulkStudentAction('pending-callback')">Pending callback</button>
+        <button class="ghost-btn" onclick="applyBulkStudentAction('resolved')">Resolved</button>
+        <button class="ghost-btn" onclick="applyBulkStudentAction('')">Clear</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderQueueTable(queue) {
+  const allVisibleSelected = queue.length && getVisibleSelectedQueueCount(queue) === queue.length;
+
+  return `
+    <table>
+      <thead>
+        <tr>
+          <th class="select-cell">
+            <input
+              class="select-checkbox"
+              type="checkbox"
+              ${allVisibleSelected ? "checked" : ""}
+              onclick="toggleSelectAllVisibleQueue(event)"
+              aria-label="Select all visible students"
+            />
+          </th>
+          ${renderSortableHeader("priorityScore", "Priority")}
+          ${renderSortableHeader("student", "Student")}
+          ${renderSortableHeader("totalCurrentRemaining", "System")}
+          ${renderSortableHeader("totalAdjustedRemaining", "Actual")}
+          ${renderSortableHeader("nextSessionDate", "Next Session")}
+          ${renderSortableHeader("packageCount", "Packages")}
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${queue.map(function(row) {
+          const actionState = row.actionState || null;
+          return `
+            <tr class="queue-row ${selectedQueueStudentKeys[row.studentKey] ? "is-selected" : ""}" onclick="openStudent(${row.studentIndex})">
+              <td class="select-cell">
+                <input
+                  class="select-checkbox"
+                  type="checkbox"
+                  ${selectedQueueStudentKeys[row.studentKey] ? "checked" : ""}
+                  onclick="toggleQueueSelection(event, decodeURIComponent('${encodeURIComponent(row.studentKey)}'))"
+                  aria-label="Select ${escapeHtml(row.student)}"
+                />
+              </td>
+              <td>
+                <div class="priority-chip ${row.pinned ? "pinned" : "standard"}">${row.pinned ? "Pinned" : statusLabel(row.worstStatus)}</div>
+                <div class="queue-secondary mono" style="margin-top:8px">${formatNumber(row.priorityScore)}</div>
+              </td>
+              <td>
+                <div class="queue-primary">${escapeHtml(row.student)}</div>
+                <div class="queue-secondary">${escapeHtml(row.parent)}</div>
+                <div class="queue-secondary">${escapeHtml(row.packageNames.join(", "))}</div>
+              </td>
+              <td>
+                <div class="queue-primary ${balanceTone(row.totalCurrentRemaining)}">${formatNumber(row.totalCurrentRemaining)} cr</div>
+                <div class="queue-secondary">${row.totalCurrentRemaining <= 0 ? "System balance is zero or negative" : "Rolled up across all packages"}</div>
+              </td>
+              <td>
+                <div class="queue-primary ${balanceTone(row.totalAdjustedRemaining)}">${formatNumber(row.totalAdjustedRemaining)} cr</div>
+                <div class="queue-secondary">${formatNumber(row.totalPendingDeduction)} cr pending deduction backlog</div>
+              </td>
+              <td>
+                <div class="queue-primary">${escapeHtml(row.nextSessionDate ? formatShortDate(row.nextSessionDate) : "No future session")}</div>
+                <div class="queue-secondary">${escapeHtml(row.nextSessionPackageName || "No package scheduled next")}</div>
+              </td>
+              <td>
+                <div class="queue-primary">${row.packageCount} active</div>
+                <div class="queue-secondary">${row.riskyPackageCount} risky package${row.riskyPackageCount === 1 ? "" : "s"}</div>
+              </td>
+              <td>
+                <div class="queue-primary">${escapeHtml(row.recommendedAction)}</div>
+                <div class="queue-secondary">${escapeHtml(row.whyNow)}</div>
+                ${actionState ? `
+                  <div class="action-status-pill ${actionState.status}" style="margin-top:10px">${escapeHtml(actionStatusLabel(actionState.status))}</div>
+                  <div class="queue-secondary">${escapeHtml(formatActionStateSummary(actionState))}</div>
+                ` : '<div class="queue-secondary">No action recorded today</div>'}
+              </td>
+            </tr>
+          `;
+        }).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+function renderSortableHeader(field, label) {
+  const isActive = currentSort.field === field;
+  const arrow = !isActive ? "↕" : currentSort.dir === "asc" ? "↑" : "↓";
+  return `
+    <th class="sortable" onclick="toggleSort('${field}')">
+      <span class="sort-label">${label} <span>${arrow}</span></span>
+    </th>
+  `;
+}
+
+function renderCalendarPane(selectedDay, scopedCalendarDays) {
+  const calendarBody = renderCalendarBody(selectedDay);
+  const periodLabel = calendarView === "month"
+    ? "Month overview"
+    : calendarView === "week"
+      ? "Week focus"
+      : "Daily workload";
+
+  return `
+    <section class="panel pane calendar-pane" style="flex: 1 1 0;">
+      <div class="pane-header">
+        <div>
+          <div class="panel-title">Calendar View</div>
+          <div class="panel-heading-lg">Triage Calendar</div>
+          <div class="panel-caption">Scan the month fast, then jump straight into the days that need action.</div>
+        </div>
+        <div class="mini-pills">
+          <span class="mini-pill">${scopedCalendarDays.filter(function(day) { return day.totalStudents > 0; }).length} scheduled days</span>
+          <button class="icon-btn" onclick="hideCalendarPane()">Hide</button>
+        </div>
+      </div>
+      <div class="calendar-toolbar">
+        <div class="toolbar-left">
+          <div class="segmented-control">
+            <button class="${calendarView === "month" ? "active" : ""}" onclick="setCalendarView('month')">Month</button>
+            <button class="${calendarView === "week" ? "active" : ""}" onclick="setCalendarView('week')">Week</button>
+            <button class="${calendarView === "day" ? "active" : ""}" onclick="setCalendarView('day')">Day</button>
+          </div>
+        </div>
+        <div class="toolbar-center">
+          <div class="calendar-period-nav">
+            <button class="icon-btn calendar-period-btn" onclick="shiftCalendar(-1)" aria-label="Previous period">‹</button>
+            <div class="calendar-period-heading">
+              <div class="calendar-period-label">${periodLabel}</div>
+              <div class="calendar-period-value">${escapeHtml(formatCurrentCalendarHeading())}</div>
+            </div>
+            <button class="icon-btn calendar-period-btn" onclick="shiftCalendar(1)" aria-label="Next period">›</button>
+          </div>
+        </div>
+        <div class="toolbar-right">
+          <button class="icon-btn" onclick="jumpToToday()">Today</button>
+          <button class="icon-btn" onclick="jumpToNextUrgentDay()">Next urgent</button>
+          <button class="icon-btn" onclick="jumpToNextScheduledDay()">Next scheduled</button>
+        </div>
+      </div>
+      <div class="calendar-body">
+        ${calendarBody}
+      </div>
+    </section>
+  `;
+}
+
+function renderCalendarBody(selectedDay) {
+  if (calendarView === "day") {
+    return `
+      <div class="calendar-content-grid day-focus">
+        <div class="calendar-main">
+          ${renderSelectedDayDetail(selectedDay, true)}
+        </div>
+      </div>
+    `;
+  }
+
+  const gridItems = calendarView === "month"
+    ? buildMonthCells()
+    : buildWeekCells();
+
+  return `
+    <div class="calendar-content-grid">
+      <div class="calendar-main">
+        ${renderActionableDayStrip(selectedDay)}
+        ${renderWeekdayHeaders()}
+        <div class="calendar-grid ${calendarView}">
+          ${gridItems.join("")}
+        </div>
+      </div>
+      <aside class="calendar-rail">
+        ${renderSelectedDayDetail(selectedDay)}
+      </aside>
+    </div>
+  `;
+}
+
+function renderWeekdayHeaders() {
+  return `<div class="calendar-weekdays">${WEEKDAY_NAMES.map(function(name) {
+    return `<div class="calendar-weekday">${name}</div>`;
+  }).join("")}</div>`;
+}
+
+function buildMonthCells() {
+  const start = startOfWeek(startOfMonth(calendarCursor));
+  const cells = [];
+
+  for (let offset = 0; offset < 42; offset++) {
+    const date = addDays(start, offset);
+    cells.push(renderCalendarCell(date, date.getMonth() !== calendarCursor.getMonth()));
+  }
+
+  return cells;
+}
+
+function buildWeekCells() {
+  const start = startOfWeek(calendarCursor);
+  const cells = [];
+
+  for (let offset = 0; offset < 7; offset++) {
+    cells.push(renderCalendarCell(addDays(start, offset), false));
+  }
+
+  return cells;
+}
+
+function renderCalendarCell(dateObj, muted) {
+  const dateKey = formatDateKey(dateObj);
+  const day = getFilteredCalendarDayMap()[dateKey] || null;
+  const isSelected = selectedCalendarDate === dateKey;
+  const tone = getCalendarDayTone(day);
+  const classes = [
+    "calendar-cell",
+    muted ? "muted" : "",
+    isSelected ? "selected" : "",
+    tone === "urgent" ? "has-urgent" : "",
+    tone === "watch" ? "has-watch" : "",
+    tone === "scheduled" ? "has-scheduled" : "",
+  ].filter(Boolean).join(" ");
+
+  return `
+    <button class="${classes}" onclick="selectCalendarDate('${dateKey}')">
+      <div class="calendar-day-top">
+        <div class="calendar-day-number">${dateObj.getDate()}</div>
+        <span class="calendar-count-badge">${day ? day.totalStudents : 0} student${day && day.totalStudents === 1 ? "" : "s"}</span>
+      </div>
+      <div class="calendar-summary">
+        <span class="calendar-severity-pill ${tone}">${escapeHtml(getCalendarSeverityLabel(day))}</span>
+      </div>
     </button>
   `;
 }
 
-function renderContent() {
-  if (isLoading) {
-    document.getElementById("main-area").innerHTML = renderStateCard(
-      "Loading command center",
-      "Fetching the latest package balances, risk queue, analytics, and student detail data."
-    );
-    return;
+function renderActionableDayStrip(selectedDay) {
+  const days = getActionableStripDays(getFilteredCalendarDayMap());
+
+  if (!days.length) {
+    return `
+      <div class="calendar-action-strip">
+        <div class="calendar-action-strip-head">
+          <div>
+            <div class="calendar-action-strip-title">Actionable days</div>
+            <div class="calendar-action-strip-caption">No scheduled days are visible for the current filters.</div>
+          </div>
+        </div>
+      </div>
+    `;
   }
-
-  if (loadError) {
-    document.getElementById("main-area").innerHTML = renderStateCard(
-      "Dashboard data unavailable",
-      loadError,
-      `<button class="action-btn" onclick="retryLoadData()">Retry</button>`
-    );
-    return;
-  }
-
-  if (currentView === "analytics") {
-    document.getElementById("main-area").innerHTML = renderAnalyticsView();
-    return;
-  }
-
-  if (currentView === "student" && selectedStudentIndex !== null) {
-    document.getElementById("main-area").innerHTML = renderStudentDetailView();
-    return;
-  }
-
-  document.getElementById("main-area").innerHTML = renderCommandCenterView();
-}
-
-function renderCommandCenterView() {
-  const queue = getSortedFilteredQueue();
-  const selectedRow = getSelectedQueueRow();
-  if (selectedRow) selectedQueueKey = selectedRow.key;
 
   return `
-    <div class="metrics-grid">
-      ${renderMetricCard("Need outreach today", DATA.summary.packages.notify, DATA.summary.deltas.packagesNotify, "Packages already below threshold")}
-      ${renderMetricCard("At risk in 7 days", DATA.summary.portfolio.risk7, DATA.summary.deltas.risk7, "Projected to cross threshold within the week")}
-      ${renderMetricCard("At risk in 30 days", DATA.summary.portfolio.risk30, DATA.summary.deltas.risk30, "All projected near-term alerts")}
-      ${renderMetricCard("No schedule data", DATA.summary.portfolio.noSchedule, DATA.summary.deltas.noSchedule, "Packages with weak forecasting confidence")}
-      ${renderMetricCard("Pending deductions", DATA.summary.portfolio.pendingDeductionBacklog, DATA.summary.deltas.pendingDeductionBacklog, "Credits not yet reflected in source balance", " credits")}
-    </div>
-
-    <div class="command-grid">
-      <div class="queue-panel">
-        <section class="panel queue-card">
-          <div class="queue-toolbar">
-            <div>
-              <div class="queue-title">Prioritized action queue</div>
-              <div class="queue-subtitle">Ranked by urgency, depletion timing, pending deductions, and data confidence.</div>
-            </div>
-            <div class="queue-count">${queue.length} packages in view</div>
-          </div>
-          ${queue.length ? renderQueueTable(queue, selectedRow) : `<div class="empty-state">No packages match the current filter.</div>`}
-        </section>
+    <div class="calendar-action-strip">
+      <div class="calendar-action-strip-head">
+        <div>
+          <div class="calendar-action-strip-title">Actionable days</div>
+          <div class="calendar-action-strip-caption">The next scheduled days that deserve a quick jump.</div>
+        </div>
       </div>
-
-      <div class="context-column">
-        ${selectedRow ? renderQueueContext(selectedRow) : `<section class="panel context-card"><div class="empty-state">Select a package to inspect its risk brief.</div></section>`}
-        <section class="panel context-card">
-          <div class="panel-heading">
-            <div class="panel-title">What changed</div>
-            <div class="panel-caption">Compared with the previous stored snapshot</div>
-          </div>
-          <div class="insight-list">
-            ${DATA.insights.map(function(insight) {
-              return `
-                <div class="insight-row">
-                  <div class="insight-copy">
-                    <div class="insight-name">${escapeHtml(insight.title)}</div>
-                    <div class="insight-detail">${escapeHtml(insight.detail)}</div>
-                  </div>
-                  <div class="insight-value ${toneClass(insight.tone)}">${escapeHtml(String(insight.value))}</div>
-                </div>
-              `;
-            }).join("")}
-          </div>
-        </section>
-
-        <section class="panel context-card">
-          <div class="panel-heading">
-            <div class="panel-title">Risk drivers</div>
-            <div class="panel-caption">Current drivers of workload and low confidence</div>
-          </div>
-          <div class="driver-list">
-            ${DATA.segments.drivers.map(function(driver) {
-              return `
-                <div class="driver-row">
-                  <div class="segment-copy">
-                    <div class="segment-name">${escapeHtml(driver.name)}</div>
-                  </div>
-                  <div class="segment-value ${toneClass(driver.tone)}">${driver.count}</div>
-                </div>
-              `;
-            }).join("")}
-          </div>
-        </section>
+      <div class="calendar-action-list">
+        ${days.map(function(day) {
+          const tone = getCalendarDayTone(day);
+          return `
+            <button class="calendar-action-pill ${tone} ${selectedDay && selectedDay.date === day.date ? "selected" : ""}" onclick="selectCalendarDate('${day.date}')">
+              <div class="calendar-action-pill-label">${escapeHtml(formatShortWeekday(day.date))}</div>
+              <div class="calendar-action-pill-date">${escapeHtml(formatShortDate(day.date))}</div>
+              <div class="calendar-action-pill-meta">${day.totalStudents} student${day.totalStudents === 1 ? "" : "s"} • ${escapeHtml(getCalendarSeverityLabel(day))}</div>
+            </button>
+          `;
+        }).join("")}
       </div>
     </div>
   `;
 }
 
-function renderMetricCard(label, value, delta, subline, suffix) {
-  return `
-    <section class="metric-card">
-      <div class="metric-label">${label}</div>
-      <div class="metric-value">${formatNumber(value)}${suffix || ""}</div>
-      <div class="metric-sub">${subline}</div>
-      <div class="mini-stack" style="margin-top:10px">
-        <span class="delta-pill">${formatSigned(delta, suffix || "")} vs last refresh</span>
-      </div>
-    </section>
-  `;
-}
+function renderSelectedDayDetail(day, isStandaloneDayView) {
+  if (!day) {
+    return '<div class="calendar-empty">Select a day to see the student-level schedule details.</div>';
+  }
 
-function renderQueueTable(queue, selectedRow) {
+  const previousActionableDay = getAdjacentActionableDate(day.date, -1);
+  const nextActionableDay = getAdjacentActionableDate(day.date, 1);
+  const totalLabel = day.totalStudents + " scheduled student" + (day.totalStudents === 1 ? "" : "s");
+  const detailCaption = day.totalStudents
+    ? totalLabel + " sorted by urgency"
+    : "No visible students are scheduled for this date.";
+
   return `
-    <div class="queue-table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th onclick="toggleSort('priorityScore')">Priority</th>
-            <th onclick="toggleSort('student')">Student</th>
-            <th class="no-sort">Package</th>
-            <th onclick="toggleSort('adjustedRemaining')">Actual</th>
-            <th onclick="toggleSort('daysUntilAlert')">Risk window</th>
-            <th onclick="toggleSort('pendingDeduction')">Pending</th>
-            <th onclick="toggleSort('nextSessionDate')">Next session</th>
-            <th class="no-sort">Recommended action</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${queue.map(function(row) {
+    <section class="day-detail">
+      <div class="day-detail-head">
+        <div>
+          <div class="panel-title">${isStandaloneDayView ? "Daily Detail" : "Selected Day"}</div>
+          <div class="day-detail-title">${escapeHtml(formatLongDate(day.date))}</div>
+          <div class="panel-caption">${detailCaption}</div>
+          <div class="day-detail-actions">
+            <button class="ghost-btn" onclick="jumpToAdjacentActionableDay(-1)" ${previousActionableDay ? "" : "disabled"}>Previous actionable day</button>
+            <button class="ghost-btn" onclick="jumpToAdjacentActionableDay(1)" ${nextActionableDay ? "" : "disabled"}>Next actionable day</button>
+          </div>
+        </div>
+        <div class="mini-pills">
+          <span class="mini-pill">${day.totalStudents} total</span>
+          <span class="mini-pill">${day.urgentStudents} urgent</span>
+          <span class="mini-pill">${day.watchStudents} watch</span>
+        </div>
+      </div>
+      ${day.students.length ? `
+        <div class="day-student-list">
+          ${day.students.map(function(student) {
             return `
-              <tr class="queue-row ${selectedRow && selectedRow.key === row.key ? "active" : ""}" onclick="selectQueue('${escapeJs(row.key)}')">
-                <td>
-                  <div class="queue-primary mono">${formatNumber(row.priorityScore)}</div>
-                  <div class="queue-secondary">${escapeHtml(row.changeSummary)}</div>
-                </td>
-                <td>
-                  <div class="queue-primary">${escapeHtml(row.student)}</div>
-                  <div class="queue-secondary">${escapeHtml(row.parent)}</div>
-                </td>
-                <td>
-                  <div class="queue-primary">${escapeHtml(row.packageName)}</div>
-                  <div class="mini-stack" style="margin-top:6px">
-                    <span class="status-pill ${row.status}">${statusLabel(row.status)}</span>
-                    ${row.dataQualityFlags.slice(0, 1).map(function(flag) {
-                      return `<span class="flag-pill">${escapeHtml(flagLabel(flag))}</span>`;
-                    }).join("")}
+              <article class="day-student-card">
+                <div class="day-student-top">
+                  <div>
+                    <div class="queue-primary">${escapeHtml(student.student)}</div>
+                    <div class="queue-secondary">${escapeHtml(student.parent)}</div>
                   </div>
-                </td>
-                <td>
-                  <div class="queue-primary">${formatNumber(row.adjustedRemaining)} cr</div>
-                  <div class="queue-secondary">System ${formatNumber(row.currentRemaining)} cr</div>
-                </td>
-                <td>
-                  <div class="queue-primary">${escapeHtml(renderRiskWindowText(row))}</div>
-                  <div class="queue-secondary">${escapeHtml(renderExhaustionText(row))}</div>
-                </td>
-                <td>
-                  <div class="queue-primary">${formatNumber(row.pendingDeduction)} cr</div>
-                  <div class="queue-secondary">${row.pendingDeduction > 0 ? "Awaiting feedback updates" : "No backlog"}</div>
-                </td>
-                <td>
-                  <div class="queue-primary">${escapeHtml(row.nextSessionDate ? formatShortDate(row.nextSessionDate) : "No future session")}</div>
-                  <div class="queue-secondary">${escapeHtml(row.cadenceLabel)} cadence</div>
-                </td>
-                <td>
-                  <div class="queue-primary">${escapeHtml(row.recommendedAction)}</div>
-                  <div class="queue-secondary">${escapeHtml(row.whyNow)}</div>
-                </td>
-              </tr>
+                  <div class="mini-pills">
+                    <span class="status-pill ${student.worstStatus}">${statusLabel(student.worstStatus)}</span>
+                    ${student.pinned ? '<span class="priority-chip pinned">Pinned</span>' : ""}
+                  </div>
+                </div>
+                <div class="queue-secondary" style="margin-top:10px">${escapeHtml(student.whyNow)}</div>
+                <div class="session-chip-row">
+                  ${student.sessions.map(function(session) {
+                    return `
+                      <div class="session-chip">
+                        <div class="queue-primary">${escapeHtml(session.packageName)}</div>
+                        <div class="queue-secondary">${session.durationMin} min / ${formatNumber(session.deduct)} cr</div>
+                      </div>
+                    `;
+                  }).join("")}
+                </div>
+                <div class="btn-row" style="margin-top:14px">
+                  <div class="mini-pills">
+                    <span class="mini-pill">${formatNumber(student.totalAdjustedRemaining)} cr actual</span>
+                    <span class="mini-pill">${formatNumber(student.totalCurrentRemaining)} cr system</span>
+                    ${student.isNextSessionDay ? '<span class="mini-pill">Nearest next session</span>' : ""}
+                  </div>
+                  <button class="ghost-btn" onclick="openStudent(${student.studentIndex})">Open student detail</button>
+                </div>
+              </article>
             `;
           }).join("")}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-
-function renderQueueContext(row) {
-  const student = DATA.students[row.studentIndex];
-  const pkg = student.packages[row.packageIndex];
-  const confidenceText = row.dataQualityFlags.indexOf("no-upcoming-sessions") !== -1
-    ? "Low confidence - no future sessions available"
-    : "Based on " + row.upcomingCount + " upcoming sessions";
-
-  return `
-    <section class="panel context-card">
-      <div class="context-head">
-        <div>
-          <div class="context-title">${escapeHtml(row.student)}</div>
-          <div class="context-subtitle">${escapeHtml(row.packageName)} - ${escapeHtml(row.parent)}</div>
         </div>
-        <span class="status-pill ${row.status}">${statusLabel(row.status)}</span>
-      </div>
-
-      <div class="context-grid">
-        <div class="context-hero">
-          <div class="context-stat">
-            <div class="context-stat-label">Actual credits</div>
-            <div class="context-stat-value">${formatNumber(row.adjustedRemaining)}</div>
-          </div>
-          <div class="context-stat">
-            <div class="context-stat-label">Days to alert</div>
-            <div class="context-stat-value">${row.daysUntilAlert === null ? "-" : row.daysUntilAlert}</div>
-          </div>
-          <div class="context-stat">
-            <div class="context-stat-label">Priority score</div>
-            <div class="context-stat-value">${formatNumber(row.priorityScore)}</div>
-          </div>
-        </div>
-
-        <div class="context-block">
-          <h4>Why this package is here</h4>
-          <div>${escapeHtml(row.whyNow)}</div>
-          <div class="mini-stack" style="margin-top:10px">
-            <span class="delta-pill">${escapeHtml(confidenceText)}</span>
-            <span class="delta-pill">${escapeHtml(row.changeSummary)}</span>
-          </div>
-        </div>
-
-        <div class="context-block">
-          <h4>What changed</h4>
-          <div class="insight-detail">${escapeHtml(describeContextChange(row))}</div>
-        </div>
-
-        <div class="context-block">
-          <h4>What should happen next</h4>
-          <div class="queue-primary">${escapeHtml(row.recommendedAction)}</div>
-          <div class="insight-detail" style="margin-top:6px">${escapeHtml(renderActionNarrative(row))}</div>
-          <div class="mini-stack" style="margin-top:10px">
-            ${row.dataQualityFlags.map(function(flag) {
-              return `<span class="flag-pill">${escapeHtml(flagLabel(flag))}</span>`;
-            }).join("")}
-          </div>
-        </div>
-
-        <div class="context-block">
-          <h4>Quick actions</h4>
-          <div class="btn-row">
-            <button class="action-btn" onclick="openMsgModalByIndex(${row.studentIndex}, ${row.packageIndex})">Preview LINE message</button>
-            <button class="ghost-btn" onclick="openStudent(${row.studentIndex})">Open student detail</button>
-          </div>
-        </div>
-      </div>
+      ` : '<div class="calendar-empty">No students match the current search for this day.</div>'}
     </section>
-  `;
-}
-
-function describeContextChange(row) {
-  if (!row.previousStatus) {
-    return "This package is new to the stored comparison set, so the current state becomes the new baseline.";
-  }
-  if (row.statusChange === "worsened") {
-    return "Status worsened from " + statusLabel(row.previousStatus).toLowerCase() + " to " + statusLabel(row.status).toLowerCase() + ".";
-  }
-  if (row.statusChange === "improved") {
-    return "Status improved from " + statusLabel(row.previousStatus).toLowerCase() + " to " + statusLabel(row.status).toLowerCase() + ".";
-  }
-  if (row.balanceDelta !== null && row.balanceDelta !== 0) {
-    return "Actual balance moved by " + formatSigned(row.balanceDelta, " credits") + " since the last stored refresh.";
-  }
-  return "Status and balance are stable since the previous stored refresh.";
-}
-
-function renderActionNarrative(row) {
-  if (row.status === "notify") {
-    return row.adjustedRemaining <= 0
-      ? "This package is already exhausted. Outreach should confirm renewal immediately."
-      : "The package is already below the threshold, so outreach should happen now.";
-  }
-  if (row.status === "watch") {
-    return row.daysUntilAlert !== null && row.daysUntilAlert <= 7
-      ? "This is still pre-alert, but the crossing happens within the week."
-      : "Queue this package for pre-emptive renewal follow-up before it becomes urgent.";
-  }
-  if (row.dataQualityFlags.indexOf("no-upcoming-sessions") !== -1) {
-    return "Forecast confidence is low. Confirm the schedule before escalating.";
-  }
-  return "Keep this package monitored and revisit if the balance deteriorates.";
-}
-
-function renderAnalyticsView() {
-  return `
-    <div class="analytics-grid">
-      <div class="metrics-grid">
-        ${renderMetricCard("Students monitored", DATA.summary.students.total, null, DATA.summary.students.notify + DATA.summary.students.watch + " students need attention")}
-        ${renderMetricCard("Packages in notify", DATA.summary.packages.notify, DATA.summary.deltas.packagesNotify, "Immediate outreach workload")}
-        ${renderMetricCard("Packages in watch", DATA.summary.packages.watch, DATA.summary.deltas.packagesWatch, "Pre-alert opportunity set")}
-        ${renderMetricCard("Exhausted now", DATA.summary.portfolio.exhaustedNow, null, "Packages with zero credits after pending deductions")}
-        ${renderMetricCard("Multi-risk students", DATA.summary.portfolio.multiRiskStudents, null, "Students carrying more than one risky package")}
-      </div>
-
-      <div class="analytics-row">
-        <section class="panel analytics-card">
-          <div class="panel-heading">
-            <div>
-              <div class="panel-title">Risk trend</div>
-              <div class="panel-caption">Notify, watch, healthy, and no-data mix across stored refreshes</div>
-            </div>
-          </div>
-          <div class="chart-shell">
-            ${renderTrendChart(DATA.timeline)}
-            <div class="chart-labels">
-              ${renderLegend("#c63d31", "Notify")}
-              ${renderLegend("#d28b15", "Watch")}
-              ${renderLegend("#1d7a4f", "Healthy")}
-              ${renderLegend("#0d3b73", "No data")}
-            </div>
-          </div>
-        </section>
-
-        <section class="panel analytics-card">
-          <div class="panel-heading">
-            <div>
-              <div class="panel-title">Remaining credit distribution</div>
-              <div class="panel-caption">How much usable balance is left across all active packages</div>
-            </div>
-          </div>
-          <div class="chart-shell">
-            ${renderHistogram(DATA.segments.distribution)}
-          </div>
-        </section>
-      </div>
-
-      <div class="analytics-row">
-        <section class="panel analytics-card">
-          <div class="panel-heading">
-            <div>
-              <div class="panel-title">Risk concentration by package</div>
-              <div class="panel-caption">Which package clusters carry the most active risk</div>
-            </div>
-          </div>
-          ${renderSegmentBars(DATA.segments.packageNames, "riskyPackages", "risky")}
-        </section>
-
-        <section class="panel analytics-card">
-          <div class="panel-heading">
-            <div>
-              <div class="panel-title">Parents with multiple risky packages</div>
-              <div class="panel-caption">Where follow-up load is concentrated at the household level</div>
-            </div>
-          </div>
-          ${renderSegmentBars(DATA.segments.parents, "riskyPackages", "risky")}
-        </section>
-      </div>
-
-      <div class="analytics-row">
-        <section class="panel analytics-card">
-          <div class="panel-heading">
-            <div>
-              <div class="panel-title">Cadence segmentation</div>
-              <div class="panel-caption">Projected risk split by weekly session intensity</div>
-            </div>
-          </div>
-          ${renderSegmentBars(DATA.segments.cadence, "riskyPackages", "risky")}
-        </section>
-
-        <section class="panel analytics-card">
-          <div class="panel-heading">
-            <div>
-              <div class="panel-title">Risk drivers</div>
-              <div class="panel-caption">What is making the queue hard to reason about</div>
-            </div>
-          </div>
-          ${renderDriverBreakdown(DATA.segments.drivers)}
-        </section>
-      </div>
-
-      <div class="analytics-row">
-        <section class="panel analytics-card">
-          <div class="panel-heading">
-            <div>
-              <div class="panel-title">Projected outreach load</div>
-              <div class="panel-caption">Packages entering alert by week from today</div>
-            </div>
-          </div>
-          <div class="chart-shell">${renderWeekBars(DATA.segments.outreachByWeek, "#f36a1d")}</div>
-        </section>
-
-        <section class="panel analytics-card">
-          <div class="panel-heading">
-            <div>
-              <div class="panel-title">Projected exhaustion load</div>
-              <div class="panel-caption">Packages likely to hit zero credits by week</div>
-            </div>
-          </div>
-          <div class="chart-shell">${renderWeekBars(DATA.segments.exhaustionByWeek, "#c63d31")}</div>
-        </section>
-      </div>
-
-      <section class="panel analytics-card">
-        <div class="panel-heading">
-          <div>
-            <div class="panel-title">Exhaustion heatmap</div>
-            <div class="panel-caption">Daily density of projected package exhaustion over the next six weeks</div>
-          </div>
-        </div>
-        <div class="chart-shell">
-          ${renderHeatmap(DATA.segments.exhaustionHeatmap)}
-        </div>
-      </section>
-    </div>
-  `;
-}
-
-function renderTrendChart(points) {
-  if (!points.length) return `<div class="empty-state">No stored trend points yet.</div>`;
-
-  const width = 640;
-  const height = 220;
-  const padding = 28;
-  const keys = [
-    { key: "notify", color: "#c63d31" },
-    { key: "watch", color: "#d28b15" },
-    { key: "ok", color: "#1d7a4f" },
-    { key: "nodata", color: "#0d3b73" },
-  ];
-  const maxValue = Math.max(1, ...points.flatMap(function(point) {
-    return keys.map(function(item) { return point[item.key] || 0; });
-  }));
-
-  const xForIndex = function(index) {
-    if (points.length === 1) return width / 2;
-    return padding + ((width - (padding * 2)) * index / (points.length - 1));
-  };
-  const yForValue = function(value) {
-    return height - padding - ((height - (padding * 2)) * (value / maxValue));
-  };
-
-  const polylines = keys.map(function(item) {
-    const pointsString = points.map(function(point, index) {
-      return xForIndex(index) + "," + yForValue(point[item.key] || 0);
-    }).join(" ");
-    return `<polyline fill="none" stroke="${item.color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="${pointsString}"></polyline>`;
-  }).join("");
-
-  const labels = points.map(function(point, index) {
-    return `<text x="${xForIndex(index)}" y="${height - 6}" font-size="11" text-anchor="middle" fill="#8e95a3">${escapeHtml(point.label)}</text>`;
-  }).join("");
-
-  return `
-    <svg viewBox="0 0 ${width} ${height}" width="100%" height="220" role="img" aria-label="Risk trend chart">
-      <line x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}" stroke="#d7d2c8" stroke-width="1"></line>
-      <line x1="${padding}" y1="${padding}" x2="${padding}" y2="${height - padding}" stroke="#d7d2c8" stroke-width="1"></line>
-      ${polylines}
-      ${labels}
-    </svg>
-  `;
-}
-
-function renderLegend(color, label) {
-  return `<span class="legend-pill"><span class="legend-dot" style="background:${color}"></span>${label}</span>`;
-}
-
-function renderSegmentBars(items, valueKey, suffix) {
-  if (!items.length) return `<div class="empty-state">No segment data available.</div>`;
-  const maxValue = Math.max(1, ...items.map(function(item) { return item[valueKey]; }));
-
-  return `
-    <div class="segment-bars">
-      ${items.map(function(item) {
-        const width = Math.max(6, (item[valueKey] / maxValue) * 100);
-        return `
-          <div class="segment-row" style="display:block">
-            <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
-              <div class="segment-copy">
-                <div class="segment-name">${escapeHtml(item.name)}</div>
-                <div class="segment-detail">${item.totalPackages !== undefined ? item.totalPackages + " packages tracked" : item.students + " students"}</div>
-              </div>
-              <div class="segment-value">${item[valueKey]} ${suffix}</div>
-            </div>
-            <div class="segment-bar-track" style="margin-top:12px">
-              <div class="segment-bar-fill" style="width:${width}%;background:linear-gradient(90deg, var(--navy), var(--orange))"></div>
-            </div>
-          </div>
-        `;
-      }).join("")}
-    </div>
-  `;
-}
-
-function renderDriverBreakdown(drivers) {
-  return `
-    <div class="segment-bars">
-      ${drivers.map(function(driver) {
-        const maxValue = Math.max(1, ...drivers.map(function(item) { return item.count; }));
-        return `
-          <div class="segment-row" style="display:block">
-            <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
-              <div class="segment-name">${escapeHtml(driver.name)}</div>
-              <div class="segment-value ${toneClass(driver.tone)}">${driver.count}</div>
-            </div>
-            <div class="segment-bar-track" style="margin-top:12px">
-              <div class="segment-bar-fill" style="width:${Math.max(6, (driver.count / maxValue) * 100)}%;background:${driver.tone === "critical" ? "var(--red)" : driver.tone === "warning" ? "var(--yellow)" : "var(--navy)"}"></div>
-            </div>
-          </div>
-        `;
-      }).join("")}
-    </div>
-  `;
-}
-
-function renderHistogram(buckets) {
-  const maxValue = Math.max(1, ...buckets.map(function(bucket) { return bucket.count; }));
-  return `
-    <div class="hist-grid">
-      ${buckets.map(function(bucket) {
-        return `
-          <div class="hist-cell">
-            <div class="stat-label">${escapeHtml(bucket.label)} credits</div>
-            <div class="hist-value">${bucket.count}</div>
-            <div class="hist-bar-track" style="margin-top:12px">
-              <div class="hist-bar-fill" style="width:${Math.max(8, (bucket.count / maxValue) * 100)}%;background:linear-gradient(90deg, var(--orange), var(--navy))"></div>
-            </div>
-          </div>
-        `;
-      }).join("")}
-    </div>
-  `;
-}
-
-function renderWeekBars(buckets, color) {
-  const maxValue = Math.max(1, ...buckets.map(function(bucket) { return bucket.count; }));
-  return `
-    <div class="week-grid">
-      ${buckets.map(function(bucket) {
-        return `
-          <div class="week-cell">
-            <div class="stat-label">${escapeHtml(bucket.label)}</div>
-            <div class="week-value">${bucket.count}</div>
-            <div class="week-bar-track" style="margin-top:12px">
-              <div class="week-bar-fill" style="width:${Math.max(8, (bucket.count / maxValue) * 100)}%;background:${color}"></div>
-            </div>
-            <div class="segment-detail" style="margin-top:8px">${escapeHtml(formatShortDate(bucket.start))} - ${escapeHtml(formatShortDate(bucket.end))}</div>
-          </div>
-        `;
-      }).join("")}
-    </div>
-  `;
-}
-
-function renderHeatmap(cells) {
-  if (!cells.length) return `<div class="empty-state">No projected exhaustion dates yet.</div>`;
-  const maxValue = Math.max(1, ...cells.map(function(cell) { return cell.count; }));
-  return `
-    <div class="heatmap-grid">
-      ${cells.map(function(cell) {
-        const intensity = cell.count === 0 ? 0.06 : 0.16 + (cell.count / maxValue) * 0.56;
-        return `
-          <div class="heatmap-cell" title="${escapeHtml(cell.date)}: ${cell.count} packages" style="background:rgba(198,61,49,${intensity});color:${cell.count > 0 ? "white" : "var(--ink-soft)"}">
-            ${new Date(cell.date).getDate()}
-          </div>
-        `;
-      }).join("")}
-    </div>
   `;
 }
 
 function renderStudentDetailView() {
   const student = DATA.students[selectedStudentIndex];
-  if (!student) {
+  if (!student || !isStudentVisibleForCurrentAdmin(student)) {
+    selectedStudentIndex = null;
     currentView = "command";
     return renderCommandCenterView();
   }
@@ -2181,12 +2638,13 @@ function renderStudentDetailView() {
     <div class="detail-layout">
       <section class="panel detail-header">
         <button class="back-btn" onclick="goCommand()">Back to command center</button>
-        <div class="detail-top" style="margin-top:14px">
+        <div class="detail-top" style="margin-top:16px">
           <div>
             <div class="detail-name">${escapeHtml(student.student)}</div>
-            <div class="detail-sub">${escapeHtml(student.parent || "Missing parent")} - ${student.packages.length} active packages</div>
-            <div class="mini-stack" style="margin-top:12px">
+            <div class="detail-sub">${escapeHtml(student.parent || "Missing parent")} · ${student.packages.length} active packages</div>
+            <div class="mini-pills" style="margin-top:12px">
               <span class="status-pill ${worstStatus(student.packages)}">${statusLabel(worstStatus(student.packages))}</span>
+              <span class="mini-pill">${escapeHtml(student.adminOwnerName || "Unassigned")}</span>
               ${student.dataQualityFlags.map(function(flag) {
                 return `<span class="flag-pill">${escapeHtml(flagLabel(flag))}</span>`;
               }).join("")}
@@ -2211,6 +2669,25 @@ function renderStudentDetailView() {
             <div class="metric-value" style="font-size:22px">${escapeHtml(statusLabel(worstStatus(student.packages)))}</div>
           </div>
         </div>
+        <div class="action-control-row">
+          <div class="action-control-summary">
+            <div class="action-control-label">Student action state</div>
+            <div class="action-control-value">
+              ${student.actionState
+                ? `
+                  <span class="action-status-pill ${student.actionState.status}">${escapeHtml(actionStatusLabel(student.actionState.status))}</span>
+                  <span>${escapeHtml(formatActionStateSummary(student.actionState))}</span>
+                `
+                : "No action recorded today"}
+            </div>
+          </div>
+          <div class="action-control-actions">
+            <button class="ghost-btn" onclick="applyStudentAction(decodeURIComponent('${encodeURIComponent(student.studentKey)}'), 'contacted')">Contacted</button>
+            <button class="ghost-btn" onclick="applyStudentAction(decodeURIComponent('${encodeURIComponent(student.studentKey)}'), 'pending-callback')">Pending callback</button>
+            <button class="ghost-btn" onclick="applyStudentAction(decodeURIComponent('${encodeURIComponent(student.studentKey)}'), 'resolved')">Resolved</button>
+            <button class="ghost-btn" onclick="applyStudentAction(decodeURIComponent('${encodeURIComponent(student.studentKey)}'), '')">Clear</button>
+          </div>
+        </div>
       </section>
 
       <section class="package-stack">
@@ -2220,9 +2697,9 @@ function renderStudentDetailView() {
       </section>
 
       <section class="panel detail-card">
-        <div class="panel-heading">
+        <div class="pane-header" style="padding:0 0 16px;border-bottom:none">
           <div>
-            <div class="panel-title">Upcoming sessions</div>
+            <div class="panel-title">Upcoming Sessions</div>
             <div class="panel-caption">Cross-package upcoming schedule for this student</div>
           </div>
         </div>
@@ -2240,18 +2717,18 @@ function renderPackageDetailCard(student, pkg, studentIndex, packageIndex) {
       <div class="package-head">
         <div>
           <div class="package-title">${escapeHtml(pkg.name)}</div>
-          <div class="package-subtitle">${escapeHtml(pkg.recommendedAction)} - ${escapeHtml(pkg.whyNow)}</div>
+          <div class="package-subtitle">${escapeHtml(pkg.recommendedAction)} · ${escapeHtml(pkg.whyNow)}</div>
         </div>
-        <div class="mini-stack">
+        <div class="mini-pills">
           <span class="status-pill ${pkg.status}">${statusLabel(pkg.status)}</span>
-          <span class="delta-pill">Priority ${formatNumber(pkg.priorityScore)}</span>
+          <span class="delta-pill">Priority ${formatNumber(pkg.priorityScore || 0)}</span>
         </div>
       </div>
 
       <div class="package-grid">
         <div class="detail-card" style="padding:0">
-          <h3>Where are we now?</h3>
-          <div class="stat-grid">
+          <div class="panel-title">Where Are We Now?</div>
+          <div class="stat-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
             <div class="stat-card">
               <div class="stat-label">Actual remaining</div>
               <div class="stat-value">${formatNumber(pkg.adjustedRemaining)} credits</div>
@@ -2272,45 +2749,44 @@ function renderPackageDetailCard(student, pkg, studentIndex, packageIndex) {
         </div>
 
         <div class="detail-card" style="padding:0">
-          <h3>Why are we here?</h3>
-          ${renderWaterfall(pkg)}
+          <div class="panel-title">Balance Waterfall</div>
+          <div style="margin-top:14px">${renderWaterfall(pkg)}</div>
         </div>
 
         <div class="detail-card" style="padding:0">
-          <h3>What happens next?</h3>
-          <div class="stat-grid">
+          <div class="panel-title">Projection</div>
+          <div class="stat-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px">
             <div class="stat-card">
-              <div class="stat-label">Balance below 2</div>
-              <div class="stat-value">${pkg.alertDate ? escapeHtml(formatShortDate(pkg.alertDate)) : "-"}</div>
+              <div class="stat-label">Below 2 credits</div>
+              <div class="stat-value" style="font-size:22px">${pkg.alertDate ? escapeHtml(formatShortDate(pkg.alertDate)) : "-"}</div>
             </div>
             <div class="stat-card">
               <div class="stat-label">Exhausted</div>
-              <div class="stat-value">${pkg.exhaustDate ? escapeHtml(formatShortDate(pkg.exhaustDate)) : "-"}</div>
+              <div class="stat-value" style="font-size:22px">${pkg.exhaustDate ? escapeHtml(formatShortDate(pkg.exhaustDate)) : "-"}</div>
             </div>
             <div class="stat-card">
               <div class="stat-label">Next session</div>
-              <div class="stat-value">${pkg.nextSessionDate ? escapeHtml(formatShortDate(pkg.nextSessionDate)) : "None"}</div>
+              <div class="stat-value" style="font-size:22px">${pkg.nextSessionDate ? escapeHtml(formatShortDate(pkg.nextSessionDate)) : "None"}</div>
             </div>
             <div class="stat-card">
               <div class="stat-label">Cadence</div>
-              <div class="stat-value">${escapeHtml(pkg.cadenceLabel)}</div>
+              <div class="stat-value" style="font-size:22px">${escapeHtml(pkg.cadenceLabel)}</div>
             </div>
           </div>
-          <div style="height:14px"></div>
           ${renderProjectionChart(pkg)}
           ${renderProjectionTable(pkg)}
         </div>
 
         <div class="detail-card" style="padding:0">
-          <h3>What should we do?</h3>
-          <div class="context-block" style="background:white">
+          <div class="panel-title">Recommended Action</div>
+          <div style="margin-top:14px">
             <div class="queue-primary">${escapeHtml(pkg.recommendedAction)}</div>
-            <div class="insight-detail" style="margin-top:6px">${escapeHtml(pkg.whyNow)}</div>
-            <div class="mini-stack" style="margin-top:12px">
+            <div class="queue-secondary">${escapeHtml(pkg.whyNow)}</div>
+            <div class="mini-pills" style="margin-top:12px">
               ${pkg.dataQualityFlags.map(function(flag) {
                 return `<span class="flag-pill">${escapeHtml(flagLabel(flag))}</span>`;
               }).join("")}
-              ${!pkg.dataQualityFlags.length ? `<span class="flag-pill">No data-quality warnings</span>` : ""}
+              ${!pkg.dataQualityFlags.length ? '<span class="flag-pill">No data-quality warnings</span>' : ""}
             </div>
             <div class="btn-row" style="margin-top:16px">
               <button class="action-btn" onclick="openMsgModalByIndex(${studentIndex}, ${packageIndex})">Preview LINE message</button>
@@ -2331,19 +2807,19 @@ function renderWaterfall(pkg) {
   return `
     <div class="waterfall">
       <div class="waterfall-row">
-        <div class="waterfall-label">System balance</div>
+        <div class="queue-secondary">System balance</div>
         <div class="waterfall-track"><div class="waterfall-fill" style="width:${systemPct}%;background:var(--navy)"></div></div>
-        <div class="waterfall-value">${formatNumber(pkg.currentRemaining)}</div>
+        <div class="queue-primary">${formatNumber(pkg.currentRemaining)}</div>
       </div>
       <div class="waterfall-row">
-        <div class="waterfall-label">Pending deduction</div>
+        <div class="queue-secondary">Pending deduction</div>
         <div class="waterfall-track"><div class="waterfall-fill" style="width:${pendingPct}%;background:var(--yellow)"></div></div>
-        <div class="waterfall-value">-${formatNumber(pkg.pendingDeduction)}</div>
+        <div class="queue-primary">-${formatNumber(pkg.pendingDeduction)}</div>
       </div>
       <div class="waterfall-row">
-        <div class="waterfall-label">Actual remaining</div>
+        <div class="queue-secondary">Actual remaining</div>
         <div class="waterfall-track"><div class="waterfall-fill" style="width:${actualPct}%;background:${pkg.adjustedRemaining < 2 ? "var(--red)" : pkg.adjustedRemaining < 4 ? "var(--yellow)" : "var(--green)"}"></div></div>
-        <div class="waterfall-value">${formatNumber(pkg.adjustedRemaining)}</div>
+        <div class="queue-primary">${formatNumber(pkg.adjustedRemaining)}</div>
       </div>
     </div>
   `;
@@ -2351,25 +2827,23 @@ function renderWaterfall(pkg) {
 
 function renderProjectionChart(pkg) {
   if (!pkg.projection.length) {
-    return `<div class="empty-state" style="padding:16px 0">No upcoming sessions available for projection.</div>`;
+    return '<div class="empty-state" style="margin-top:16px">No upcoming sessions available for projection.</div>';
   }
 
   const maxBalance = Math.max(pkg.totalCredits || 1, ...pkg.projection.map(function(item) { return Math.max(0, item.bal); }));
 
   return `
-    <div class="chart-shell">
-      <div class="projection-bars">
-        ${pkg.projection.slice(0, 8).map(function(item) {
-          const height = Math.max(18, (Math.max(0, item.bal) / maxBalance) * 96);
-          const color = item.bal <= 0 ? "var(--red)" : item.bal < 2 ? "var(--red)" : item.bal < 4 ? "var(--yellow)" : "var(--green)";
-          return `
-            <div class="projection-bar-wrap">
-              <div class="projection-bar" style="height:${height}px;background:${color}"></div>
-              <div class="projection-label">${escapeHtml(formatShortDate(item.date))}</div>
-            </div>
-          `;
-        }).join("")}
-      </div>
+    <div class="projection-bars">
+      ${pkg.projection.slice(0, 8).map(function(item) {
+        const height = Math.max(18, (Math.max(0, item.bal) / maxBalance) * 110);
+        const color = item.bal <= 0 ? "var(--red)" : item.bal < 2 ? "var(--red)" : item.bal < 4 ? "var(--yellow)" : "var(--green)";
+        return `
+          <div class="projection-bar-wrap">
+            <div class="projection-bar" style="height:${height}px;background:${color}"></div>
+            <div class="projection-label">${escapeHtml(formatShortDate(item.date))}</div>
+          </div>
+        `;
+      }).join("")}
     </div>
   `;
 }
@@ -2382,10 +2856,10 @@ function renderProjectionTable(pkg) {
       <table>
         <thead>
           <tr>
-            <th class="no-sort">Date</th>
-            <th class="no-sort">Minutes</th>
-            <th class="no-sort">Deduction</th>
-            <th class="no-sort">Balance after</th>
+            <th>Date</th>
+            <th>Minutes</th>
+            <th>Deduction</th>
+            <th>Balance after</th>
           </tr>
         </thead>
         <tbody>
@@ -2419,85 +2893,210 @@ function renderUpcomingSessionRows(student) {
   });
 
   rows.sort(function(a, b) {
-    return new Date(a.date) - new Date(b.date);
+    return parseDateKey(a.date) - parseDateKey(b.date);
   });
 
   if (!rows.length) {
-    return `<div class="empty-state">No upcoming sessions are scheduled for this student.</div>`;
+    return '<div class="empty-state">No upcoming sessions are scheduled for this student.</div>';
   }
 
-  return rows.slice(0, 10).map(function(row) {
+  return rows.slice(0, 12).map(function(row) {
     return `
       <div class="upcoming-row">
-        <div class="segment-copy">
-          <div class="segment-name">${escapeHtml(row.packageName)}</div>
-          <div class="segment-detail">${escapeHtml(formatDate(row.date))}</div>
+        <div>
+          <div class="queue-primary">${escapeHtml(row.packageName)}</div>
+          <div class="queue-secondary">${escapeHtml(formatLongDate(row.date))}</div>
         </div>
-        <div class="segment-value">${row.durationMin}m / ${formatNumber(row.deduct)} cr</div>
+        <div class="queue-primary">${row.durationMin}m / ${formatNumber(row.deduct)} cr</div>
       </div>
     `;
   }).join("");
 }
 
-function renderRiskWindowText(row) {
-  if (row.adjustedRemaining <= 0) return "Already exhausted";
-  if (row.status === "notify") return "Below 2 credits now";
-  if (row.alertDate) return "Below 2 on " + formatShortDate(row.alertDate);
-  if (row.dataQualityFlags.indexOf("no-upcoming-sessions") !== -1) return "No future sessions";
-  return "No near-term alert";
+function getSortedFilteredQueue() {
+  const filtered = getFilteredQueueRows();
+
+  const direction = currentSort.dir === "asc" ? 1 : -1;
+  const field = currentSort.field;
+
+  return filtered.slice().sort(function(a, b) {
+    if (field === "student") return direction * a.student.localeCompare(b.student);
+    if (field === "priorityScore") return direction * (a.priorityScore - b.priorityScore);
+    if (field === "totalCurrentRemaining") return direction * (a.totalCurrentRemaining - b.totalCurrentRemaining);
+    if (field === "totalAdjustedRemaining") return direction * (a.totalAdjustedRemaining - b.totalAdjustedRemaining);
+    if (field === "packageCount") return direction * (a.packageCount - b.packageCount);
+    if (field === "nextSessionDate") return direction * compareNullableDates(a.nextSessionDate, b.nextSessionDate);
+    return direction * (getStatusOrder(a.worstStatus) - getStatusOrder(b.worstStatus));
+  });
 }
 
-function renderExhaustionText(row) {
-  if (!row.exhaustDate) return row.nextSessionDate ? "Next " + formatShortDate(row.nextSessionDate) : "No projected exhaustion";
-  return "Exhausts " + formatShortDate(row.exhaustDate);
+function getFilteredCalendarDayMap() {
+  const dayMap = {};
+
+  getAdminScopedCalendarDays().forEach(function(day) {
+    const students = day.students.filter(function(student) {
+      return !currentSearch || student.searchText.indexOf(currentSearch) !== -1;
+    });
+
+    dayMap[day.date] = {
+      date: day.date,
+      totalStudents: students.length,
+      urgentStudents: students.filter(function(student) {
+        return student.pinned || student.worstStatus === "notify";
+      }).length,
+      watchStudents: students.filter(function(student) {
+        return student.worstStatus === "watch";
+      }).length,
+      students: students,
+    };
+  });
+
+  return dayMap;
 }
 
-function setView(viewName) {
-  if (isLoading || loadError) {
-    currentView = viewName === "student" ? "command" : viewName;
-    renderAll();
-    return;
+function getCalendarDayMap() {
+  const dayMap = {};
+  getAdminScopedCalendarDays().forEach(function(day) {
+    dayMap[day.date] = day;
+  });
+  return dayMap;
+}
+
+function createEmptyCalendarDay(dateKey) {
+  return {
+    date: dateKey,
+    totalStudents: 0,
+    urgentStudents: 0,
+    watchStudents: 0,
+    students: [],
+  };
+}
+
+function getVisibleCalendarDates(filteredDayMap) {
+  return Object.keys(filteredDayMap)
+    .filter(function(key) { return filteredDayMap[key].totalStudents > 0; })
+    .sort();
+}
+
+function getDefaultCalendarDate() {
+  const todayKey = formatDateKey(new Date());
+  const filteredDayMap = getFilteredCalendarDayMap();
+  if (filteredDayMap[todayKey]) return todayKey;
+
+  const visibleDates = getVisibleCalendarDates(filteredDayMap);
+
+  return visibleDates.length ? visibleDates[0] : todayKey;
+}
+
+function getEffectiveSelectedCalendarDate(filteredDayMap) {
+  if (selectedCalendarDate) {
+    return selectedCalendarDate;
   }
 
-  if (viewName === "student" && selectedStudentIndex === null) {
-    currentView = "command";
-  } else {
-    currentView = viewName;
+  const visibleDates = getVisibleCalendarDates(filteredDayMap);
+
+  if (filteredDayMap[formatDateKey(new Date())]) {
+    return formatDateKey(new Date());
   }
-  renderAll();
+
+  if (visibleDates.length) {
+    return visibleDates[0];
+  }
+
+  return formatDateKey(new Date());
 }
 
-function setFilter(filterName) {
-  if (!hasLoadedData()) return;
-  currentFilter = filterName;
-  const firstRow = getSortedFilteredQueue()[0];
-  selectedQueueKey = firstRow ? firstRow.key : null;
-  renderAll();
+function getSelectedCalendarDay(filteredDayMap) {
+  const dateKey = getEffectiveSelectedCalendarDate(filteredDayMap);
+  return dateKey ? (filteredDayMap[dateKey] || createEmptyCalendarDay(dateKey)) : null;
+}
+
+function getFallbackSelectedDay() {
+  const filteredDayMap = getFilteredCalendarDayMap();
+  return getSelectedCalendarDay(filteredDayMap);
+}
+
+function getCalendarDayTone(day) {
+  if (!day || !day.totalStudents) return "empty";
+  if (day.urgentStudents) return "urgent";
+  if (day.watchStudents) return "watch";
+  return "scheduled";
+}
+
+function getCalendarSeverityLabel(day) {
+  if (!day || !day.totalStudents) return "No sessions";
+  if (day.urgentStudents) return day.urgentStudents + " urgent";
+  if (day.watchStudents) return day.watchStudents + " watch";
+  return "Healthy day";
+}
+
+function getActionableStripDays(filteredDayMap) {
+  const visibleDates = getVisibleCalendarDates(filteredDayMap);
+  if (!visibleDates.length) return [];
+
+  const referenceKey = getEffectiveSelectedCalendarDate(filteredDayMap) || formatDateKey(new Date());
+  const startIndex = visibleDates.findIndex(function(key) {
+    return compareNullableDates(key, referenceKey) >= 0;
+  });
+  const sliceStart = startIndex === -1 ? Math.max(0, visibleDates.length - 7) : startIndex;
+
+  return visibleDates.slice(sliceStart, sliceStart + 7).map(function(key) {
+    return filteredDayMap[key];
+  });
+}
+
+function getAdjacentActionableDate(dateKey, direction) {
+  const visibleDates = getVisibleCalendarDates(getFilteredCalendarDayMap());
+  if (!visibleDates.length) return null;
+
+  const currentIndex = visibleDates.indexOf(dateKey);
+  if (currentIndex === -1) {
+    return direction > 0 ? visibleDates[0] : visibleDates[visibleDates.length - 1];
+  }
+
+  const nextIndex = currentIndex + direction;
+  if (nextIndex < 0 || nextIndex >= visibleDates.length) {
+    return null;
+  }
+
+  return visibleDates[nextIndex];
+}
+
+function findNextCalendarDate(dateKeys, referenceKey) {
+  if (!dateKeys.length) return null;
+
+  const nextMatch = dateKeys.find(function(key) {
+    return compareNullableDates(key, referenceKey) > 0;
+  });
+
+  return nextMatch || dateKeys[0];
 }
 
 function setSearch(value) {
-  if (!hasLoadedData()) return;
   currentSearch = String(value || "").trim().toLowerCase();
-  const firstRow = getSortedFilteredQueue()[0];
-  selectedQueueKey = firstRow ? firstRow.key : null;
+  pruneQueueSelection();
   renderAll();
 }
 
-function selectQueue(key) {
-  if (!hasLoadedData()) return;
-  selectedQueueKey = key;
-  renderContent();
+function clearSearch() {
+  setSearch("");
 }
 
-function openStudent(index) {
-  if (!hasLoadedData()) return;
-  selectedStudentIndex = index;
-  currentView = "student";
+function setRiskFilter(filterKey) {
+  currentRiskFilter = filterKey || "all";
+  pruneQueueSelection();
   renderAll();
 }
 
-function goCommand() {
-  currentView = "command";
+function setAdminView(viewKey) {
+  currentAdminView = viewKey || "all";
+  pruneQueueSelection();
+
+  if (selectedStudentIndex !== null && !isStudentVisibleForCurrentAdmin(DATA.students[selectedStudentIndex])) {
+    selectedStudentIndex = null;
+    currentView = "command";
+  }
+
   renderAll();
 }
 
@@ -2508,10 +3107,494 @@ function toggleSort(field) {
   } else {
     currentSort = {
       field: field,
-      dir: field === "student" ? "asc" : "desc",
+      dir: field === "student" || field === "nextSessionDate" ? "asc" : "desc",
     };
   }
   renderContent();
+}
+
+function setView(viewName) {
+  if (viewName === "student" && selectedStudentIndex === null) {
+    currentView = "command";
+  } else {
+    currentView = viewName;
+  }
+  renderAll();
+}
+
+function openStudent(index) {
+  if (!isStudentVisibleForCurrentAdmin(DATA.students[index])) {
+    return;
+  }
+  selectedStudentIndex = index;
+  currentView = "student";
+  renderAll();
+}
+
+function toggleQueueSelection(event, studentKey) {
+  event.stopPropagation();
+
+  if (selectedQueueStudentKeys[studentKey]) {
+    delete selectedQueueStudentKeys[studentKey];
+  } else {
+    selectedQueueStudentKeys[studentKey] = true;
+  }
+
+  renderContent();
+}
+
+function toggleSelectAllVisibleQueue(event) {
+  event.stopPropagation();
+
+  const visibleQueue = getSortedFilteredQueue();
+  const shouldSelectAll = getVisibleSelectedQueueCount(visibleQueue) !== visibleQueue.length;
+
+  if (shouldSelectAll) {
+    visibleQueue.forEach(function(row) {
+      selectedQueueStudentKeys[row.studentKey] = true;
+    });
+  } else {
+    visibleQueue.forEach(function(row) {
+      delete selectedQueueStudentKeys[row.studentKey];
+    });
+  }
+
+  renderContent();
+}
+
+function applyStudentAction(studentKey, status) {
+  const request = status
+    ? requestServer("setStudentAction", studentKey, status, currentAdminView)
+    : requestServer("clearStudentAction", studentKey, currentAdminView);
+
+  request
+    .then(function(result) {
+      patchStudentActionState(result.studentKey, result.actionState);
+      showToast(buildActionToastMessage(result.actionState, 1), "success");
+      renderAll();
+    })
+    .catch(function(error) {
+      showToast(extractErrorMessage(error), "error");
+    });
+}
+
+function applyBulkStudentAction(status) {
+  const visibleRows = getVisibleSelectedQueueRows();
+  if (!visibleRows.length) {
+    showToast("Select at least one student first.", "error");
+    return;
+  }
+
+  requestServer(
+    "bulkSetStudentAction",
+    visibleRows.map(function(row) { return row.studentKey; }),
+    status || "",
+    currentAdminView
+  )
+    .then(function(result) {
+      patchBulkStudentActionStates(result.updated || []);
+      selectedQueueStudentKeys = {};
+      showToast(buildActionToastMessage(status ? { status: status } : null, visibleRows.length), "success");
+      renderAll();
+    })
+    .catch(function(error) {
+      showToast(extractErrorMessage(error), "error");
+    });
+}
+
+function goCommand() {
+  currentView = "command";
+  renderAll();
+}
+
+function hideQueuePane() {
+  if (isCalendarHidden) return;
+  isQueueHidden = true;
+  renderContent();
+}
+
+function hideCalendarPane() {
+  if (isQueueHidden) return;
+  isCalendarHidden = true;
+  renderContent();
+}
+
+function showQueuePane() {
+  isQueueHidden = false;
+  renderContent();
+}
+
+function showCalendarPane() {
+  isCalendarHidden = false;
+  renderContent();
+}
+
+function startResize(event) {
+  if (window.innerWidth <= 960) return;
+  event.preventDefault();
+  isResizing = true;
+  document.addEventListener("mousemove", handleResize);
+  document.addEventListener("mouseup", stopResize);
+}
+
+function handleResize(event) {
+  if (!isResizing) return;
+  const layout = document.getElementById("command-layout");
+  if (!layout) return;
+
+  const rect = layout.getBoundingClientRect();
+  const percentage = ((event.clientX - rect.left) / rect.width) * 100;
+  queuePanelWidth = Math.max(26, Math.min(74, percentage));
+  renderContent();
+}
+
+function stopResize() {
+  isResizing = false;
+  document.removeEventListener("mousemove", handleResize);
+  document.removeEventListener("mouseup", stopResize);
+}
+
+function setCalendarView(viewName) {
+  calendarView = viewName;
+  if (!selectedCalendarDate) {
+    selectedCalendarDate = getDefaultCalendarDate();
+  }
+  if (selectedCalendarDate) {
+    calendarCursor = getCalendarCursorForView(viewName, parseDateKey(selectedCalendarDate));
+  }
+  renderContent();
+}
+
+function shiftCalendar(direction) {
+  if (calendarView === "month") {
+    calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth() + direction, 1);
+    selectedCalendarDate = getDefaultDateForCurrentPeriod(calendarCursor, "month");
+  } else if (calendarView === "week") {
+    calendarCursor = addDays(calendarCursor, direction * 7);
+    selectedCalendarDate = getDefaultDateForCurrentPeriod(calendarCursor, "week");
+  } else {
+    calendarCursor = addDays(calendarCursor, direction);
+    selectedCalendarDate = formatDateKey(calendarCursor);
+  }
+  renderContent();
+}
+
+function getCalendarCursorForView(viewName, date) {
+  if (viewName === "month") {
+    return startOfMonth(date);
+  }
+  if (viewName === "week") {
+    return startOfWeek(date);
+  }
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function getDefaultDateForCurrentPeriod(cursorDate, viewName) {
+  const filteredDayMap = getFilteredCalendarDayMap();
+  const visibleDates = getVisibleCalendarDates(filteredDayMap);
+  if (!visibleDates.length) {
+    return formatDateKey(cursorDate);
+  }
+
+  if (viewName === "month") {
+    const monthStart = startOfMonth(cursorDate);
+    const monthEnd = new Date(cursorDate.getFullYear(), cursorDate.getMonth() + 1, 0);
+    const withinMonth = visibleDates.find(function(key) {
+      return compareNullableDates(key, formatDateKey(monthStart)) >= 0
+        && compareNullableDates(key, formatDateKey(monthEnd)) <= 0;
+    });
+    return withinMonth || formatDateKey(monthStart);
+  }
+
+  const weekStart = startOfWeek(cursorDate);
+  const weekEnd = addDays(weekStart, 6);
+  const withinWeek = visibleDates.find(function(key) {
+    return compareNullableDates(key, formatDateKey(weekStart)) >= 0
+      && compareNullableDates(key, formatDateKey(weekEnd)) <= 0;
+  });
+
+  return withinWeek || formatDateKey(weekStart);
+}
+
+function setCalendarMonth(monthValue) {
+  calendarCursor = new Date(calendarCursor.getFullYear(), Number(monthValue), 1);
+  selectedCalendarDate = getDefaultDateForCurrentPeriod(calendarCursor, "month");
+  renderContent();
+}
+
+function setCalendarYear(yearValue) {
+  calendarCursor = new Date(Number(yearValue), calendarCursor.getMonth(), 1);
+  selectedCalendarDate = getDefaultDateForCurrentPeriod(calendarCursor, "month");
+  renderContent();
+}
+
+function selectCalendarDate(dateKey) {
+  selectedCalendarDate = dateKey;
+  calendarCursor = getCalendarCursorForView(calendarView, parseDateKey(dateKey));
+  renderContent();
+}
+
+function jumpToToday() {
+  selectCalendarDate(formatDateKey(new Date()));
+}
+
+function jumpToNextUrgentDay() {
+  const filteredDayMap = getFilteredCalendarDayMap();
+  const urgentDates = getVisibleCalendarDates(filteredDayMap).filter(function(key) {
+    return filteredDayMap[key].urgentStudents > 0;
+  });
+  const referenceKey = selectedCalendarDate || formatDateKey(new Date());
+  const nextUrgent = findNextCalendarDate(urgentDates, referenceKey);
+  if (nextUrgent) {
+    selectCalendarDate(nextUrgent);
+  }
+}
+
+function jumpToNextScheduledDay() {
+  const visibleDates = getVisibleCalendarDates(getFilteredCalendarDayMap());
+  const referenceKey = selectedCalendarDate || formatDateKey(new Date());
+  const nextScheduled = findNextCalendarDate(visibleDates, referenceKey);
+  if (nextScheduled) {
+    selectCalendarDate(nextScheduled);
+  }
+}
+
+function jumpToAdjacentActionableDay(direction) {
+  if (!selectedCalendarDate) return;
+
+  const target = getAdjacentActionableDate(selectedCalendarDate, direction);
+  if (target) {
+    selectCalendarDate(target);
+  }
+}
+
+function renderMonthOptions() {
+  return MONTH_NAMES.map(function(name, index) {
+    return `<option value="${index}" ${calendarCursor.getMonth() === index ? "selected" : ""}>${name}</option>`;
+  }).join("");
+}
+
+function renderYearOptions() {
+  const start = DATA.calendar.availableStart ? parseDateKey(DATA.calendar.availableStart) : new Date();
+  const end = DATA.calendar.availableEnd ? parseDateKey(DATA.calendar.availableEnd) : new Date();
+  const startYear = Math.min(start.getFullYear(), new Date().getFullYear());
+  const endYear = Math.max(end.getFullYear(), new Date().getFullYear());
+  const options = [];
+
+  for (let year = startYear - 1; year <= endYear + 1; year++) {
+    options.push(`<option value="${year}" ${calendarCursor.getFullYear() === year ? "selected" : ""}>${year}</option>`);
+  }
+
+  return options.join("");
+}
+
+function formatCurrentCalendarHeading() {
+  if (calendarView === "month") {
+    return formatMonthYear(calendarCursor);
+  }
+  if (calendarView === "week") {
+    const start = startOfWeek(calendarCursor);
+    const end = addDays(start, 6);
+    return formatShortDate(formatDateKey(start)) + " - " + formatShortDate(formatDateKey(end));
+  }
+  return selectedCalendarDate ? formatLongDate(selectedCalendarDate) : formatLongDate(formatDateKey(calendarCursor));
+}
+
+function compareNullableDates(valueA, valueB) {
+  const normalizedA = valueA ? parseDateKey(valueA).getTime() : Number.POSITIVE_INFINITY;
+  const normalizedB = valueB ? parseDateKey(valueB).getTime() : Number.POSITIVE_INFINITY;
+  return normalizedA - normalizedB;
+}
+
+function startOfMonth(date) {
+  return new Date(date.getFullYear(), date.getMonth(), 1);
+}
+
+function startOfWeek(date) {
+  const copy = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  copy.setDate(copy.getDate() - copy.getDay());
+  return copy;
+}
+
+function addDays(date, numberOfDays) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + numberOfDays);
+}
+
+function parseDateKey(value) {
+  const parts = String(value).split("-").map(function(item) { return Number(item); });
+  return new Date(parts[0], parts[1] - 1, parts[2]);
+}
+
+function formatDateKey(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return year + "-" + month + "-" + day;
+}
+
+function formatDateTime(value) {
+  const date = new Date(value);
+  return date.toLocaleString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+function formatShortDate(value) {
+  const date = parseDateKey(value);
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
+function formatShortWeekday(value) {
+  const date = parseDateKey(value);
+  return date.toLocaleDateString("en-US", { weekday: "short" });
+}
+
+function formatLongDate(value) {
+  const date = parseDateKey(value);
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function formatMonthYear(date) {
+  return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+}
+
+function formatNumber(value) {
+  const numeric = Number(value || 0);
+  return numeric % 1 === 0 ? String(numeric) : numeric.toFixed(1);
+}
+
+function balanceTone(value) {
+  if (value <= 0) return "balance-critical";
+  if (value < 2) return "balance-critical";
+  if (value < 4) return "balance-warning";
+  return "balance-positive";
+}
+
+function statusLabel(status) {
+  return {
+    notify: "Notify",
+    watch: "Watch",
+    ok: "Healthy",
+    nodata: "No data",
+  }[status] || status;
+}
+
+function actionStatusLabel(status) {
+  return ACTION_STATUS_META[status] ? ACTION_STATUS_META[status].label : status;
+}
+
+function formatActionStateSummary(actionState) {
+  if (!actionState) {
+    return "No action recorded today";
+  }
+
+  const actor = actionState.updatedByAdminLabel
+    ? " by " + actionState.updatedByAdminLabel
+    : "";
+
+  return actionStatusLabel(actionState.status) + " " + formatActionTimestamp(actionState.updatedAt) + actor;
+}
+
+function formatActionTimestamp(value) {
+  const parsed = new Date(value);
+  return parsed.toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+function patchStudentActionState(studentKey, actionState) {
+  DATA.students.forEach(function(student) {
+    if (student.studentKey === studentKey) {
+      student.actionState = actionState || null;
+    }
+  });
+
+  DATA.studentQueue.forEach(function(row) {
+    if (row.studentKey === studentKey) {
+      row.actionState = actionState || null;
+    }
+  });
+}
+
+function patchBulkStudentActionStates(updated) {
+  (updated || []).forEach(function(item) {
+    patchStudentActionState(item.studentKey, item.actionState || null);
+  });
+}
+
+function buildActionToastMessage(actionState, count) {
+  const total = count || 1;
+
+  if (!actionState || !actionState.status) {
+    return total === 1
+      ? "Cleared today's action state."
+      : "Cleared today's action state for " + total + " students.";
+  }
+
+  const label = actionStatusLabel(actionState.status);
+  return total === 1
+    ? "Marked student as " + label.toLowerCase() + "."
+    : "Marked " + total + " students as " + label.toLowerCase() + ".";
+}
+
+function extractErrorMessage(error) {
+  return error && error.message ? error.message : String(error || "Action failed.");
+}
+
+function showToast(message, type) {
+  const root = document.getElementById("toast-root");
+  if (!root) return;
+
+  const toast = document.createElement("div");
+  toast.className = "toast " + (type || "success");
+  toast.textContent = message;
+  root.appendChild(toast);
+
+  window.setTimeout(function() {
+    toast.classList.add("fade-out");
+  }, 2600);
+
+  window.setTimeout(function() {
+    if (toast.parentNode === root) {
+      root.removeChild(toast);
+    }
+  }, 2800);
+}
+
+function getStatusOrder(status) {
+  return Object.prototype.hasOwnProperty.call(CLIENT_STATUS_ORDER, status)
+    ? CLIENT_STATUS_ORDER[status]
+    : 99;
+}
+
+function worstStatus(packages) {
+  if (packages.some(function(pkg) { return pkg.status === "notify"; })) return "notify";
+  if (packages.some(function(pkg) { return pkg.status === "watch"; })) return "watch";
+  if (packages.some(function(pkg) { return pkg.status === "ok"; })) return "ok";
+  return "nodata";
+}
+
+function flagLabel(flag) {
+  return {
+    "no-upcoming-sessions": "No future schedule",
+    "pending-deduction": "Pending deduction",
+    "duplicate-source-rows": "Duplicate source rows",
+    "low-balance-no-schedule": "Low balance + no schedule",
+    "missing-parent": "Missing parent",
+    "exhausted-now": "Exhausted now",
+  }[flag] || flag;
 }
 
 function buildParentMessage(student, pkg) {
@@ -2519,7 +3602,7 @@ function buildParentMessage(student, pkg) {
   const parentFirst = String(student.parent || "").split(" ")[0] || "ผู้ปกครอง";
   const referenceDate = pkg.exhaustDate || pkg.alertDate;
   const monthLabel = referenceDate
-    ? new Date(referenceDate).toLocaleDateString("th-TH", { month: "long", year: "numeric" })
+    ? parseDateKey(referenceDate).toLocaleDateString("th-TH", { month: "long", year: "numeric" })
     : "เร็วๆ นี้";
 
   let creditLine = "";
@@ -2550,7 +3633,6 @@ function buildParentMessage(student, pkg) {
 }
 
 function openMsgModalByIndex(studentIndex, packageIndex) {
-  if (!hasLoadedData()) return;
   const student = DATA.students[studentIndex];
   const pkg = student && student.packages ? student.packages[packageIndex] : null;
   if (!student || !pkg) return;
@@ -2564,19 +3646,24 @@ function closeModal() {
 }
 
 function copyMsg() {
-  if (!hasLoadedData()) return;
-  navigator.clipboard.writeText(document.getElementById("modal-msg").textContent);
-  document.getElementById("modal-copy-btn").textContent = "Copied";
+  const message = document.getElementById("modal-msg").textContent;
+
+  navigator.clipboard.writeText(message)
+    .then(function() {
+      showToast("LINE message copied.", "success");
+    })
+    .catch(function(error) {
+      showToast(extractErrorMessage(error), "error");
+    });
 }
 
-function escapeJs(value) {
-  return String(value).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
-}
-
-function renderAll() {
-  renderHeaderState();
-  renderRail();
-  renderContent();
+function escapeHtml(value) {
+  return String(value === null || value === undefined ? "" : value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 renderAll();

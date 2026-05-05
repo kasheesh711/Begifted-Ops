@@ -26,7 +26,11 @@ body:
       label: Expected Areas
       description: Select the parts of the repo likely to change.
       options:
-        - label: Apps Script server logic (`Code.gs`)
+        - label: Apps Script bootstrap (`Code.gs`)
+        - label: Apps Script data loading (`DashboardDataLoading.gs`)
+        - label: Apps Script package rules or projection (`DashboardPackages.gs` or `DashboardProjection.gs`)
+        - label: Apps Script student queue, calendar, analytics, or state (`DashboardAnalytics.gs` or `DashboardState.gs`)
+        - label: Shared backend helpers (`SharedHelpers.gs`)
         - label: Dashboard frontend (`dashboard.html`)
         - label: Apps Script config (`appsscript.json` or `.clasp.json`)
         - label: Documentation or workflow files
@@ -36,7 +40,7 @@ body:
     attributes:
       label: Ownership And Parallelization Notes
       description: Note expected file ownership, disjoint scopes, or overlap risks.
-      placeholder: Example: agent owns dashboard.html only; avoid editing workflow docs in this task.
+      placeholder: Example: agent owns DashboardAnalytics.gs only; avoid SharedHelpers.gs and workflow docs in this task.
     validations:
       required: true
   - type: textarea
@@ -44,7 +48,7 @@ body:
     attributes:
       label: Definition Of Done
       description: What must be true before this issue is complete?
-      placeholder: Include validation and deployment expectations.
+      placeholder: Include validation, Apps Script push expectations, and whether a fresh web app deployment is required.
     validations:
       required: true
   - type: textarea
